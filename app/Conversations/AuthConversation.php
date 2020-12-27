@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * https://dev.to/devkiran/building-a-salon-booking-chatbot-with-laravel-and-botman-1250
+ */
 declare(strict_types=1);
 
 namespace App\Conversations;
