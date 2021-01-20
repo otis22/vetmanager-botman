@@ -37,6 +37,10 @@ final class AuthConversation extends Conversation
         return $this->ask("Введите доменное имя или адрес программы. Пример: myclinic или https://myclinic.vetmanager.ru", function (Answer $answer) {
             try {
                 $this->clinicUrl = url($answer->getValue())->asString();
+                $this->getBot()->userStorage()
+                    ->save(
+                        ['clinicUrl' => $this->clinicUrl]
+                    );
                 $this->askLogin();
             } catch (\Throwable $exception) {
                 $this->say("Попробуйте еще раз. Ошибка: " . $exception->getMessage());
