@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Conversations\AuthConversation;
+use App\Conversations\TimesheetConversation;
 use BotMan\BotMan\BotMan;
 
 final class VetmanagerController extends Controller
@@ -15,6 +16,11 @@ final class VetmanagerController extends Controller
      */
     public function authConversation(BotMan $bot)
     {
-        $bot->startConversation(new AuthConversation());
+        $bot->startConversation(new AuthConversation(config('app.name')));
+    }
+
+    public function timesheetConversation(BotMan $bot)
+    {
+        $bot->startConversation(new TimesheetConversation());
     }
 }

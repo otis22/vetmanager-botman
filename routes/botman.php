@@ -38,3 +38,5 @@ $botman->hears("who am I", function (BotMan $bot) {
 $botman->hears('Start conversation', BotManController::class.'@startConversation');
 
 $botman->hears('start', VetmanagerController::class.'@authConversation');
+
+$botman->hears('timesheet', VetmanagerController::class.'@timesheetConversation');
