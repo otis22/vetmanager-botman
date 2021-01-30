@@ -40,3 +40,5 @@ $botman->hears('Start conversation', BotManController::class.'@startConversation
 $botman->hears('start', VetmanagerController::class.'@authConversation');
 
 $botman->hears('timesheet', VetmanagerController::class.'@timesheetConversation');
+
+$botman->hears('My Admission', VetmanagerController::class.'@admissionConversation');

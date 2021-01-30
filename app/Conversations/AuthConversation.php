@@ -56,6 +56,10 @@ final class AuthConversation extends Conversation
     {
         return $this->ask("Введите login вашего пользователя в Ветменеджер", function (Answer $answer) {
             $this->userLogin = $answer->getValue();
+            $this->getBot()->userStorage()
+                ->save(
+                    ['userLogin' => $this->userLogin]
+                );
             $this->askPassword();
         });
     }
