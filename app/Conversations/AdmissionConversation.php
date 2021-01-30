@@ -22,9 +22,9 @@ final class AdmissionConversation extends Conversation
         try {
             $token = new Concrete(
                 (
-                new ClinicToken(
-                    $this->getBot()
-                )
+                    new ClinicToken(
+                        $this->getBot()
+                    )
                 )->asString()
             );
             $baseUri = $this->getBot()->userStorage()->get('clinicUrl');
