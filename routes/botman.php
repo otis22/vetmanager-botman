@@ -8,6 +8,13 @@ use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 
 $botman = resolve('botman');
 
+$botman->fallback(function (Botman $bot) {
+    $bot->reply(
+        Question::create("Я вас не понимаю, может с начала?")
+            ->addButton(Button::create("start")->value('start'))
+    );
+});
+
 $botman->hears('start', function($bot){
     $bot->reply(
         (

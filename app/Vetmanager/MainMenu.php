@@ -58,7 +58,6 @@ final class MainMenu
         $buttonFactory = $this->buttonFactory;
 
         return $questionFactory('Что мне сделать?')
-            ->callbackId('select_command')
             ->addButtons(
                 array_map(
                     function ($command, $title) use ($buttonFactory) {
