@@ -1,4 +1,6 @@
-# Test bot
+# Vetmanager Botman
+
+![GitHub CI](https://github.com/otis22/vetmanager-botman/workflows/CI/badge.svg)
 
 [heroku app](https://vetmanager-botman.herokuapp.com/)
 
