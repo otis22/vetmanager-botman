@@ -3,7 +3,6 @@
 namespace App\Http\Helpers\Rest;
 
 use GuzzleHttp\Client;
-use Otis22\VetmanagerToken\Token;
 use Otis22\VetmanagerRestApi\Query\Filter\MoreThan;
 use Otis22\VetmanagerRestApi\Query\Filter\LessThan;
 use Otis22\VetmanagerRestApi\Model\Property;

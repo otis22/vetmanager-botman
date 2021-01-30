@@ -3,7 +3,10 @@
 namespace App\Http\Helpers\Rest;
 
 use GuzzleHttp\Client;
-use Otis22\VetmanagerToken\Token;
+use Otis22\VetmanagerRestApi\Model\Property;
+use Otis22\VetmanagerRestApi\Query\Filter\EqualTo;
+use Otis22\VetmanagerRestApi\Query\Filter\Value\StringValue;
+use Otis22\VetmanagerRestApi\Query\Filters;
 
 use function Otis22\VetmanagerRestApi\uri;
 
@@ -15,7 +18,7 @@ class Users
     private $httpClient;
 
     /**
-     * Schedules constructor.
+     * Users constructor.
      * @param Client $httpClient
      */
     public function __construct(Client $httpClient)
@@ -61,4 +64,28 @@ class Users
         );
         return $result;
     }
+
+    public function getUserIdByLogin($login)
+    {
+        $filteringParams[] = new EqualTo(
+            new Property('login'),
+            new StringValue(strval($login))
+        );
+        $filters = new Filters(...$filteringParams);
+        $request = $this->httpClient->request(
+            'GET',
+            uri("user")->asString() . '/',
+            [
+                "query" => $filters->asKeyValue()
+            ]
+        );
+        $result = json_decode(
+            strval(
+                $request->getBody()
+            ),
+            true
+        );
+        return $result['data']['user'][0]['id'];
+    }
+
 }
