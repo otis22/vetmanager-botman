@@ -39,11 +39,15 @@ final class AdmissionConversation extends Conversation
             $currentUserId = $users->getUserIdByLogin($currentUserLogin);
             $admission = new Admission($client);
             $last10Admissions = array_slice($admission->getByUserId($currentUserId)['data']['admission'], 0, 10, true);
-            foreach ($last10Admissions as $concrete) {
-                $message = $concrete['admission_date'] . ' - ' . $concrete['client']['last_name'] . " ";
-                $message .= $concrete['client']['first_name'] . " " . $concrete['pet']['alias'] . " ";
-                $message .= $concrete['pet']['pet_type_data']['title'] . " " . $concrete['pet']['breed_data']['title'];
-                $this->say($message);
+            if (!empty($last10Admissions)) {
+                foreach ($last10Admissions as $concrete) {
+                    $message = $concrete['admission_date'] . ' - ' . $concrete['client']['last_name'] . " ";
+                    $message .= $concrete['client']['first_name'] . " " . $concrete['pet']['alias'] . " ";
+                    $message .= $concrete['pet']['pet_type_data']['title'] . " " . $concrete['pet']['breed_data']['title'];
+                    $this->say($message);
+                }
+            } else {
+                $this->say("У вас нет запланированных визитов.");
             }
         } catch (\Throwable $exception) {
             $this->sayError("Ошибка: " . $exception->getMessage());
