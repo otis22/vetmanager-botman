@@ -6,6 +6,7 @@ namespace App\Conversations;
 
 use App\Http\Helpers\Rest\Admission;
 use App\Vetmanager\MainMenu;
+use App\Vetmanager\UserData\ClinicUrl;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use App\Http\Helpers\Rest\Users;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
@@ -27,7 +28,9 @@ final class AdmissionConversation extends Conversation
                     )
                 )->asString()
             );
-            $baseUri = $this->getBot()->userStorage()->get('clinicUrl');
+            $baseUri = (
+                new ClinicUrl($this->getBot())
+            )->asString();
             $client = new Client(
                 [
                     'base_uri' => $baseUri,
