@@ -41,7 +41,12 @@ final class AuthConversation extends Conversation
                         ['clinicDomain' => $answer->getValue()]
                     );
                 $this->clinicUrl = (
-                    new ClinicUrl($this->getBot(), function (string $domain) {return url($domain)->asString();})
+                    new ClinicUrl(
+                        $this->getBot(),
+                        function (string $domain) : string {
+                            return url($domain)->asString();
+                        }
+                    )
                 )->asString();
                 $this->askLogin();
             } catch (\Throwable $exception) {

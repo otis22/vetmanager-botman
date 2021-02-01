@@ -36,7 +36,9 @@ class ClinicUrlTest extends TestCase
             (
                 new ClinicUrl(
                     $this->botmanWithUserStorageWillReturnValue('mydomain'),
-                    function ($domain) {return "https://{$domain}.vetmanager.ru";}
+                    function ($domain): string {
+                        return "https://{$domain}.vetmanager.ru";
+                    }
                 )
             )->asString()
         );
