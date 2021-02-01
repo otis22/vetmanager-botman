@@ -4,6 +4,9 @@ namespace App\Vetmanager\UserData;
 
 use ElegantBro\Interfaces\Stringify;
 use BotMan\BotMan\BotMan;
+use Otis22\VetmanagerUrl\Url\FromBillingApiGateway;
+
+use function Otis22\VetmanagerUrl\url;
 
 final class ClinicUrl implements Stringify
 {
@@ -13,20 +16,29 @@ final class ClinicUrl implements Stringify
     private $bot;
 
     /**
+     * @var FromBillingApiGateway
+     */
+    private $urlBuilder;
+
+    /**
      * ClinicUrl constructor.
      * @param BotMan $bot
+     * @param callable $urlBuilder
      */
-    public function __construct(BotMan $bot)
+    public function __construct(BotMan $bot, $urlBuilder)
     {
         $this->bot = $bot;
+        $this->urlBuilder = $urlBuilder;
     }
 
     public function asString(): string
     {
-        $clinicUrl = $this->bot
-            ->userStorage()->get('clinicUrl');
+        $clinicDomain = $this->bot
+            ->userStorage()->get('clinicDomain');
+        $builder = $this->urlBuilder;
+        $clinicUrl = $builder($clinicDomain);
 
-        if (empty($clinicUrl)) {
+        if (empty($clinicDomain)) {
             throw new \Exception("Clinic url can't be empty");
         }
         return strval($clinicUrl);

@@ -13,6 +13,7 @@ use Otis22\VetmanagerToken\Token\Concrete;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use App\Vetmanager\UserData\ClinicUrl;
+use function Otis22\VetmanagerUrl\url;
 
 final class TimesheetConversation extends Conversation
 {
@@ -21,7 +22,7 @@ final class TimesheetConversation extends Conversation
     {
         $token = new Concrete($this->getBot()->userStorage()->get('clinicUserToken'));
         $baseUri = (
-            new ClinicUrl($this->getBot())
+            new ClinicUrl($this->getBot(), function (string $domain) {return url($domain)->asString();})
         )->asString();
         $client = new Client(
             [
@@ -82,7 +83,7 @@ final class TimesheetConversation extends Conversation
     private function askDoctorId() {
         $token = new Concrete($this->getBot()->userStorage()->get('clinicUserToken'));
         $baseUri = (
-            new ClinicUrl($this->getBot())
+            new ClinicUrl($this->getBot(), function (string $domain) {return url($domain)->asString();})
         )->asString();
         $client = new Client(
             [
