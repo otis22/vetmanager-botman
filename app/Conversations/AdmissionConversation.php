@@ -6,6 +6,7 @@ namespace App\Conversations;
 
 use App\Http\Helpers\Rest\Admission;
 use App\Vetmanager\MainMenu;
+use App\Vetmanager\UserData\ClinicUrl;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use App\Http\Helpers\Rest\Users;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
@@ -13,6 +14,8 @@ use BotMan\BotMan\Messages\Outgoing\Question;
 use GuzzleHttp\Client;
 use Otis22\VetmanagerToken\Token\Concrete;
 use App\Vetmanager\UserData\ClinicToken;
+
+use function Otis22\VetmanagerUrl\url;
 
 final class AdmissionConversation extends Conversation
 {
@@ -27,7 +30,9 @@ final class AdmissionConversation extends Conversation
                     )
                 )->asString()
             );
-            $baseUri = $this->getBot()->userStorage()->get('clinicUrl');
+            $baseUri = (
+                new ClinicUrl($this->getBot(), function (string $domain) {return url($domain)->asString();})
+            )->asString();
             $client = new Client(
                 [
                     'base_uri' => $baseUri,

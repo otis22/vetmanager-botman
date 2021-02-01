@@ -12,6 +12,8 @@ use App\Http\Helpers\Rest\Schedules;
 use Otis22\VetmanagerToken\Token\Concrete;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
+use App\Vetmanager\UserData\ClinicUrl;
+use function Otis22\VetmanagerUrl\url;
 
 final class TimesheetConversation extends Conversation
 {
@@ -19,7 +21,9 @@ final class TimesheetConversation extends Conversation
     public function saySchedule(): void
     {
         $token = new Concrete($this->getBot()->userStorage()->get('clinicUserToken'));
-        $baseUri = $this->getBot()->userStorage()->get('clinicUrl');
+        $baseUri = (
+            new ClinicUrl($this->getBot(), function (string $domain) {return url($domain)->asString();})
+        )->asString();
         $client = new Client(
             [
                 'base_uri' => $baseUri,
@@ -78,7 +82,9 @@ final class TimesheetConversation extends Conversation
 
     private function askDoctorId() {
         $token = new Concrete($this->getBot()->userStorage()->get('clinicUserToken'));
-        $baseUri = $this->getBot()->userStorage()->get('clinicUrl');
+        $baseUri = (
+            new ClinicUrl($this->getBot(), function (string $domain) {return url($domain)->asString();})
+        )->asString();
         $client = new Client(
             [
                 'base_uri' => $baseUri,

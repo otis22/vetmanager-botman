@@ -8,7 +8,7 @@ namespace App\Conversations;
 
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\Answer;
-
+use App\Vetmanager\UserData\ClinicUrl;
 use BotMan\BotMan\Storages\Storage;
 use function Otis22\VetmanagerUrl\url;
 use function Otis22\VetmanagerToken\token;
@@ -36,11 +36,13 @@ final class AuthConversation extends Conversation
     {
         return $this->ask("Введите доменное имя или адрес программы. Пример: myclinic или https://myclinic.vetmanager.ru", function (Answer $answer) {
             try {
-                $this->clinicUrl = url($answer->getValue())->asString();
                 $this->getBot()->userStorage()
                     ->save(
-                        ['clinicUrl' => $this->clinicUrl]
+                        ['clinicDomain' => $answer->getValue()]
                     );
+                $this->clinicUrl = (
+                    new ClinicUrl($this->getBot(), function (string $domain) {return url($domain)->asString();})
+                )->asString();
                 $this->askLogin();
             } catch (\Throwable $exception) {
                 $this->say("Попробуйте еще раз. Ошибка: " . $exception->getMessage());
