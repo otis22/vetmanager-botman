@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: danilyer
- * Date: 01.02.21
- * Time: 9:46
- */
 
 namespace App\Vetmanager\UserData;
 
