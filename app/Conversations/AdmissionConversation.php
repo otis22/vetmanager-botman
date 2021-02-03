@@ -31,7 +31,12 @@ final class AdmissionConversation extends Conversation
                 )->asString()
             );
             $baseUri = (
-                new ClinicUrl($this->getBot(), function (string $domain) {return url($domain)->asString();})
+                new ClinicUrl(
+                    $this->getBot(),
+                    function (string $domain) : string {
+                        return url($domain)->asString();
+                    }
+                )
             )->asString();
             $client = new Client(
                 [

@@ -22,7 +22,12 @@ final class TimesheetConversation extends Conversation
     {
         $token = new Concrete($this->getBot()->userStorage()->get('clinicUserToken'));
         $baseUri = (
-            new ClinicUrl($this->getBot(), function (string $domain) {return url($domain)->asString();})
+            new ClinicUrl(
+                $this->getBot(),
+                function (string $domain) : string {
+                    return url($domain)->asString();
+                }
+            )
         )->asString();
         $client = new Client(
             [
@@ -83,7 +88,12 @@ final class TimesheetConversation extends Conversation
     private function askDoctorId() {
         $token = new Concrete($this->getBot()->userStorage()->get('clinicUserToken'));
         $baseUri = (
-            new ClinicUrl($this->getBot(), function (string $domain) {return url($domain)->asString();})
+            new ClinicUrl(
+                $this->getBot(),
+                function (string $domain) : string {
+                    return url($domain)->asString();
+                }
+            )
         )->asString();
         $client = new Client(
             [
