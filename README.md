@@ -36,3 +36,20 @@ docker exec -it vetmanager-botman-php-fpm /bin/bash
 redis-cli -h redis -a 123456 -p 6379
 ```
 
+## Telegram 
+
+[how to create bot](https://unnikked.ga/getting-started-with-telegram-bots-9e467d922d69)
+[how to debug with ngrok](https://unnikked.ga/make-your-telegram-bot-with-laravel-and-botman-b8199e58461d)
+
+### For contributors 
+
+`
+1. Go to @BotFather in Telegram
+1. Press /newbot
+1. Enter bot data, for devs vetmanager-botman-$username
+1. Run server `make serve`
+1. Start tunnelling with [ngrok](https://otis22.github.io/ngrok,/utils/2021/02/03/ngrok-is-pretty-cool.html) `ngrok http 8080`
+1. https://api.telegram.org/bot<token>/setWebhook?url=https://5e86b344.ngrok.io/botman
+
+Where token is authtoken from @GodFather
+`
