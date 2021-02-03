@@ -38,7 +38,7 @@ final class AuthConversation extends Conversation
             try {
                 $this->getBot()->userStorage()
                     ->save(
-                        ['clinicDomain' => $answer->getValue()]
+                        ['clinicDomain' => $answer->getText()]
                     );
                 $this->clinicUrl = (
                     new ClinicUrl(
@@ -62,7 +62,7 @@ final class AuthConversation extends Conversation
     public function askLogin(): Conversation
     {
         return $this->ask("Введите login вашего пользователя в Ветменеджер", function (Answer $answer) {
-            $this->userLogin = $answer->getValue();
+            $this->userLogin = $answer->getText();
             $this->getBot()->userStorage()
                 ->save(
                     ['userLogin' => $this->userLogin]
@@ -74,7 +74,7 @@ final class AuthConversation extends Conversation
     public function askPassword(): Conversation
     {
         return $this->ask("Введите пароль вашего пользователя в Ветменеджер", function (Answer $answer) {
-            $password = $answer->getValue();
+            $password = $answer->getText();
             $credentials = credentials(
                 $this->userLogin,
                 $password,
@@ -86,8 +86,7 @@ final class AuthConversation extends Conversation
                     ->save(
                         ['clinicUserToken' => $token]
                     );
-                $this->say('Success ' .$token);
-                $this->say('From storage' . $this->userData()->get('clinicUserToken'));
+                $this->say('Успех! Введите start для вывода списка команд');
             } catch (\Throwable $exception) {
                 $this->say("Попробуйте еще раз. Ошибка: " . $exception->getMessage());
                 $this->askDomain();

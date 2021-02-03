@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\BotManController;
+use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\BotMan;
 use App\Http\Controllers\VetmanagerController;
 use App\Vetmanager\MainMenu;
@@ -9,9 +10,25 @@ use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 $botman = resolve('botman');
 
 $botman->fallback(function (Botman $bot) {
-    $bot->reply(
+    $bot->ask(
         Question::create("Я вас не понимаю, может с начала?")
-            ->addButton(Button::create("start")->value('start'))
+            ->addButton(Button::create("start")->value('start')),
+        function (Answer $answer) use ($bot) {
+            if ($answer->isInteractiveMessageReply()) {
+                switch ($answer->getValue()) {
+                    case 'start':
+                        $bot->reply(
+                            (
+                                new MainMenu(
+                                    [Question::class, 'create'],
+                                    [Button::class, 'create']
+                                )
+                            )->asQuestion()
+                        );
+                        break;
+                }
+            }
+        }
     );
 });
 
@@ -28,10 +45,18 @@ $botman->hears('start', function($bot){
 $botman->hears('auth', VetmanagerController::class.'@authConversation');
 $botman->hears('timesheet', VetmanagerController::class.'@timesheetConversation');
 $botman->hears('admissions', VetmanagerController::class.'@admissionConversation');
-//$botman->
 
 /** Examples
+$botman->fallback(function (Botman $bot) {
+$bot->reply(
+Question::create("Я вас не понимаю, может с начала?")
+->addButton(Button::create("start")->value('start'))
+);
+});
 
+
+ *
+ *
 $botman->hears('Hi', function ($bot) {
 $bot->reply('Hello!');
 });

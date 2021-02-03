@@ -54,10 +54,10 @@ final class TimesheetConversation extends Conversation
     private function askDaysCount()
     {
         $this->ask("Введите количество дней", function (Answer $answer) {
-            $daysCount = $answer->getValue();
+            $daysCount = $answer->getText();
             try {
                 if (!is_numeric($daysCount) or $daysCount == 0) {
-                    throw new \Exception("Ошибка. Проверьте введенные данные!");
+                    throw new \Exception("Ошибка. Проверьте введенные данные! {$daysCount} - неправильные данные" );
                 }
                 $this->bot->userStorage()->save(compact('daysCount'));
                 return $this->askClinicId();
@@ -71,7 +71,7 @@ final class TimesheetConversation extends Conversation
     private function askClinicId()
     {
         $this->ask("Введите ID клиники(0, чтобы отобразить по всем клиникам)", function (Answer $answer) {
-            $clinicId = $answer->getValue();
+            $clinicId = $answer->getText();
             try {
                 if (!is_numeric($clinicId)) {
                     throw new \Exception("Ошибка. Проверьте введенные данные!");
