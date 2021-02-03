@@ -26,3 +26,5 @@ jobs:
       - name: Run Unit tests
         run: |
           composer unit
+        env:
+          CLEARDB_DATABASE_URL: ${{ secrets.CLEARDB_DATABASE_URL }}

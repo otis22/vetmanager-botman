@@ -36,11 +36,11 @@ final class ClinicUrl implements Stringify
         $clinicDomain = $this->bot
             ->userStorage()->get('clinicDomain');
         $builder = $this->urlBuilder;
-        $clinicUrl = $builder($clinicDomain);
 
         if (empty($clinicDomain)) {
             throw new \Exception("Clinic url can't be empty");
         }
+        $clinicUrl = $builder($clinicDomain);
         return strval($clinicUrl);
     }
 }
