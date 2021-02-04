@@ -8,6 +8,8 @@ unit:
 	docker-compose -f ./.docker/docker-compose.yml run php-fpm ./vendor/bin/phpunit --testsuite=Unit
 enter:
 	docker-compose -f ./.docker/docker-compose.yml exec php-fpm bash
+exec:
+	docker-compose -f ./.docker/docker-compose.yml exec php-fpm bash
 
 all: build serve unit
 
