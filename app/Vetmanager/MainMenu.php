@@ -14,7 +14,8 @@ final class MainMenu
     private $commandsConfig = [
         'auth' => 'Авторизация(Необходима для работы бота)',
         'timesheet' => 'График работы сотрудников',
-        'admissions' =>  'Мои запланированные визиты'
+        'admissions' =>  'Мои запланированные визиты',
+        'notification' => 'Управление уведомлениями'
     ];
     /**
      * @var callable(string $questionTitle): Question
