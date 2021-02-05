@@ -28,3 +28,8 @@ jobs:
           composer unit
         env:
           CLEARDB_DATABASE_URL: ${{ secrets.CLEARDB_DATABASE_URL }}
+      - name: Run Botman tests
+        run: |
+          composer botman-tests
+        env:
+          CLEARDB_DATABASE_URL: ${{ secrets.CLEARDB_DATABASE_URL }}

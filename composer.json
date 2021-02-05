@@ -74,6 +74,9 @@
         ],
         "unit": [
             "vendor/bin/phpunit --testsuite Unit"
+        ],
+        "botman-tests": [
+            "vendor/bin/phpunit --testsuite BotMan"
         ]
     },
     "config": {
