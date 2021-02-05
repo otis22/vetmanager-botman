@@ -16,5 +16,4 @@ class AuthConversationTest extends BotManTestCase
         $this->tester->receives('message')
             ->assertReply('Привет, Босс, ответьте на 3 вопроса');
     }
-
 }
