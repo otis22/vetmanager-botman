@@ -19,4 +19,4 @@ RUN cd /tmp/ \
     && cp src/redis-cli /usr/local/bin/ \
     && rm -rf /tmp/*
 
-RUN usermod -u 1000 www-data
+RUN chown -R www-data:www-data /application
