@@ -7,6 +7,7 @@ namespace App\Conversations;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use App\Http\Helpers\Rest\Users;
 use BotMan\BotMan\Messages\Incoming\Answer;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use GuzzleHttp\Client;
 use App\Http\Helpers\Rest\Schedules;
 use Otis22\VetmanagerToken\Token\Concrete;
@@ -129,7 +130,18 @@ final class TimesheetConversation extends Conversation
         });
 
     }
+    /**
+     * @param IncomingMessage $message
+     * @return bool
+     */
+    public function stopsConversation(IncomingMessage $message): bool
+    {
+        if ($message->getText() == 'stop') {
+            return true;
+        }
 
+        return false;
+    }
     public function run()
     {
         $this->askDaysCount();

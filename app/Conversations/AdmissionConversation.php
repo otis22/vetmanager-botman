@@ -9,6 +9,7 @@ use App\Vetmanager\MainMenu;
 use App\Vetmanager\UserData\ClinicUrl;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use App\Http\Helpers\Rest\Users;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use GuzzleHttp\Client;
@@ -76,7 +77,18 @@ final class AdmissionConversation extends Conversation
             )->asQuestion()
         );
     }
+    /**
+     * @param IncomingMessage $message
+     * @return bool
+     */
+    public function stopsConversation(IncomingMessage $message): bool
+    {
+        if ($message->getText() == 'stop') {
+            return true;
+        }
 
+        return false;
+    }
     public function run()
     {
         $this->sayTop10();

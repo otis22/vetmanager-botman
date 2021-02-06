@@ -1,34 +1,19 @@
 <?php
 
-namespace Tests\BotMan;
+namespace Tests\Unit\BotMan;
 
-use BotMan\Studio\Testing\BotManTester;
-use Illuminate\Foundation\Inspiring;
-use Tests\TestCase;
+use App\Conversations\AuthConversation;
+use Tests\BotManTestCase;
 
-class AuthConversationTest extends TestCase
+class AuthConversationTest extends BotManTestCase
 {
-    /**
-     * A conversation test example.
-     *
-     * @return void
-     */
-    public function testInvalidDomain(): void
+    public function testFirstMessage(): void
     {
-        /**
-         * @var BotManTester
-         */
+        $this->botman->hears('message', function ($bot) {
+            $bot->startConversation(new AuthConversation('test-app'));
+        });
 
-        $this->bot()
-            ->receives('start')
-            ->assertReply('Привет, Босс, ответьте на 3 вопроса')
-            ->assertReply('Введите доменное имя или адрес программы. Пример: myclinic или https://myclinic.vetmanager.ru')
-            ->receivesInteractiveMessage('myclinic')
-            ->assertReply('myclinic');
-    }
-
-    private function bot(): BotManTester
-    {
-        return $this->bot;
+        $this->tester->receives('message')
+            ->assertReply('Привет, Босс, ответьте на 3 вопроса');
     }
 }

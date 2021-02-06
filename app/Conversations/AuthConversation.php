@@ -10,6 +10,7 @@ use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use App\Vetmanager\UserData\ClinicUrl;
 use BotMan\BotMan\Storages\Storage;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use function Otis22\VetmanagerUrl\url;
 use function Otis22\VetmanagerToken\token;
 use function Otis22\VetmanagerToken\credentials;
@@ -20,15 +21,29 @@ final class AuthConversation extends Conversation
     /**
      * @var string
      */
+    private $appName;
+    /**
+     * @var string
+     */
     protected $clinicUrl;
     /**
      * @var string
      */
     protected $userLogin;
-    /*
+    /**
      * @var string
      */
     protected $token;
+
+    /**
+     * AuthConversation constructor.
+     * @param string $appName
+     */
+    public function __construct(string $appName)
+    {
+        $this->appName = $appName;
+    }
+
     /**
      * @return Conversation
      */
@@ -36,6 +51,9 @@ final class AuthConversation extends Conversation
     {
         return $this->ask("Введите доменное имя или адрес программы. Пример: myclinic или https://myclinic.vetmanager.ru", function (Answer $answer) {
             try {
+                if (empty(trim($answer->getText()))) {
+                    throw new \Exception("Can't be empty text");
+                }
                 $this->getBot()->userStorage()
                     ->save(
                         ['clinicDomain' => $answer->getText()]
@@ -78,7 +96,7 @@ final class AuthConversation extends Conversation
             $credentials = credentials(
                 $this->userLogin,
                 $password,
-                config('app.name')
+                $this->appName
             );
             try {
                 $token = token($credentials, $this->clinicUrl)->asString();
@@ -113,5 +131,18 @@ final class AuthConversation extends Conversation
             ->userStorage(
                 $this->getBot()->getUser()
             );
+    }
+
+    /**
+     * @param IncomingMessage $message
+     * @return bool
+     */
+    public function stopsConversation(IncomingMessage $message): bool
+    {
+        if ($message->getText() == 'stop') {
+            return true;
+        }
+
+        return false;
     }
 }
