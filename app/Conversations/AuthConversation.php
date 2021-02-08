@@ -11,6 +11,7 @@ use BotMan\BotMan\Messages\Incoming\Answer;
 use App\Vetmanager\UserData\ClinicUrl;
 use BotMan\BotMan\Storages\Storage;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use Illuminate\Support\Facades\DB;
 use function Otis22\VetmanagerUrl\url;
 use function Otis22\VetmanagerToken\token;
 use function Otis22\VetmanagerToken\credentials;
@@ -18,10 +19,6 @@ use function config;
 
 final class AuthConversation extends Conversation
 {
-    /**
-     * @var string
-     */
-    private $appName;
     /**
      * @var string
      */
@@ -34,15 +31,6 @@ final class AuthConversation extends Conversation
      * @var string
      */
     protected $token;
-
-    /**
-     * AuthConversation constructor.
-     * @param string $appName
-     */
-    public function __construct(string $appName)
-    {
-        $this->appName = $appName;
-    }
 
     /**
      * @return Conversation
@@ -96,7 +84,7 @@ final class AuthConversation extends Conversation
             $credentials = credentials(
                 $this->userLogin,
                 $password,
-                $this->appName
+                config('app.name')
             );
             try {
                 $token = token($credentials, $this->clinicUrl)->asString();
@@ -104,6 +92,14 @@ final class AuthConversation extends Conversation
                     ->save(
                         ['clinicUserToken' => $token]
                     );
+                $chatId = $this->getBot()->getUser()->getId();
+                if (is_null(DB::table('users')->where('chat_id', '=', $chatId)->first())) {
+                    DB::table('users')->insert([
+                        'chat_id' => $chatId,
+                        'clinic_domain' => $this->getBot()->userStorage()->get('clinicDomain'),
+                        'clinic_token' => $token
+                    ]);
+                }
                 $this->say('Успех! Введите start для вывода списка команд');
             } catch (\Throwable $exception) {
                 $this->say("Попробуйте еще раз. Ошибка: " . $exception->getMessage());

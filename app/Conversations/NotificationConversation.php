@@ -12,6 +12,7 @@ use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use GuzzleHttp\Client;
 use Otis22\VetmanagerToken\Token\Concrete;
+use Illuminate\Support\Facades\DB;
 use function Otis22\VetmanagerUrl\url;
 
 final class NotificationConversation extends Conversation
@@ -46,22 +47,17 @@ final class NotificationConversation extends Conversation
                 );
 
                 $comboManual = new ComboManual($client);
+                $chatId = $this->getBot()->getUser()->getId();
+                $user = DB::table('users')
+                    ->where('chat_id', '=', $chatId);
                 if ($answer->getValue() == "on")
                 {
-                    $result = $comboManual->enableNotification($this->getBot()->userStorage()->get("clinicDomain"));
-                    if ($result['success']) {
-                        $this->say("Уведомления включены.");
-                    } else {
-                        $this->say("Ошибка: " . $result['message']);
-                    }
+                    $user->update(['notification_enabled' => true]);
+                    $comboManual->addNotificationRoute($this->getBot()->userStorage()->get("clinicDomain"));
+                    $this->say("Уведомления включены.");
                 } else {
-                    $result = $comboManual->disableNotification($this->getBot()->userStorage()->get("clinicDomain"));
-
-                    if ($result['success']) {
-                        $this->say("Уведомления выключены.");
-                    } else {
-                        $this->say("Ошибка: " . $result['message']);
-                    }
+                    $user->update(['notification_enabled' => false]);
+                    $this->say("Уведомления выключены.");
                 }
             }
         });

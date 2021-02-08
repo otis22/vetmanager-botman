@@ -18,7 +18,7 @@ final class VetmanagerController extends Controller
      */
     public function authConversation(BotMan $bot)
     {
-        $bot->startConversation(new AuthConversation(config('app.name')));
+        $bot->startConversation(new AuthConversation());
     }
 
     public function timesheetConversation(BotMan $bot)

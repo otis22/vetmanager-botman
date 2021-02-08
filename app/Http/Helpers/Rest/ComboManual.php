@@ -47,11 +47,11 @@ class ComboManual
         return $result;
     }
 
-    public function enableNotification($domainName)
+    public function addNotificationRoute($domainName)
     {
         $id = $this->getExistHookId();
         if ($id) {
-            return ['success' => false, 'message' => "Уведомления уже работают."];
+            return true;
         }
         $request = $this->httpClient->request(
             'POST',
@@ -70,27 +70,9 @@ class ComboManual
             ),
             true
         );
-        return $result;
-    }
-
-    public function disableNotification(): array
-    {
-        $id = $this->getExistHookId();
-        if (!$id) {
-            return ['success' => false, 'message' => "Уведомления и так выключены."];
-        }
-        if ($id)
-        $request = $this->httpClient->request(
-            'DELETE',
-            uri("comboManualItem")->asString() . "/" . $id
-        );
-        $result = json_decode(
-            strval(
-                $request->getBody()
-            ),
-            true
-        );
-        return $result;
+        if($result['success'])
+            return true;
+        return false;
     }
 
     public function getExistHookId()

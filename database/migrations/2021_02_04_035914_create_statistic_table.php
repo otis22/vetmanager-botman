@@ -15,7 +15,6 @@ class CreateStatisticTable extends Migration
     {
         Schema::create('statistic', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->timestamp('datetime');
             $table->string('event');
             $table->string('channel');
             $table->integer('user_id');
