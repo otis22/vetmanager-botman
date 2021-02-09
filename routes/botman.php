@@ -1,13 +1,15 @@
 <?php
-use App\Http\Controllers\BotManController;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\BotMan;
 use App\Http\Controllers\VetmanagerController;
 use App\Vetmanager\MainMenu;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
+use App\Http\Middleware\BotMan\ReceivedMiddleware;
 
 $botman = resolve('botman');
+
+$botman->middleware->captured((new ReceivedMiddleware()));
 
 $botman->fallback(function (Botman $bot) {
     $bot->ask(

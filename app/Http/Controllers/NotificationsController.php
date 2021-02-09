@@ -14,14 +14,23 @@ final class NotificationsController extends Controller
 {
     public function handleNotifications(Request $request, $domain)
     {
-        $botman = resolve('botman');
         $input = $request->all();
+        $botman = resolve('botman');
         $event = new VmEvent($input['name']);
         if ($event->hasTranslation()) {
             $users = DB::table('users')
                 ->where('clinic_domain', '=', $domain)
                 ->where('notification_enabled', '=', true)->pluck('chat_id')->toArray();
-            $botman->say($event->asString(), $users, TelegramDriver::class);
+
+            foreach ($users as $user) {
+                DB::table('statistic')->insert([
+                    'created_at' => date("Y-m-d H:i:s"),
+                    'user_id' => $user,
+                    'channel' => $botman->getDriver()->getName(),
+                    'event' => 'notification message'
+                ]);
+                $botman->say($event->asString(), $user, TelegramDriver::class);
+            }
         }
     }
 }
