@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Conversations;
 
+use App\Vetmanager\UserData\ClinicToken;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use App\Http\Helpers\Rest\Users;
 use BotMan\BotMan\Messages\Incoming\Answer;
@@ -21,7 +22,13 @@ final class TimesheetConversation extends Conversation
 
     public function saySchedule(): void
     {
-        $token = new Concrete($this->getBot()->userStorage()->get('clinicUserToken'));
+        $token = new Concrete(
+            (
+            new ClinicToken(
+                $this->getBot()
+            )
+            )->asString()
+        );
         $baseUri = (
             new ClinicUrl(
                 $this->getBot(),
@@ -81,13 +88,18 @@ final class TimesheetConversation extends Conversation
                 return $this->askDoctorId();
             } catch (\Exception $e) {
                 $this->say($e->getMessage());
-                return $this->askClinicId();
             }
         });
     }
 
     private function askDoctorId() {
-        $token = new Concrete($this->getBot()->userStorage()->get('clinicUserToken'));
+        $token = new Concrete(
+            (
+            new ClinicToken(
+                $this->getBot()
+            )
+            )->asString()
+        );
         $baseUri = (
             new ClinicUrl(
                 $this->getBot(),

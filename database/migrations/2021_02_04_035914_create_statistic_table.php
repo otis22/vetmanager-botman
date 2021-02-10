@@ -17,7 +17,7 @@ class CreateStatisticTable extends Migration
             $table->bigIncrements('id');
             $table->string('event');
             $table->string('channel');
-            $table->integer('user_id');
+            $table->string('user_id');
             $table->timestamps();
         });
     }

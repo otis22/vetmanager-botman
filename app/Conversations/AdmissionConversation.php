@@ -67,7 +67,6 @@ final class AdmissionConversation extends Conversation
 
     public function sayError(string $message) {
         $this->say($message);
-        $this->say("Попробуйте повторить команду после авторизации.");
         $this->say(
             (
                 new MainMenu(
