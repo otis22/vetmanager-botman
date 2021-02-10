@@ -63,6 +63,7 @@
             <a href="https://twitter.com/botman_io" target="_blank">News</a>
             <a href="https://rauchg-slackin-jtdkltstsj.now.sh/" target="_blank">Slack</a>
             <a href="https://github.com/botman/botman" target="_blank">GitHub</a>
+            <a href="/stats/">Statistics</a>
         </div>
     </div>
 </div>
