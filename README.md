@@ -29,13 +29,35 @@ docker-composer build
 docker-compose up
 ```
 
+Make commands
+```shell
+#run conversations tests
+make botman-tests
+
+#run unit tests
+make unit
+
+#build docker containers
+make build
+
+#start the server
+make serve
+
+#enter into php-fpm
+make exec
+
+#stop the server
+make down
+```
+
 Other commands
 ```shell
 #connecte to php
-docker exec -it vetmanager-botman-php-fpm /bin/bash
+make exec
 #connect to redis from php
 redis-cli -h redis -a 123456 -p 6379
 ```
+
 
 ## Telegram 
 
