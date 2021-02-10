@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Conversations;
 
 use App\Http\Helpers\Rest\ComboManual;
+use App\Vetmanager\UserData\ClinicToken;
 use App\Vetmanager\UserData\ClinicUrl;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\Answer;
@@ -30,7 +31,13 @@ final class NotificationConversation extends Conversation
 
         $this->bot->ask($question, function (Answer $answer) {
             if ($answer->isInteractiveMessageReply()) {
-                $token = new Concrete($this->getBot()->userStorage()->get('clinicUserToken'));
+                $token = new Concrete(
+                    (
+                    new ClinicToken(
+                        $this->getBot()
+                    )
+                    )->asString()
+                );
                 $baseUri = (
                 new ClinicUrl(
                     $this->getBot(),
@@ -53,7 +60,7 @@ final class NotificationConversation extends Conversation
                 if ($answer->getValue() == "on")
                 {
                     $user->update(['notification_enabled' => true]);
-                    $comboManual->addNotificationRoute($this->getBot()->userStorage()->get("clinicDomain"));
+                    $comboManual->addNotificationRoute($user->get('clinic_domain'));
                     $this->say("Уведомления включены.");
                 } else {
                     $user->update(['notification_enabled' => false]);

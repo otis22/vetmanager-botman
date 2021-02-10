@@ -4,6 +4,8 @@ namespace App\Vetmanager\UserData;
 
 use ElegantBro\Interfaces\Stringify;
 use BotMan\BotMan\BotMan;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\UnauthorizedException;
 use Otis22\VetmanagerUrl\Url\FromBillingApiGateway;
 
 use function Otis22\VetmanagerUrl\url;
@@ -33,13 +35,17 @@ final class ClinicUrl implements Stringify
 
     public function asString(): string
     {
+        $userId = $this->bot->getUser()->getId();
         $clinicDomain = $this->bot
             ->userStorage()->get('clinicDomain');
+        if(empty($clinicDomain)) {
+            $clinicDomain = DB::table('users')->where('chat_id', '=', $userId)->get('clinic_domain')->toArray();
+            if (empty($clinicDomain)) {
+                throw new UnauthorizedException("Попробуйте повторить команду после авторизации.");
+            }
+        }
         $builder = $this->urlBuilder;
 
-        if (empty($clinicDomain)) {
-            throw new \Exception("Clinic url can't be empty");
-        }
         $clinicUrl = $builder($clinicDomain);
         return strval($clinicUrl);
     }

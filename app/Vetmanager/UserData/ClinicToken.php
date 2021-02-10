@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Vetmanager\UserData;
 
+use App\Exceptions\VmUnauthorizedException;
 use BotMan\BotMan\BotMan;
 use ElegantBro\Interfaces\Stringify;
-use Exception;
+use Illuminate\Support\Facades\DB;
 
 final class ClinicToken implements Stringify
 {
@@ -26,11 +27,14 @@ final class ClinicToken implements Stringify
 
     public function asString(): string
     {
+        $userId = $this->bot->getUser()->getId();
         $token = $this->bot
             ->userStorage()->get('clinicUserToken');
-
         if (empty($token)) {
-            throw new \Exception("Token can't be empty");
+            $token = DB::table('users')->where('chat_id', '=', $userId)->get('clinic_token');
+            if (empty($token)) {
+                throw new VmUnauthorizedException("Попробуйте повторить команду после авторизации.");
+            }
         }
         return strval($token);
     }
