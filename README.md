@@ -58,6 +58,23 @@ make exec
 redis-cli -h redis -a 123456 -p 6379
 ```
 
+## Heroku 
+
+1. Add clear db addon
+```shell
+heroku addons:add cleardb:ignite –a(my_app_name_goes_here)
+```
+After you can use CLEARDB_DATABASE_URL in envs, and you can connect remotely
+
+CLEARDB_DATABASE_URL => mysql://[username]:[password]@[host]/[database name]?reconnect=true
+
+2. Run migrations
+```shell
+heroku run -a(my_app_name_goes_here)  bash 
+#after
+php artisan migrate
+#than yes
+```
 
 ## Telegram 
 
