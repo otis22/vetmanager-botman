@@ -7,6 +7,7 @@ namespace App\Conversations;
 use App\Http\Helpers\Rest\Admission;
 use App\Vetmanager\MainMenu;
 use App\Vetmanager\UserData\ClinicUrl;
+use App\Vetmanager\UserData\UserRepository\UserRepository;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use App\Http\Helpers\Rest\Users;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
@@ -24,19 +25,20 @@ final class AdmissionConversation extends Conversation
     public function sayTop10()
     {
         try {
+            $user = UserRepository::getById($this->getBot()->getUser()->getId());
             $token = new Concrete(
                 (
                     new ClinicToken(
-                        $this->getBot()
+                        $user
                     )
                 )->asString()
             );
             $baseUri = (
                 new ClinicUrl(
-                    $this->getBot(),
                     function (string $domain) : string {
                         return url($domain)->asString();
-                    }
+                    },
+                    $user
                 )
             )->asString();
             $client = new Client(

@@ -2,47 +2,35 @@
 
 namespace App\Vetmanager\UserData;
 
+use App\Vetmanager\UserData\UserRepository\UserRepository;
 use ElegantBro\Interfaces\Stringify;
-use BotMan\BotMan\BotMan;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\UnauthorizedException;
-use Otis22\VetmanagerUrl\Url\FromBillingApiGateway;
-
-use function Otis22\VetmanagerUrl\url;
 
 final class ClinicUrl implements Stringify
 {
-    /**
-     * @var BotMan
-     */
-    private $bot;
-
-    /**
-     * @var FromBillingApiGateway
-     */
     private $urlBuilder;
 
     /**
-     * ClinicUrl constructor.
-     * @param BotMan $bot
-     * @param callable $urlBuilder
+     * @var UserRepository
      */
-    public function __construct(BotMan $bot, $urlBuilder)
+    private $user;
+
+    /**
+     * ClinicUrl constructor.
+     * @param callable $urlBuilder
+     * @param UserRepository $user
+     */
+    public function __construct($urlBuilder, UserRepository $user)
     {
-        $this->bot = $bot;
         $this->urlBuilder = $urlBuilder;
+        $this->user = $user;
     }
 
     public function asString(): string
     {
-        $userId = $this->bot->getUser()->getId();
-        $clinicDomain = $this->bot
-            ->userStorage()->get('clinicDomain');
-        if(empty($clinicDomain)) {
-            $clinicDomain = DB::table('users')->where('chat_id', '=', $userId)->get('clinic_domain')->toArray();
-            if (empty($clinicDomain)) {
-                throw new UnauthorizedException("Попробуйте повторить команду после авторизации.");
-            }
+        $clinicDomain = $this->user->getDomain();
+        if (empty($clinicDomain)) {
+            throw new UnauthorizedException("Попробуйте повторить команду после авторизации.");
         }
         $builder = $this->urlBuilder;
 

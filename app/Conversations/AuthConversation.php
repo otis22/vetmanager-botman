@@ -6,9 +6,9 @@ declare(strict_types=1);
 
 namespace App\Conversations;
 
+use App\Vetmanager\UserData\UserRepository\UserRepository;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\Answer;
-use App\Vetmanager\UserData\ClinicUrl;
 use BotMan\BotMan\Storages\Storage;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use Illuminate\Support\Facades\DB;
@@ -42,18 +42,12 @@ final class AuthConversation extends Conversation
                 if (empty(trim($answer->getText()))) {
                     throw new \Exception("Can't be empty text");
                 }
+                $domainName = $answer->getText();
                 $this->getBot()->userStorage()
                     ->save(
-                        ['clinicDomain' => $answer->getText()]
+                        ['clinicDomain' => $domainName]
                     );
-                $this->clinicUrl = (
-                    new ClinicUrl(
-                        $this->getBot(),
-                        function (string $domain) : string {
-                            return url($domain)->asString();
-                        }
-                    )
-                )->asString();
+                $this->clinicUrl = url($domainName)->asString();
                 $this->askLogin();
             } catch (\Throwable $exception) {
                 $this->say("Попробуйте еще раз. Ошибка: " . $exception->getMessage());
@@ -88,17 +82,13 @@ final class AuthConversation extends Conversation
             );
             try {
                 $token = token($credentials, $this->clinicUrl)->asString();
-                $this->getBot()->userStorage()
-                    ->save(
-                        ['clinicUserToken' => $token]
-                    );
                 $chatId = $this->getBot()->getUser()->getId();
                 if (is_null(DB::table('users')->where('chat_id', '=', $chatId)->first())) {
-                    DB::table('users')->insert([
-                        'chat_id' => $chatId,
-                        'clinic_domain' => $this->getBot()->userStorage()->get('clinicDomain'),
-                        'clinic_token' => $token
-                    ]);
+                    UserRepository::create(
+                        $chatId,
+                        $this->getBot()->userStorage()->get('clinicDomain'),
+                        $token
+                    );
                 }
                 $this->say('Успех! Введите start для вывода списка команд');
             } catch (\Throwable $exception) {

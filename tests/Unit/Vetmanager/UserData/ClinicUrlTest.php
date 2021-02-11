@@ -5,29 +5,17 @@ declare(strict_types=1);
 namespace Tests\Vetmanager\UserData;
 
 use App\Vetmanager\UserData\ClinicUrl;
-use BotMan\BotMan\BotMan;
+use App\Vetmanager\UserData\UserRepository\UserRepository;
 use PHPUnit\Framework\TestCase;
 
 class ClinicUrlTest extends TestCase
 {
-    private function botmanWithUserStorageWillReturnValue(string $value): BotMan
+    private function userWithDomain(string $domainName): UserRepository
     {
-        $bot = $this->createMock(BotMan::class);
-        $bot->method('userStorage')
-            ->willReturn(
-                new class($value) {
-                    private $val;
-                    public function __construct($value)
-                    {
-                        $this->val = $value;
-                    }
-                    public function get(string $key)
-                    {
-                        return $this->val;
-                    }
-                }
-            );
-        return $bot;
+        $user = $this->createMock(UserRepository::class);
+        $user->method('getDomain')
+            ->willReturn($domainName);
+        return $user;
     }
     public function testAsStringNotEmptyToken(): void
     {
@@ -35,10 +23,10 @@ class ClinicUrlTest extends TestCase
             "https://mydomain.vetmanager.ru",
             (
                 new ClinicUrl(
-                    $this->botmanWithUserStorageWillReturnValue('mydomain'),
                     function ($domain): string {
                         return "https://{$domain}.vetmanager.ru";
-                    }
+                    },
+                    $this->userWithDomain('mydomain'),
                 )
             )->asString()
         );
@@ -49,8 +37,8 @@ class ClinicUrlTest extends TestCase
         $this->expectException(\Exception::class);
         (
             new ClinicUrl(
-                $this->botmanWithUserStorageWillReturnValue(''),
-                function ($domain) {return "https://{$domain}.vetmanager.ru";}
+                function ($domain) {return "https://{$domain}.vetmanager.ru";},
+                $this->userWithDomain('')
             )
         )->asString();
     }
