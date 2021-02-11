@@ -7,13 +7,13 @@ namespace App\Conversations;
 use App\Http\Helpers\Rest\ComboManual;
 use App\Vetmanager\UserData\ClinicToken;
 use App\Vetmanager\UserData\ClinicUrl;
+use App\Vetmanager\UserData\UserRepository\UserRepository;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use GuzzleHttp\Client;
 use Otis22\VetmanagerToken\Token\Concrete;
-use Illuminate\Support\Facades\DB;
 use function Otis22\VetmanagerUrl\url;
 
 final class NotificationConversation extends Conversation
@@ -31,19 +31,20 @@ final class NotificationConversation extends Conversation
 
         $this->bot->ask($question, function (Answer $answer) {
             if ($answer->isInteractiveMessageReply()) {
+                $user = UserRepository::getById($this->getBot()->getUser()->getId());
                 $token = new Concrete(
                     (
                     new ClinicToken(
-                        $this->getBot()
+                        $user
                     )
                     )->asString()
                 );
                 $baseUri = (
                 new ClinicUrl(
-                    $this->getBot(),
                     function (string $domain) : string {
                         return url($domain)->asString();
-                    }
+                    },
+                    $user
                 )
                 )->asString();
                 $client = new Client(
@@ -54,16 +55,13 @@ final class NotificationConversation extends Conversation
                 );
 
                 $comboManual = new ComboManual($client);
-                $chatId = $this->getBot()->getUser()->getId();
-                $user = DB::table('users')
-                    ->where('chat_id', '=', $chatId);
                 if ($answer->getValue() == "on")
                 {
-                    $user->update(['notification_enabled' => true]);
-                    $comboManual->addNotificationRoute($user->get('clinic_domain'));
+                    $user->setNotifications(true);
+                    $comboManual->addNotificationRoute($user->getDomain());
                     $this->say("Уведомления включены.");
                 } else {
-                    $user->update(['notification_enabled' => false]);
+                    $user->setNotifications(false);
                     $this->say("Уведомления выключены.");
                 }
             }

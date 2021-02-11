@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Conversations;
 
 use App\Vetmanager\UserData\ClinicToken;
+use App\Vetmanager\UserData\UserRepository\UserRepository;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use App\Http\Helpers\Rest\Users;
 use BotMan\BotMan\Messages\Incoming\Answer;
@@ -22,19 +23,20 @@ final class TimesheetConversation extends Conversation
 
     public function saySchedule(): void
     {
+        $user = UserRepository::getById($this->getBot()->getUser()->getId());
         $token = new Concrete(
             (
             new ClinicToken(
-                $this->getBot()
+                $user
             )
             )->asString()
         );
         $baseUri = (
             new ClinicUrl(
-                $this->getBot(),
                 function (string $domain) : string {
                     return url($domain)->asString();
-                }
+                },
+                $user
             )
         )->asString();
         $client = new Client(
@@ -93,19 +95,20 @@ final class TimesheetConversation extends Conversation
     }
 
     private function askDoctorId() {
+        $user = UserRepository::getById($this->getBot()->getUser()->getId());
         $token = new Concrete(
             (
             new ClinicToken(
-                $this->getBot()
+                $user
             )
             )->asString()
         );
         $baseUri = (
             new ClinicUrl(
-                $this->getBot(),
                 function (string $domain) : string {
                     return url($domain)->asString();
-                }
+                },
+                $user
             )
         )->asString();
         $client = new Client(
