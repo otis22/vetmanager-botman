@@ -15,7 +15,8 @@ final class MainMenu
         'auth' => 'Авторизация(Необходима для работы бота)',
         'timesheet' => 'График работы сотрудников',
         'admissions' =>  'Мои запланированные визиты',
-        'notification' => 'Управление уведомлениями'
+        'notification' => 'Управление уведомлениями',
+        'review' => 'Оцените меня'
     ];
     /**
      * @var callable(string $questionTitle): Question

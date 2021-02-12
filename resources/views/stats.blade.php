@@ -48,6 +48,7 @@
 <div class="container">
     <div class="content">
         <h1>Statistics</h1>
+        <h2>Average rating: {{$avgReviewMark}}</h2>
         <div class="stats-block">
             <h6>Users Count</h6>
             <h1>{{$userCount}}</h1>
