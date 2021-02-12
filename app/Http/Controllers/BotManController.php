@@ -34,6 +34,8 @@ class BotManController extends Controller
     {
         $userCount = DB::table('users')->count();
         $notifies = DB::table('statistic')->where('event', '=', 'notification message')->count();
+        $reviews = DB::table('review')->pluck('mark')->toArray();
+        $avgReviewMark = array_sum($reviews) / count($reviews);
         $statistic = DB::table('statistic')
             ->select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as count'))
             ->groupBy('date')
@@ -42,7 +44,7 @@ class BotManController extends Controller
         $statistic = array_reverse($statistic);
         $eventsLast10Days['labels'] = array_column($statistic, 'date');
         $eventsLast10Days['data'] = array_column($statistic, 'count');
-        return view('stats')->with(compact(['notifies', 'userCount', 'eventsLast10Days']));
+        return view('stats')->with(compact(['notifies', 'userCount', 'eventsLast10Days', 'avgReviewMark']));
     }
 
     /**
