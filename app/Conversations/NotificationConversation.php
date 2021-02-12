@@ -57,13 +57,14 @@ final class NotificationConversation extends Conversation
                 $comboManual = new ComboManual($client);
                 if ($answer->getValue() == "on")
                 {
-                    $user->setNotifications(true);
+                    $user->enableNotifications();
                     $comboManual->addNotificationRoute($user->getDomain());
                     $this->say("Уведомления включены.");
                 } else {
-                    $user->setNotifications(false);
+                    $user->disableNotifications();
                     $this->say("Уведомления выключены.");
                 }
+                UserRepository::save($user);
             }
         });
     }

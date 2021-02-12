@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace App\Conversations;
 
+use App\Vetmanager\UserData\UserRepository\User;
 use App\Vetmanager\UserData\UserRepository\UserRepository;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\Answer;
@@ -84,11 +85,12 @@ final class AuthConversation extends Conversation
                 $token = token($credentials, $this->clinicUrl)->asString();
                 $chatId = $this->getBot()->getUser()->getId();
                 if (is_null(DB::table('users')->where('chat_id', '=', $chatId)->first())) {
-                    UserRepository::create(
+                    $user = new User(
                         $chatId,
                         $this->getBot()->userStorage()->get('clinicDomain'),
                         $token
                     );
+                    UserRepository::save($user);
                 }
                 $this->say('Успех! Введите start для вывода списка команд');
             } catch (\Throwable $exception) {
