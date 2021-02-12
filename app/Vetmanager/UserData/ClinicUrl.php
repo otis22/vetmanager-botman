@@ -2,7 +2,7 @@
 
 namespace App\Vetmanager\UserData;
 
-use App\Vetmanager\UserData\UserRepository\UserRepository;
+use App\Vetmanager\UserData\UserRepository\User;
 use ElegantBro\Interfaces\Stringify;
 use Illuminate\Validation\UnauthorizedException;
 
@@ -11,16 +11,16 @@ final class ClinicUrl implements Stringify
     private $urlBuilder;
 
     /**
-     * @var UserRepository
+     * @var User
      */
     private $user;
 
     /**
      * ClinicUrl constructor.
      * @param callable $urlBuilder
-     * @param UserRepository $user
+     * @param User $user
      */
-    public function __construct($urlBuilder, UserRepository $user)
+    public function __construct($urlBuilder, User $user)
     {
         $this->urlBuilder = $urlBuilder;
         $this->user = $user;
