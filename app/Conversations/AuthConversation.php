@@ -6,12 +6,14 @@ declare(strict_types=1);
 
 namespace App\Conversations;
 
+use App\Http\Helpers\Rest\Users;
 use App\Vetmanager\UserData\UserRepository\User;
 use App\Vetmanager\UserData\UserRepository\UserRepository;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Storages\Storage;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use GuzzleHttp\Client;
 use Illuminate\Support\Facades\DB;
 use function Otis22\VetmanagerUrl\url;
 use function Otis22\VetmanagerToken\token;
@@ -85,10 +87,18 @@ final class AuthConversation extends Conversation
                 $token = token($credentials, $this->clinicUrl)->asString();
                 $chatId = $this->getBot()->getUser()->getId();
                 if (is_null(DB::table('users')->where('chat_id', '=', $chatId)->first())) {
+                    $client = new Client(
+                        [
+                            'base_uri' => $this->clinicUrl,
+                            'headers' => ['X-USER-TOKEN' => $token, 'X-APP-NAME' => config('app.name')]
+                        ]
+                    );
+                    $vmUserId = (new Users($client))->getUserIdByToken($token);
                     $user = new User(
                         $chatId,
                         $this->getBot()->userStorage()->get('clinicDomain'),
-                        $token
+                        $token,
+                        $vmUserId
                     );
                     UserRepository::save($user);
                 }

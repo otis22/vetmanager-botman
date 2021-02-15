@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Conversations;
 
+use App\Http\Helpers\Rest\Clinics;
 use App\Vetmanager\UserData\ClinicToken;
 use App\Vetmanager\UserData\UserRepository\UserRepository;
 use BotMan\BotMan\Messages\Conversations\Conversation;
@@ -80,21 +81,6 @@ final class TimesheetConversation extends Conversation
 
     private function askClinicId()
     {
-        $this->ask("Введите ID клиники(0, чтобы отобразить по всем клиникам)", function (Answer $answer) {
-            $clinicId = $answer->getText();
-            try {
-                if (!is_numeric($clinicId)) {
-                    throw new \Exception("Ошибка. Проверьте введенные данные!");
-                }
-                $this->bot->userStorage()->save(compact('clinicId'));
-                return $this->askDoctorId();
-            } catch (\Exception $e) {
-                $this->say($e->getMessage());
-            }
-        });
-    }
-
-    private function askDoctorId() {
         $user = UserRepository::getById($this->getBot()->getUser()->getId());
         $token = new Concrete(
             (
@@ -117,10 +103,64 @@ final class TimesheetConversation extends Conversation
                 'headers' => ['X-USER-TOKEN' => $token->asString(), 'X-APP-NAME' => config('app.name')]
             ]
         );
+        $clinics = (new Clinics($client))->all()['data']['clinics'];
+        if (count($clinics) == 1) {
+            return $this->askDoctorId(1);
+        }
+
+        foreach ($clinics as $clinic) {
+            $text = $clinic['title'];
+            $buttons[] = Button::create($text)->value($clinic['id']);
+        }
+        $question = Question::create('Выберите клинику')
+            ->callbackId('select_clinic')
+            ->addButtons($buttons);
+
+        $this->ask($question, function (Answer $answer) {
+            $clinicId = $answer->getText();
+            try {
+                if (!is_numeric($clinicId)) {
+                    throw new \Exception("Ошибка. Проверьте введенные данные!");
+                }
+                return $this->askDoctorId($clinicId);
+            } catch (\Exception $e) {
+                $this->say($e->getMessage());
+            }
+        });
+    }
+
+    private function askDoctorId($clinicId=1) {
+        $user = UserRepository::getById($this->getBot()->getUser()->getId());
+        $token = new Concrete(
+            (
+            new ClinicToken(
+                $user
+            )
+            )->asString()
+        );
+        $baseUri = (
+            new ClinicUrl(
+                function (string $domain) : string {
+                    return url($domain)->asString();
+                },
+                $user
+            )
+        )->asString();
+        $client = new Client(
+            [
+                'base_uri' => $baseUri,
+                'headers' => ['X-USER-TOKEN' => $token->asString(), 'X-APP-NAME' => config('app.name')]
+            ]
+        );
+
+        $currentUserId = $user->getVmUserId();
+        $buttons[] = Button::create('Мой график')->value($currentUserId);
         $users = new Users($client);
         foreach ($users->all()['data']['user'] as $user) {
-            $text = $user['first_name'] . " " . $user['last_name'] . " " . $user['login'];
-            $buttons[] = Button::create($text)->value($user['id']);
+            if ($user['id'] != $currentUserId) {
+                $text = $user['first_name'] . " " . $user['last_name'] . " " . $user['login'];
+                $buttons[] = Button::create($text)->value($user['id']);
+            }
         }
 
         $question = Question::create('Выберите врача')
@@ -129,7 +169,7 @@ final class TimesheetConversation extends Conversation
 
         $this->ask($question, function (Answer $answer) {
             if ($answer->isInteractiveMessageReply()) {
-                $this->say("Результаты для ID " . $answer->getText());
+                $this->say("Результаты для " . $answer->getText());
                 $doctorId = $answer->getValue();
                 try {
                     if (!is_numeric($doctorId)) {
