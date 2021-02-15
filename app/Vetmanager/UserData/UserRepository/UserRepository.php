@@ -9,7 +9,7 @@ class UserRepository implements IUserRepository
     public static function save(User $user): bool
     {
         $existUser = DB::table('users')->where('chat_id', '=', $user->getId());
-        if (!empty($existUser)) {
+        if (!empty($existUser->get()->toArray())) {
             return $existUser->update($user->toArray());
         }
         return DB::table('users')->insert($user->toArray());
