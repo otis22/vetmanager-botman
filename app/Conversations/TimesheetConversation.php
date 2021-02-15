@@ -152,10 +152,15 @@ final class TimesheetConversation extends Conversation
                 'headers' => ['X-USER-TOKEN' => $token->asString(), 'X-APP-NAME' => config('app.name')]
             ]
         );
+
+        $currentUserId = $user->getVmUserId();
+        $buttons[] = Button::create('Мой график')->value($currentUserId);
         $users = new Users($client);
         foreach ($users->all()['data']['user'] as $user) {
-            $text = $user['first_name'] . " " . $user['last_name'] . " " . $user['login'];
-            $buttons[] = Button::create($text)->value($user['id']);
+            if ($user['id'] != $currentUserId) {
+                $text = $user['first_name'] . " " . $user['last_name'] . " " . $user['login'];
+                $buttons[] = Button::create($text)->value($user['id']);
+            }
         }
 
         $question = Question::create('Выберите врача')
@@ -164,7 +169,7 @@ final class TimesheetConversation extends Conversation
 
         $this->ask($question, function (Answer $answer) {
             if ($answer->isInteractiveMessageReply()) {
-                $this->say("Результаты для ID " . $answer->getText());
+                $this->say("Результаты для " . $answer->getText());
                 $doctorId = $answer->getValue();
                 try {
                     if (!is_numeric($doctorId)) {

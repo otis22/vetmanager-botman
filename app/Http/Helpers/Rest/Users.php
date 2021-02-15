@@ -65,6 +65,21 @@ class Users
         return $result;
     }
 
+    public function getUserIdByToken($token)
+    {
+        $request = $this->httpClient->request(
+            'GET',
+            uri("user")->asString() . '/CurrentId?user_token=' . $token
+        );
+        $result = json_decode(
+            strval(
+                $request->getBody()
+            ),
+            true
+        );
+        return $result['user_id'];
+    }
+
     public function getUserIdByLogin($login)
     {
         $filteringParams[] = new EqualTo(
