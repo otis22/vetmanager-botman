@@ -58,7 +58,8 @@ final class TimesheetConversation extends Conversation
             $date = date_format(date_create($timesheet['begin_datetime']), "d.m.Y");
             $from = date_format(date_create($timesheet['begin_datetime']), "H:i:s");
             $to = date_format(date_create($timesheet['end_datetime']), "H:i:s");
-            $this->say("{$date} $from - $to");
+            $type = $schedules->getTypeNameById($timesheet['type']);
+            $this->say($date . PHP_EOL ."$from - $to" . PHP_EOL . $type);
         }
     }
 
@@ -169,8 +170,31 @@ final class TimesheetConversation extends Conversation
 
         $this->ask($question, function (Answer $answer) {
             if ($answer->isInteractiveMessageReply()) {
-                $this->say("Результаты для " . $answer->getText());
-                $doctorId = $answer->getValue();
+                $user = UserRepository::getById($this->getBot()->getUser()->getId());
+                $token = new Concrete(
+                    (
+                    new ClinicToken(
+                        $user
+                    )
+                    )->asString()
+                );
+                $baseUri = (
+                new ClinicUrl(
+                    function (string $domain) : string {
+                        return url($domain)->asString();
+                    },
+                    $user
+                )
+                )->asString();
+                $client = new Client(
+                    [
+                        'base_uri' => $baseUri,
+                        'headers' => ['X-USER-TOKEN' => $token->asString(), 'X-APP-NAME' => config('app.name')]
+                    ]
+                );
+                $users = new Users($client);
+                $doctorId = intval($answer->getValue());
+                $this->say("Результаты для " . $users->byId($doctorId)['data']['user']['login']);
                 try {
                     if (!is_numeric($doctorId)) {
                         throw new \Exception("Ошибка. Проверьте введенные данные!");

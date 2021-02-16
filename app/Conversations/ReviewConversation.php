@@ -40,7 +40,7 @@ final class ReviewConversation extends Conversation
             DB::table('review')->insert([
                 'user_id' => $this->getBot()->getUser()->getId(),
                 'channel' => $this->getBot()->getDriver()->getName(),
-                'mark' => $this->getBot()->userStorage()->get('mark'),
+                'mark' => intval($this->getBot()->userStorage()->get('mark')),
                 'the_best_feature' => $feature,
                 'created_at' => date("Y-m-d H:i:s"),
             ]);
