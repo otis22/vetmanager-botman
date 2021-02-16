@@ -74,4 +74,26 @@ class Schedules
         );
         return $result;
     }
+
+    public function getTypeNameById($id): string
+    {
+        $request = $this->httpClient->request(
+            'GET',
+            uri("timesheetTypes")->asString(),
+            []
+        );
+        $result = json_decode(
+            strval(
+                $request->getBody()
+            ),
+            true
+        );
+        $types = $result['data']['timesheetTypes'];
+        foreach ($types as $type) {
+            if ($type['id'] == $id) {
+                return $type['name'];
+            }
+        }
+        return false;
+    }
 }
