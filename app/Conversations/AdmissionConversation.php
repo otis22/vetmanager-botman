@@ -54,9 +54,18 @@ final class AdmissionConversation extends Conversation
             $last10Admissions = array_slice($admission->getByUserId($currentUserId)['data']['admission'], 0, 10, true);
             if (!empty($last10Admissions)) {
                 foreach ($last10Admissions as $concrete) {
-                    $message = $concrete['admission_date'] . ' - ' . $concrete['client']['last_name'] . " ";
-                    $message .= $concrete['client']['first_name'] . " " . $concrete['pet']['alias'] . " ";
-                    $message .= $concrete['pet']['pet_type_data']['title'] . " " . $concrete['pet']['breed_data']['title'];
+                    $message = $concrete['admission_date'] .PHP_EOL;
+                    if (isset($concrete['client'])) {
+                        $message .= "Клиент: ";
+                        $message .= $concrete['client']['last_name'] . " " . $concrete['client']['first_name'] . PHP_EOL;
+                    } else {
+                        $message .= "Клиент: <пусто>";
+                    }
+                    if (isset($concrete['pet'])) {
+                        $message .= "Кличка питомца: " . $concrete['pet']['alias'] . PHP_EOL;
+                        $message .= "Тип: " . $concrete['pet']['pet_type_data']['title'] . PHP_EOL;
+                        $message .= "Порода: " . $concrete['pet']['breed_data']['title'];
+                    }
                     $this->say($message);
                 }
             } else {
