@@ -6,20 +6,29 @@ namespace App\Conversations;
 
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\Answer;
+use BotMan\BotMan\Messages\Outgoing\Actions\Button;
+use BotMan\BotMan\Messages\Outgoing\Question;
 use Illuminate\Support\Facades\DB;
 
 final class ReviewConversation extends Conversation
 {
     public function askMark()
     {
-        $this->ask("Поставьте оценку от 1 до 10. Где 10 - отличный бот, буду рекомендовать", function (Answer $answer) {
+        foreach (range(1,10) as $value) {
+            $buttons[] = Button::create($value)->value($value);
+        }
+        $question = Question::create('Поставьте оценку от 1 до 10. Где 10 - отличный бот, буду рекомендовать')
+            ->callbackId('select_rate')
+            ->addButtons($buttons);
+
+        $this->ask($question, function (Answer $answer) {
             $mark = $answer->getText();
-            if ((1 <= $mark) && ($mark <= 10)) {
+            if (in_array($mark, range(1,10))) {
                 $this->getBot()->userStorage()->save(compact('mark'));
                 $this->askFeature();
             } else {
                 $this->say("Ошибка ввода");
-                $this->askReview();
+                $this->askMark();
             }
         });
     }
