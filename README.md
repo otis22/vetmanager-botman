@@ -54,8 +54,6 @@ Other commands
 ```shell
 #connecte to php
 make exec
-#connect to redis from php
-redis-cli -h redis -a 123456 -p 6379
 ```
 
 ## Heroku 
