@@ -106,7 +106,7 @@ final class TimesheetConversation extends Conversation
         );
         $clinics = (new Clinics($client))->all()['data']['clinics'];
         if (count($clinics) == 1) {
-            return $this->askDoctorId(1);
+            return $this->askDoctorId();
         }
 
         foreach ($clinics as $clinic) {
@@ -119,6 +119,7 @@ final class TimesheetConversation extends Conversation
 
         $this->ask($question, function (Answer $answer) {
             $clinicId = $answer->getText();
+            $this->getBot()->userStorage()->save(compact('clinicId'));
             try {
                 if (!is_numeric($clinicId)) {
                     throw new \Exception("Ошибка. Проверьте введенные данные!");
@@ -130,7 +131,7 @@ final class TimesheetConversation extends Conversation
         });
     }
 
-    private function askDoctorId($clinicId=1) {
+    private function askDoctorId() {
         $user = UserRepository::getById($this->getBot()->getUser()->getId());
         $token = new Concrete(
             (
