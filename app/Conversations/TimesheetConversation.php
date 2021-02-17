@@ -47,7 +47,7 @@ final class TimesheetConversation extends Conversation
             ]
         );
         $schedules = new Schedules($client);
-        $daysCount = $this->bot->userStorage()->get('daysCount');
+        $daysCount = 7;
         $doctorId = $this->bot->userStorage()->get('doctorId');
         $clinicId = $this->bot->userStorage()->get('clinicId');
         $timesheets = $schedules->byIntervalInDays($daysCount, $doctorId, $clinicId)['data']['timesheet'];
@@ -61,23 +61,6 @@ final class TimesheetConversation extends Conversation
             $type = $schedules->getTypeNameById($timesheet['type']);
             $this->say($date . PHP_EOL ."$from - $to" . PHP_EOL . $type);
         }
-    }
-
-    private function askDaysCount()
-    {
-        $this->ask("Введите количество дней", function (Answer $answer) {
-            $daysCount = $answer->getText();
-            try {
-                if (!is_numeric($daysCount) or $daysCount == 0) {
-                    throw new \Exception("Ошибка. Проверьте введенные данные! {$daysCount} - неправильные данные" );
-                }
-                $this->bot->userStorage()->save(compact('daysCount'));
-                return $this->askClinicId();
-            } catch (\Exception $e) {
-                $this->say($e->getMessage());
-                return $this->askDaysCount();
-            }
-        });
     }
 
     private function askClinicId()
@@ -224,6 +207,6 @@ final class TimesheetConversation extends Conversation
     }
     public function run()
     {
-        $this->askDaysCount();
+        $this->askClinicId();
     }
 }
