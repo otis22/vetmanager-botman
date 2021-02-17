@@ -35,11 +35,13 @@ $botman->fallback(function (Botman $bot) {
 });
 
 $botman->hears('start', function($bot){
+    $is_authorized = $bot->userStorage()->get('is_authorized');
     $bot->reply(
         (
             new MainMenu(
                 [Question::class, 'create'],
-                [Button::class, 'create']
+                [Button::class, 'create'],
+                $is_authorized
             )
         )->asQuestion()
     );

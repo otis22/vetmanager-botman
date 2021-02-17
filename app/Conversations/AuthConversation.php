@@ -100,6 +100,7 @@ final class AuthConversation extends Conversation
                     $vmUserId
                 );
                 UserRepository::save($user);
+                $this->getBot()->userStorage()->save(['is_authorized' => true]);
                 $this->say('Успех! Введите start для вывода списка команд');
             } catch (\Throwable $exception) {
                 $this->say("Попробуйте еще раз. Ошибка: " . $exception->getMessage());
