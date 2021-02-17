@@ -158,7 +158,7 @@ final class TimesheetConversation extends Conversation
         $currentUserId = $user->getVmUserId();
         $buttons[] = Button::create('Мой график')->value($currentUserId);
         $users = new Users($client);
-        foreach ($users->all()['data']['user'] as $user) {
+        foreach ($users->allActive()['data']['user'] as $user) {
             if ($user['id'] != $currentUserId) {
                 $text = $user['first_name'] . " " . $user['last_name'] . " " . $user['login'];
                 $buttons[] = Button::create($text)->value($user['id']);

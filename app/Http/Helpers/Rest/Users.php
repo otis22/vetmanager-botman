@@ -45,6 +45,33 @@ class Users
         return $result;
     }
 
+    public function allActive(): array
+    {
+        $filteringParams[] = new EqualTo(
+            new Property('is_active'),
+            new StringValue(strval(1))
+        );
+        $filteringParams[] = new EqualTo(
+            new Property('is_limited'),
+            new StringValue(strval(0))
+        );
+        $filters = new Filters(...$filteringParams);
+        $request = $this->httpClient->request(
+            'GET',
+            uri("user")->asString() . '/',
+            [
+                "query" => $filters->asKeyValue()
+            ]
+        );
+        $result = json_decode(
+            strval(
+                $request->getBody()
+            ),
+            true
+        );
+        return $result;
+    }
+
     /**
      * @int $id
      * @return array{success:bool}
