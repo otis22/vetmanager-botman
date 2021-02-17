@@ -26,16 +26,21 @@ final class MainMenu
      * @var callable(string $buttonTitle): Button
      */
     private $buttonFactory;
+    /**
+     * @var bool
+     */
+    private $isAuthorized;
 
     /**
      * MainMenu constructor.
      * @param callable $questionFactory
      * @param callable $buttonFactory
      */
-    public function __construct(callable $questionFactory, callable $buttonFactory)
+    public function __construct(callable $questionFactory, callable $buttonFactory, bool $isAuthorized=false)
     {
         $this->questionFactory = $questionFactory;
         $this->buttonFactory = $buttonFactory;
+        $this->isAuthorized = $isAuthorized;
     }
 
     /**
@@ -51,6 +56,9 @@ final class MainMenu
      */
     private function titles(): array
     {
+        if ($this->isAuthorized) {
+            $this->commandsConfig['auth'] = 'Сменить пользователя';
+        }
         return array_values($this->commandsConfig);
     }
 
