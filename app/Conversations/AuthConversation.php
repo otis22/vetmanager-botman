@@ -86,22 +86,20 @@ final class AuthConversation extends Conversation
             try {
                 $token = token($credentials, $this->clinicUrl)->asString();
                 $chatId = $this->getBot()->getUser()->getId();
-                if (is_null(DB::table('users')->where('chat_id', '=', $chatId)->first())) {
-                    $client = new Client(
-                        [
-                            'base_uri' => $this->clinicUrl,
-                            'headers' => ['X-USER-TOKEN' => $token, 'X-APP-NAME' => config('app.name')]
-                        ]
-                    );
-                    $vmUserId = (new Users($client))->getUserIdByToken($token);
-                    $user = new User(
-                        $chatId,
-                        $this->getBot()->userStorage()->get('clinicDomain'),
-                        $token,
-                        $vmUserId
-                    );
-                    UserRepository::save($user);
-                }
+                $client = new Client(
+                    [
+                        'base_uri' => $this->clinicUrl,
+                        'headers' => ['X-USER-TOKEN' => $token, 'X-APP-NAME' => config('app.name')]
+                    ]
+                );
+                $vmUserId = (new Users($client))->getUserIdByToken($token);
+                $user = new User(
+                    $chatId,
+                    $this->getBot()->userStorage()->get('clinicDomain'),
+                    $token,
+                    $vmUserId
+                );
+                UserRepository::save($user);
                 $this->say('Успех! Введите start для вывода списка команд');
             } catch (\Throwable $exception) {
                 $this->say("Попробуйте еще раз. Ошибка: " . $exception->getMessage());
