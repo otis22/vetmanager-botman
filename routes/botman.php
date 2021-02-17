@@ -19,11 +19,13 @@ $botman->fallback(function (Botman $bot) {
             if ($answer->isInteractiveMessageReply()) {
                 switch ($answer->getValue()) {
                     case 'start':
+                        $is_authorized = $bot->userStorage()->get('is_authorized') ?? false;
                         $bot->reply(
                             (
                                 new MainMenu(
                                     [Question::class, 'create'],
-                                    [Button::class, 'create']
+                                    [Button::class, 'create'],
+                                    $is_authorized
                                 )
                             )->asQuestion()
                         );
@@ -35,7 +37,7 @@ $botman->fallback(function (Botman $bot) {
 });
 
 $botman->hears('start', function($bot){
-    $is_authorized = $bot->userStorage()->get('is_authorized');
+    $is_authorized = $bot->userStorage()->get('is_authorized') ?? false;
     $bot->reply(
         (
             new MainMenu(
