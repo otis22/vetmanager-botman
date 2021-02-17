@@ -35,7 +35,7 @@ class BotManController extends Controller
         $userCount = DB::table('users')->count();
         $notifies = DB::table('statistic')->where('event', '=', 'notification message')->count();
         $reviews = DB::table('review')->pluck('mark')->toArray();
-        $avgReviewMark = array_sum($reviews) / count($reviews);
+        $avgReviewMark = (!empty($reviews)) ? array_sum($reviews) / count($reviews) : "Оценок нет";
         $statistic = DB::table('statistic')
             ->select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as count'))
             ->groupBy('date')
