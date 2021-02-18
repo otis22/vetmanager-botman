@@ -2,8 +2,8 @@
 
 ![GitHub CI](https://github.com/otis22/vetmanager-botman/workflows/CI/badge.svg)
 
-[heroku app](https://vetmanager-botman.herokuapp.com/)
-[telegram](https://t.me/vetmanager_bot)
+* [heroku app](https://vetmanager-botman.herokuapp.com/)
+* [telegram](https://t.me/vetmanager_bot)
 
 <p align="center"><img height="188" width="198" src="https://botman.io/img/botman.png"></p>
 <h1 align="center">Vetmanager Botman</h1>
@@ -76,8 +76,8 @@ php artisan migrate
 
 ## Telegram 
 
-[how to create bot](https://unnikked.ga/getting-started-with-telegram-bots-9e467d922d69)
-[how to debug with ngrok](https://unnikked.ga/make-your-telegram-bot-with-laravel-and-botman-b8199e58461d)
+* [how to create bot](https://unnikked.ga/getting-started-with-telegram-bots-9e467d922d69)
+* [how to debug with ngrok](https://unnikked.ga/make-your-telegram-bot-with-laravel-and-botman-b8199e58461d)
 
 ### For contributors 
 
