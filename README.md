@@ -2,6 +2,7 @@
 
 ![GitHub CI](https://github.com/otis22/vetmanager-botman/workflows/CI/badge.svg)
 
+* [for bugs](https://forms.gle/TYdpek6jYDzkTPBP8)
 * [bot statistics](http://vetmanager-botman.herokuapp.com/stats)
 * [telegram](https://t.me/vetmanager_bot)
 
