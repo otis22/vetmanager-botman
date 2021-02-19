@@ -6,6 +6,7 @@ use App\Vetmanager\MainMenu;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use App\Http\Middleware\BotMan\ReceivedMiddleware;
+use App\Vetmanager\UserData\UserRepository\UserRepository;
 
 $botman = resolve('botman');
 
@@ -19,13 +20,13 @@ $botman->fallback(function (Botman $bot) {
             if ($answer->isInteractiveMessageReply()) {
                 switch ($answer->getValue()) {
                     case 'start':
-                        $is_authorized = $bot->userStorage()->get('is_authorized') ?? false;
+                        $user = UserRepository::getById($bot->getUser()->getId());
                         $bot->reply(
                             (
                                 new MainMenu(
                                     [Question::class, 'create'],
                                     [Button::class, 'create'],
-                                    $is_authorized
+                                    $user->isAuthorized()
                                 )
                             )->asQuestion()
                         );
@@ -37,13 +38,13 @@ $botman->fallback(function (Botman $bot) {
 });
 
 $botman->hears('start', function($bot){
-    $is_authorized = $bot->userStorage()->get('is_authorized') ?? false;
+    $user = UserRepository::getById($bot->getUser()->getId());
     $bot->reply(
         (
             new MainMenu(
                 [Question::class, 'create'],
                 [Button::class, 'create'],
-                $is_authorized
+                $user->isAuthorized()
             )
         )->asQuestion()
     );
