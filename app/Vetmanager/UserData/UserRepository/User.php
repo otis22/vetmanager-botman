@@ -66,4 +66,9 @@ class User
             'notification_enabled' => $this->isNotificationEnabled()
         ];
     }
+
+    public function isAuthorized(): bool
+    {
+        return !empty($this->token);
+    }
 }
