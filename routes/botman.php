@@ -20,13 +20,13 @@ $botman->fallback(function (Botman $bot) {
             if ($answer->isInteractiveMessageReply()) {
                 switch ($answer->getValue()) {
                     case 'start':
-                        $is_authorized = $bot->userStorage()->get('is_authorized') ?? false;
+                        $user = UserRepository::getById($bot->getUser()->getId());
                         $bot->reply(
                             (
                                 new MainMenu(
                                     [Question::class, 'create'],
                                     [Button::class, 'create'],
-                                    $is_authorized
+                                    $user->isAuthorized()
                                 )
                             )->asQuestion()
                         );
