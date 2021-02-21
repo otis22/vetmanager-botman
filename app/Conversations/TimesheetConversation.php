@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Conversations;
 
 use App\Http\Helpers\Rest\Clinics;
+use App\Vetmanager\Api\AuthenticatedClientFactory;
 use App\Vetmanager\UserData\ClinicToken;
 use App\Vetmanager\UserData\UserRepository\UserRepository;
 use BotMan\BotMan\Messages\Conversations\Conversation;
@@ -25,28 +26,8 @@ final class TimesheetConversation extends Conversation
     public function saySchedule(): void
     {
         $user = UserRepository::getById($this->getBot()->getUser()->getId());
-        $token = new Concrete(
-            (
-            new ClinicToken(
-                $user
-            )
-            )->asString()
-        );
-        $baseUri = (
-            new ClinicUrl(
-                function (string $domain) : string {
-                    return url($domain)->asString();
-                },
-                $user
-            )
-        )->asString();
-        $client = new Client(
-            [
-                'base_uri' => $baseUri,
-                'headers' => ['X-USER-TOKEN' => $token->asString(), 'X-APP-NAME' => config('app.name')]
-            ]
-        );
-        $schedules = new Schedules($client);
+        $clientFactory = new AuthenticatedClientFactory($user);
+        $schedules = new Schedules($clientFactory->create());
         $daysCount = 7;
         $doctorId = $this->bot->userStorage()->get('doctorId');
         $clinicId = $this->bot->userStorage()->get('clinicId');
@@ -66,28 +47,11 @@ final class TimesheetConversation extends Conversation
     private function askClinicId()
     {
         $user = UserRepository::getById($this->getBot()->getUser()->getId());
-        $token = new Concrete(
-            (
-            new ClinicToken(
-                $user
-            )
-            )->asString()
-        );
-        $baseUri = (
-            new ClinicUrl(
-                function (string $domain) : string {
-                    return url($domain)->asString();
-                },
-                $user
-            )
-        )->asString();
-        $client = new Client(
-            [
-                'base_uri' => $baseUri,
-                'headers' => ['X-USER-TOKEN' => $token->asString(), 'X-APP-NAME' => config('app.name')]
-            ]
-        );
-        $clinics = (new Clinics($client))->all()['data']['clinics'];
+        $clientFactory = new AuthenticatedClientFactory($user);
+        $clinics = (
+            new Clinics($clientFactory->create())
+        )->all()['data']['clinics'];
+
         if (count($clinics) == 1) {
             return $this->askDoctorId();
         }
@@ -116,31 +80,10 @@ final class TimesheetConversation extends Conversation
 
     private function askDoctorId() {
         $user = UserRepository::getById($this->getBot()->getUser()->getId());
-        $token = new Concrete(
-            (
-            new ClinicToken(
-                $user
-            )
-            )->asString()
-        );
-        $baseUri = (
-            new ClinicUrl(
-                function (string $domain) : string {
-                    return url($domain)->asString();
-                },
-                $user
-            )
-        )->asString();
-        $client = new Client(
-            [
-                'base_uri' => $baseUri,
-                'headers' => ['X-USER-TOKEN' => $token->asString(), 'X-APP-NAME' => config('app.name')]
-            ]
-        );
-
+        $clientFactory = new AuthenticatedClientFactory($user);
         $currentUserId = $user->getVmUserId();
         $buttons[] = Button::create('Мой график')->value($currentUserId);
-        $users = new Users($client);
+        $users = new Users($clientFactory->create());
         foreach ($users->allActive()['data']['user'] as $user) {
             if ($user['id'] != $currentUserId) {
                 $text = $user['first_name'] . " " . $user['last_name'] . " " . $user['login'];
@@ -155,28 +98,8 @@ final class TimesheetConversation extends Conversation
         $this->ask($question, function (Answer $answer) {
             if ($answer->isInteractiveMessageReply()) {
                 $user = UserRepository::getById($this->getBot()->getUser()->getId());
-                $token = new Concrete(
-                    (
-                    new ClinicToken(
-                        $user
-                    )
-                    )->asString()
-                );
-                $baseUri = (
-                new ClinicUrl(
-                    function (string $domain) : string {
-                        return url($domain)->asString();
-                    },
-                    $user
-                )
-                )->asString();
-                $client = new Client(
-                    [
-                        'base_uri' => $baseUri,
-                        'headers' => ['X-USER-TOKEN' => $token->asString(), 'X-APP-NAME' => config('app.name')]
-                    ]
-                );
-                $users = new Users($client);
+                $clientFactory = new AuthenticatedClientFactory($user);
+                $users = new Users($clientFactory->create());
                 $doctorId = intval($answer->getValue());
                 $this->say("Результаты для " . $users->byId($doctorId)['data']['user']['login']);
                 try {

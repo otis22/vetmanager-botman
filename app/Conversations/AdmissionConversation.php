@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Conversations;
 
 use App\Http\Helpers\Rest\Admission;
+use App\Vetmanager\Api\AuthenticatedClientFactory;
 use App\Vetmanager\MainMenu;
 use App\Vetmanager\UserData\ClinicUrl;
 use App\Vetmanager\UserData\UserRepository\User;
@@ -43,27 +44,8 @@ final class AdmissionConversation extends Conversation
     public function sayTop10()
     {
         try {
-            $token = new Concrete(
-                (
-                    new ClinicToken(
-                        $this->user()
-                    )
-                )->asString()
-            );
-            $baseUri = (
-                new ClinicUrl(
-                    function (string $domain) : string {
-                        return url($domain)->asString();
-                    },
-                    $this->user()
-                )
-            )->asString();
-            $client = new Client(
-                [
-                    'base_uri' => $baseUri,
-                    'headers' => ['X-USER-TOKEN' => $token->asString(), 'X-APP-NAME' => config('app.name')]
-                ]
-            );
+            $clientFactory = new AuthenticatedClientFactory($this->user());
+            $client = $clientFactory->create();
             $currentUserLogin = $this->getBot()->userStorage()->get('userLogin');
             $users = new Users($client);
             $currentUserId = $users->getUserIdByLogin($currentUserLogin);

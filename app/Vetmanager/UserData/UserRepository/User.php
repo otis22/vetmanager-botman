@@ -4,7 +4,7 @@
 namespace App\Vetmanager\UserData\UserRepository;
 
 
-class User
+class User implements UserInterface
 {
     protected $chatId;
     protected $domain;

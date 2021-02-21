@@ -3,6 +3,7 @@
 namespace App\Vetmanager\UserData\UserRepository;
 
 use Illuminate\Support\Facades\DB;
+use App\Vetmanager\UserData\UserRepository\UserInterface;
 
 class UserRepository implements IUserRepository
 {
@@ -15,9 +16,14 @@ class UserRepository implements IUserRepository
         return DB::table('users')->insert($user->toArray());
     }
 
-    public static function getById($chatId): User
+    public static function getById($chatId): UserInterface
     {
         $user = DB::table('users')->where('chat_id', '=', $chatId)->first();
+
+        if (empty($user)) {
+            return new IsNotAuthenticatedUser();
+        }
+
         return new User($user->chat_id, $user->clinic_domain, $user->clinic_token, $user->vm_user_id, $user->notification_enabled);
     }
 }

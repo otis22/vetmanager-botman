@@ -1,7 +1,7 @@
 build:
 	docker-compose -f ./.docker/docker-compose.yml build $(c)
 serve:
-	docker-compose -f ./.docker/docker-compose.yml up -d $(c)
+	docker-compose -f ./.docker/docker-compose.yml up $(c)
 down:
 	docker-compose -f ./.docker/docker-compose.yml down $(c)
 unit:
