@@ -3,7 +3,6 @@
 namespace App\Vetmanager\UserData\UserRepository;
 
 use Illuminate\Support\Facades\DB;
-use App\Vetmanager\UserData\UserRepository\UserInterface;
 
 class UserRepository implements IUserRepository
 {
