@@ -12,9 +12,8 @@ use App\Vetmanager\UserData\UserRepository\UserRepository;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Storages\Storage;
-use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use GuzzleHttp\Client;
-use Illuminate\Support\Facades\DB;
+
 use function Otis22\VetmanagerUrl\url;
 use function Otis22\VetmanagerToken\token;
 use function Otis22\VetmanagerToken\credentials;
@@ -93,7 +92,7 @@ final class AuthConversation extends Conversation
                     ]
                 );
                 $vmUserId = (new Users($client))->getUserIdByToken($token);
-                $user = new UserInterface(
+                $user = new User(
                     $chatId,
                     $this->getBot()->userStorage()->get('clinicDomain'),
                     $token,
