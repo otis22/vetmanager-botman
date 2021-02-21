@@ -16,7 +16,8 @@ class MainMenuTest extends TestCase
             (
                 new MainMenu(
                     [Question::class, 'create'],
-                    [Button::class, 'create']
+                    [Button::class, 'create'],
+                    true
                 )
             )->asQuestion()
         );
@@ -27,7 +28,8 @@ class MainMenuTest extends TestCase
         $question = (
             new MainMenu(
                 [Question::class, 'create'],
-                [Button::class, 'create']
+                [Button::class, 'create'],
+                true
             )
         )->asQuestion();
         $this->assertTrue(

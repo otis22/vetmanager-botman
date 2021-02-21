@@ -92,3 +92,7 @@ php artisan migrate
 
 Where token is authtoken from @GodFather
 `
+
+## CODESTANDARDS 
+
+1. No default value for constructor arguments. Is wrong code `__construct($user = null)` 

@@ -20,7 +20,7 @@ final class ClinicUrl implements Stringify
      * @param callable $urlBuilder
      * @param User $user
      */
-    public function __construct($urlBuilder, User $user)
+    public function __construct(callable $urlBuilder, User $user)
     {
         $this->urlBuilder = $urlBuilder;
         $this->user = $user;

@@ -36,7 +36,7 @@ final class MainMenu
      * @param callable $questionFactory
      * @param callable $buttonFactory
      */
-    public function __construct(callable $questionFactory, callable $buttonFactory, bool $isAuthorized=false)
+    public function __construct(callable $questionFactory, callable $buttonFactory, bool $isAuthorized)
     {
         $this->questionFactory = $questionFactory;
         $this->buttonFactory = $buttonFactory;

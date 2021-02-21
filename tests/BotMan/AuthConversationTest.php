@@ -10,7 +10,7 @@ class AuthConversationTest extends BotManTestCase
     public function testFirstMessage(): void
     {
         $this->botman->hears('message', function ($bot) {
-            $bot->startConversation(new AuthConversation('test-app'));
+            $bot->startConversation(new AuthConversation());
         });
 
         $this->tester->receives('message')

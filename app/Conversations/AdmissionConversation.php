@@ -7,6 +7,7 @@ namespace App\Conversations;
 use App\Http\Helpers\Rest\Admission;
 use App\Vetmanager\MainMenu;
 use App\Vetmanager\UserData\ClinicUrl;
+use App\Vetmanager\UserData\UserRepository\User;
 use App\Vetmanager\UserData\UserRepository\UserRepository;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use App\Http\Helpers\Rest\Users;
@@ -21,15 +22,31 @@ use function Otis22\VetmanagerUrl\url;
 
 final class AdmissionConversation extends Conversation
 {
+    /**
+     * @var User
+     */
+    private $user;
+
+    /**
+     * @return User
+     */
+    private function user(): User
+    {
+        if (empty($this->user)) {
+            $this->user = UserRepository::getById(
+                $this->getBot()->getUser()->getId()
+            );
+        }
+        return $this->user;
+    }
 
     public function sayTop10()
     {
         try {
-            $user = UserRepository::getById($this->getBot()->getUser()->getId());
             $token = new Concrete(
                 (
                     new ClinicToken(
-                        $user
+                        $this->user()
                     )
                 )->asString()
             );
@@ -38,7 +55,7 @@ final class AdmissionConversation extends Conversation
                     function (string $domain) : string {
                         return url($domain)->asString();
                     },
-                    $user
+                    $this->user()
                 )
             )->asString();
             $client = new Client(
@@ -82,7 +99,8 @@ final class AdmissionConversation extends Conversation
             (
                 new MainMenu(
                     [Question::class, 'create'],
-                    [Button::class, 'create']
+                    [Button::class, 'create'],
+                    $this->user()->isAuthorized()
                 )
             )->asQuestion()
         );
