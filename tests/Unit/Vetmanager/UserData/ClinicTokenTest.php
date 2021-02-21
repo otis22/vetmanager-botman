@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Tests\Vetmanager\UserData;
 
 use App\Vetmanager\UserData\ClinicToken;
-use App\Vetmanager\UserData\UserRepository\User;
+use App\Vetmanager\UserData\UserRepository\UserInterface;
 use PHPUnit\Framework\TestCase;
 
 class ClinicTokenTest extends TestCase
 {
-    private function userWithToken(string $token): User
+    private function userWithToken(string $token): UserInterface
     {
-        $user = $this->createMock(User::class);
+        $user = $this->createMock(UserInterface::class);
         $user->method('getToken')
             ->willReturn($token);
         return $user;

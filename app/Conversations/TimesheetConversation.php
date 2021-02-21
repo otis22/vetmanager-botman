@@ -6,19 +6,14 @@ namespace App\Conversations;
 
 use App\Http\Helpers\Rest\Clinics;
 use App\Vetmanager\Api\AuthenticatedClientFactory;
-use App\Vetmanager\UserData\ClinicToken;
 use App\Vetmanager\UserData\UserRepository\UserRepository;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use App\Http\Helpers\Rest\Users;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
-use GuzzleHttp\Client;
 use App\Http\Helpers\Rest\Schedules;
-use Otis22\VetmanagerToken\Token\Concrete;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
-use App\Vetmanager\UserData\ClinicUrl;
-use function Otis22\VetmanagerUrl\url;
 
 final class TimesheetConversation extends Conversation
 {
@@ -115,18 +110,6 @@ final class TimesheetConversation extends Conversation
             }
         });
 
-    }
-    /**
-     * @param IncomingMessage $message
-     * @return bool
-     */
-    public function stopsConversation(IncomingMessage $message): bool
-    {
-        if ($message->getText() == 'stop') {
-            return true;
-        }
-
-        return false;
     }
     public function run()
     {

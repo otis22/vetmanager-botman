@@ -6,7 +6,7 @@ namespace App\Vetmanager\Api;
 
 use App\Vetmanager\UserData\ClinicToken;
 use App\Vetmanager\UserData\ClinicUrl;
-use App\Vetmanager\UserData\UserRepository\User;
+use App\Vetmanager\UserData\UserRepository\UserInterface;
 use GuzzleHttp\Client;
 use Otis22\VetmanagerToken\Token;
 use Otis22\VetmanagerToken\Token\Concrete;
@@ -16,15 +16,15 @@ use function Otis22\VetmanagerUrl\url;
 final class AuthenticatedClientFactory
 {
     /**
-     * @var User
+     * @var UserInterface
      */
     private $user;
 
     /**
      * ClientFactory constructor.
-     * @param User $user
+     * @param UserInterface $user
      */
-    public function __construct(User $user)
+    public function __construct(UserInterface $user)
     {
         $this->user = $user;
     }

@@ -7,31 +7,26 @@ namespace App\Conversations;
 use App\Http\Helpers\Rest\Admission;
 use App\Vetmanager\Api\AuthenticatedClientFactory;
 use App\Vetmanager\MainMenu;
-use App\Vetmanager\UserData\ClinicUrl;
-use App\Vetmanager\UserData\UserRepository\User;
+use App\Vetmanager\UserData\UserRepository\UserInterface;
 use App\Vetmanager\UserData\UserRepository\UserRepository;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use App\Http\Helpers\Rest\Users;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Outgoing\Question;
-use GuzzleHttp\Client;
-use Otis22\VetmanagerToken\Token\Concrete;
-use App\Vetmanager\UserData\ClinicToken;
 
-use function Otis22\VetmanagerUrl\url;
 
 final class AdmissionConversation extends Conversation
 {
     /**
-     * @var User
+     * @var UserInterface
      */
     private $user;
 
     /**
-     * @return User
+     * @return UserInterface
      */
-    private function user(): User
+    private function user(): UserInterface
     {
         if (empty($this->user)) {
             $this->user = UserRepository::getById(
@@ -87,18 +82,7 @@ final class AdmissionConversation extends Conversation
             )->asQuestion()
         );
     }
-    /**
-     * @param IncomingMessage $message
-     * @return bool
-     */
-    public function stopsConversation(IncomingMessage $message): bool
-    {
-        if ($message->getText() == 'stop') {
-            return true;
-        }
 
-        return false;
-    }
     public function run()
     {
         $this->sayTop10();

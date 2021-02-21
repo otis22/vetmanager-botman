@@ -7,7 +7,7 @@ declare(strict_types=1);
 namespace App\Conversations;
 
 use App\Http\Helpers\Rest\Users;
-use App\Vetmanager\UserData\UserRepository\User;
+use App\Vetmanager\UserData\UserRepository\UserInterface;
 use App\Vetmanager\UserData\UserRepository\UserRepository;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\Answer;
@@ -93,7 +93,7 @@ final class AuthConversation extends Conversation
                     ]
                 );
                 $vmUserId = (new Users($client))->getUserIdByToken($token);
-                $user = new User(
+                $user = new UserInterface(
                     $chatId,
                     $this->getBot()->userStorage()->get('clinicDomain'),
                     $token,
@@ -125,21 +125,7 @@ final class AuthConversation extends Conversation
     private function userData(): Storage
     {
         return $this->getBot()
-            ->userStorage(
-                $this->getBot()->getUser()
-            );
+            ->userStorage();
     }
 
-    /**
-     * @param IncomingMessage $message
-     * @return bool
-     */
-    public function stopsConversation(IncomingMessage $message): bool
-    {
-        if ($message->getText() == 'stop') {
-            return true;
-        }
-
-        return false;
-    }
 }

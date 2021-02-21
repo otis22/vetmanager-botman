@@ -7,7 +7,7 @@ use App\Vetmanager\UserData\UserRepository\UserInterface;
 
 class UserRepository implements IUserRepository
 {
-    public static function save(User $user): bool
+    public static function save(UserInterface $user): bool
     {
         $existUser = DB::table('users')->where('chat_id', '=', $user->getId());
         if (!empty($existUser->get()->toArray())) {
@@ -24,6 +24,6 @@ class UserRepository implements IUserRepository
             return new IsNotAuthenticatedUser();
         }
 
-        return new User($user->chat_id, $user->clinic_domain, $user->clinic_token, $user->vm_user_id, $user->notification_enabled);
+        return new UserInterface($user->chat_id, $user->clinic_domain, $user->clinic_token, $user->vm_user_id, $user->notification_enabled);
     }
 }

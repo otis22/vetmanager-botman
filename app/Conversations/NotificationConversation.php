@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Conversations;
 
 use App\Http\Helpers\Rest\ComboManual;
+use App\Vetmanager\Api\AuthenticatedClientFactory;
 use App\Vetmanager\UserData\ClinicToken;
 use App\Vetmanager\UserData\ClinicUrl;
 use App\Vetmanager\UserData\UserRepository\UserRepository;
@@ -32,29 +33,9 @@ final class NotificationConversation extends Conversation
         $this->bot->ask($question, function (Answer $answer) {
             if ($answer->isInteractiveMessageReply()) {
                 $user = UserRepository::getById($this->getBot()->getUser()->getId());
-                $token = new Concrete(
-                    (
-                    new ClinicToken(
-                        $user
-                    )
-                    )->asString()
-                );
-                $baseUri = (
-                new ClinicUrl(
-                    function (string $domain) : string {
-                        return url($domain)->asString();
-                    },
-                    $user
-                )
-                )->asString();
-                $client = new Client(
-                    [
-                        'base_uri' => $baseUri,
-                        'headers' => ['X-USER-TOKEN' => $token->asString(), 'X-APP-NAME' => config('app.name')]
-                    ]
-                );
+                $clientFactory = new AuthenticatedClientFactory($user);
 
-                $comboManual = new ComboManual($client);
+                $comboManual = new ComboManual($clientFactory->create());
                 if ($answer->getValue() == "on")
                 {
                     $user->enableNotifications();

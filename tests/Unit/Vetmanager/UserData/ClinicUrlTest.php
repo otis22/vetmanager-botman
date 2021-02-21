@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Tests\Vetmanager\UserData;
 
 use App\Vetmanager\UserData\ClinicUrl;
-use App\Vetmanager\UserData\UserRepository\User;
+use App\Vetmanager\UserData\UserRepository\UserInterface;
 use PHPUnit\Framework\TestCase;
 
 class ClinicUrlTest extends TestCase
 {
-    private function userWithDomain(string $domainName): User
+    private function userWithDomain(string $domainName): UserInterface
     {
-        $user = $this->createMock(User::class);
+        $user = $this->createMock(UserInterface::class);
         $user->method('getDomain')
             ->willReturn($domainName);
         return $user;

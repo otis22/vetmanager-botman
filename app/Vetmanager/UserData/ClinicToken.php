@@ -5,22 +5,22 @@ declare(strict_types=1);
 namespace App\Vetmanager\UserData;
 
 use App\Exceptions\VmUnauthorizedException;
-use App\Vetmanager\UserData\UserRepository\User;
+use App\Vetmanager\UserData\UserRepository\UserInterface;
 use ElegantBro\Interfaces\Stringify;
 
 final class ClinicToken implements Stringify
 {
     /**
-     * @var User
+     * @var UserInterface
      */
     private $user;
 
     /**
      * ClinicToken constructor.
-     * @param User $user
+     * @param UserInterface $user
      */
 
-    public function __construct(User $user)
+    public function __construct(UserInterface $user)
     {
         $this->user = $user;
     }

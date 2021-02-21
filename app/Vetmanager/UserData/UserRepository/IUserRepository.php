@@ -5,6 +5,6 @@ namespace App\Vetmanager\UserData\UserRepository;
 
 interface IUserRepository
 {
-    public static function save(User $user): bool;
+    public static function save(UserInterface $user): bool;
     public static function getById($chatId): UserInterface;
 }
