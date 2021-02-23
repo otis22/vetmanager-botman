@@ -31,7 +31,7 @@ class RollbackMessage implements MessageInterface, Stringify
         $id = $this->data['data']['id'];
         $summa = $this->data['data']['amount'];
         $result = str_replace('{{id}}', $id, $this->message);
-        $result = str_replace('{{summa}}', $summa, $result);
+        $result = str_replace('{{summa}}', intval($summa), $result);
         return $result;
     }
 }
