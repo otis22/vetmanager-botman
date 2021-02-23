@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace App\Conversations;
 
 use App\Http\Helpers\Rest\Users;
+use App\Vetmanager\UserData\UserRepository\User;
 use App\Vetmanager\UserData\UserRepository\UserInterface;
 use App\Vetmanager\UserData\UserRepository\UserRepository;
 use BotMan\BotMan\Messages\Conversations\Conversation;
@@ -96,7 +97,8 @@ final class AuthConversation extends Conversation
                     $chatId,
                     $this->getBot()->userStorage()->get('clinicDomain'),
                     $token,
-                    $vmUserId
+                    $vmUserId,
+                    $this->getBot()->getDriver()->getName()
                 );
                 UserRepository::save($user);
                 $this->getBot()->userStorage()->save(['is_authorized' => true]);

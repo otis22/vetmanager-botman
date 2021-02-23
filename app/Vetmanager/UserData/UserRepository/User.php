@@ -10,14 +10,16 @@ class User implements UserInterface
     protected $domain;
     protected $token;
     protected $vmUserId;
+    protected $channel;
     protected $notificationEnabled;
 
-    public function __construct($chatId, $domain, $token, $vmUserId, $notificationEnabled=false)
+    public function __construct($chatId, $domain, $token, $vmUserId, $channel, $notificationEnabled=false)
     {
         $this->chatId = $chatId;
         $this->domain = $domain;
         $this->token = $token;
         $this->vmUserId = $vmUserId;
+        $this->channel = $channel;
         $this->notificationEnabled = $notificationEnabled;
     }
 
@@ -39,6 +41,11 @@ class User implements UserInterface
     public function getVmUserId()
     {
         return $this->vmUserId;
+    }
+
+    public function getChannel()
+    {
+        return $this->channel;
     }
 
     public function isNotificationEnabled(): bool
@@ -63,6 +70,7 @@ class User implements UserInterface
             'clinic_domain' => $this->getDomain(),
             'clinic_token' => $this->getToken(),
             'vm_user_id' => $this->getVmUserId(),
+            'channel' => $this->getChannel(),
             'notification_enabled' => $this->isNotificationEnabled()
         ];
     }

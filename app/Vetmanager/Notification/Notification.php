@@ -8,6 +8,7 @@ use App\Vetmanager\Notification\Messages\MessageInterface;
 use App\Vetmanager\Notification\Routers\NotificationRouteInterface;
 use BotMan\BotMan\BotMan;
 use BotMan\Drivers\Telegram\TelegramDriver;
+use BotMan\Drivers\Web\WebDriver;
 use Illuminate\Support\Facades\DB;
 
 class Notification
@@ -26,14 +27,23 @@ class Notification
     public function send()
     {
         foreach ($this->route->asArray() as $user) {
-            $this->botman->say($this->message->asString(), $user, TelegramDriver::class);
-
+            $this->botman->say($this->message->asString(), $user->chat_id, $this->driver($user->channel));
             DB::table('statistic')->insert([
                 'created_at' => date("Y-m-d H:i:s"),
                 'user_id' => $user,
                 'channel' => $this->botman->getDriver()->getName(),
                 'event' => 'notification message'
             ]);
+        }
+    }
+
+    private function driver($channel)
+    {
+        switch ($channel) {
+            case 'Telegram':
+                return TelegramDriver::class;
+            case 'Web':
+                return WebDriver::class;
         }
     }
 }

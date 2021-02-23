@@ -32,6 +32,6 @@ class EveryoneRoute implements NotificationRouteInterface
      */
     public function asArray(): array
     {
-        return array_column($this->users, 'chat_id');
+        return $this->users;
     }
 }
