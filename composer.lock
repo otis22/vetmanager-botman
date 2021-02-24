@@ -949,23 +949,24 @@
         },
         {
             "name": "elegant-bro/interfaces",
-            "version": "1.1.1",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elegant-bro/interfaces.git",
-                "reference": "005e9e22dc77ea21d80c0fc358d12a901f4e59f0"
+                "reference": "2fb4aecb3d36e386ee9ee229f594d178db35f787"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elegant-bro/interfaces/zipball/005e9e22dc77ea21d80c0fc358d12a901f4e59f0",
-                "reference": "005e9e22dc77ea21d80c0fc358d12a901f4e59f0",
+                "url": "https://api.github.com/repos/elegant-bro/interfaces/zipball/2fb4aecb3d36e386ee9ee229f594d178db35f787",
+                "reference": "2fb4aecb3d36e386ee9ee229f594d178db35f787",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.1"
             },
             "require-dev": {
-                "phpunit/phpunit": "^5.7 || ^6.4 || ^7.0 || ^8.0"
+                "phpunit/phpunit": "^5.7 || ^6.4 || ^7.0 || ^8.0",
+                "squizlabs/php_codesniffer": "^3.5"
             },
             "type": "library",
             "autoload": {
@@ -985,9 +986,9 @@
             ],
             "support": {
                 "issues": "https://github.com/elegant-bro/interfaces/issues",
-                "source": "https://github.com/elegant-bro/interfaces/tree/1.1.1"
+                "source": "https://github.com/elegant-bro/interfaces/tree/1.2.0"
             },
-            "time": "2020-12-08T05:29:18+00:00"
+            "time": "2021-02-05T10:02:02+00:00"
         },
         {
             "name": "elegant-bro/stringify",
@@ -2036,16 +2037,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "2.44.0",
+            "version": "2.45.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "e6ef33cb1f67a4bed831ed6d0f7e156739a5d8cd"
+                "reference": "528783b188bdb853eb21239b1722831e0f000a8d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/e6ef33cb1f67a4bed831ed6d0f7e156739a5d8cd",
-                "reference": "e6ef33cb1f67a4bed831ed6d0f7e156739a5d8cd",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/528783b188bdb853eb21239b1722831e0f000a8d",
+                "reference": "528783b188bdb853eb21239b1722831e0f000a8d",
                 "shasum": ""
             },
             "require": {
@@ -2125,7 +2126,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-01-26T20:46:41+00:00"
+            "time": "2021-02-11T18:30:17+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -2250,24 +2251,22 @@
         },
         {
             "name": "otis22/php-interfaces",
-            "version": "1.1",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/otis22/php-interfaces.git",
-                "reference": "f7d47c3322a53d8812ea6d066b51c6c4dda0b15a"
+                "reference": "2fe0c936f6729911f3e02878bc8af83966c10e4e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/otis22/php-interfaces/zipball/f7d47c3322a53d8812ea6d066b51c6c4dda0b15a",
-                "reference": "f7d47c3322a53d8812ea6d066b51c6c4dda0b15a",
+                "url": "https://api.github.com/repos/otis22/php-interfaces/zipball/2fe0c936f6729911f3e02878bc8af83966c10e4e",
+                "reference": "2fe0c936f6729911f3e02878bc8af83966c10e4e",
                 "shasum": ""
             },
             "require-dev": {
                 "phpstan/phpstan": "^0.12.19",
                 "phpunit/phpunit": "^9.1",
-                "sensiolabs/security-checker": "^6.0",
-                "squizlabs/php_codesniffer": "3.*",
-                "wapmorgan/php-code-fixer": "^2.0"
+                "squizlabs/php_codesniffer": "3.*"
             },
             "type": "library",
             "autoload": {
@@ -2288,22 +2287,22 @@
             "description": "Interfaces for OOP php projects",
             "support": {
                 "issues": "https://github.com/otis22/php-interfaces/issues",
-                "source": "https://github.com/otis22/php-interfaces/tree/1.1"
+                "source": "https://github.com/otis22/php-interfaces/tree/1.1.1"
             },
-            "time": "2020-12-02T15:21:30+00:00"
+            "time": "2021-02-07T19:00:13+00:00"
         },
         {
             "name": "otis22/vetmanager-rest-api",
-            "version": "0.1.1",
+            "version": "0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/otis22/vetmanager-rest-api.git",
-                "reference": "968be15fda070c47945c5e42991674591331c36b"
+                "reference": "b67353a8e5c858d44f5aa389d8bbc14a2884110a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/otis22/vetmanager-rest-api/zipball/968be15fda070c47945c5e42991674591331c36b",
-                "reference": "968be15fda070c47945c5e42991674591331c36b",
+                "url": "https://api.github.com/repos/otis22/vetmanager-rest-api/zipball/b67353a8e5c858d44f5aa389d8bbc14a2884110a",
+                "reference": "b67353a8e5c858d44f5aa389d8bbc14a2884110a",
                 "shasum": ""
             },
             "require": {
@@ -2322,7 +2321,6 @@
                 "phpstan/phpstan": "^0.12.19",
                 "phpunit/phpcov": "^8.0",
                 "phpunit/phpunit": "^9.1",
-                "sensiolabs/security-checker": "^6.0",
                 "squizlabs/php_codesniffer": "3.*",
                 "wapmorgan/php-deprecation-detector": "^2.0"
             },
@@ -2348,22 +2346,22 @@
             "description": "Vetmanager - CRM for veterinary. This is library for conveniently work with Vetmanager REST API.",
             "support": {
                 "issues": "https://github.com/otis22/vetmanager-rest-api/issues",
-                "source": "https://github.com/otis22/vetmanager-rest-api/tree/0.1.1"
+                "source": "https://github.com/otis22/vetmanager-rest-api/tree/0.1.2"
             },
-            "time": "2021-01-04T19:46:00+00:00"
+            "time": "2021-02-07T19:54:03+00:00"
         },
         {
             "name": "otis22/vetmanager-token",
-            "version": "0.2.1",
+            "version": "0.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/otis22/vetmanager-token.git",
-                "reference": "eaebb0403944152232f3b42e79ea7b898fe0e610"
+                "reference": "ad5328044b3160eb17dc8ae0481b6b1e746b88d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/otis22/vetmanager-token/zipball/eaebb0403944152232f3b42e79ea7b898fe0e610",
-                "reference": "eaebb0403944152232f3b42e79ea7b898fe0e610",
+                "url": "https://api.github.com/repos/otis22/vetmanager-token/zipball/ad5328044b3160eb17dc8ae0481b6b1e746b88d5",
+                "reference": "ad5328044b3160eb17dc8ae0481b6b1e746b88d5",
                 "shasum": ""
             },
             "require": {
@@ -2405,9 +2403,9 @@
             "description": "Project for using token auth for Vetmanager Rest API",
             "support": {
                 "issues": "https://github.com/otis22/vetmanager-token/issues",
-                "source": "https://github.com/otis22/vetmanager-token/tree/0.2.1"
+                "source": "https://github.com/otis22/vetmanager-token/tree/0.2.2"
             },
-            "time": "2021-01-03T14:32:06+00:00"
+            "time": "2021-02-22T18:30:10+00:00"
         },
         {
             "name": "otis22/vetmanager-url",
@@ -3795,7 +3793,7 @@
         },
         {
             "name": "symfony/css-selector",
-            "version": "v5.2.2",
+            "version": "v5.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/css-selector.git",
@@ -3840,7 +3838,7 @@
             "description": "Converts CSS selectors to XPath expressions",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/css-selector/tree/v5.2.2"
+                "source": "https://github.com/symfony/css-selector/tree/v5.2.3"
             },
             "funding": [
                 {
@@ -4539,16 +4537,16 @@
         },
         {
             "name": "symfony/mime",
-            "version": "v5.2.2",
+            "version": "v5.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/mime.git",
-                "reference": "37bade585ea100d235c031b258eff93b5b6bb9a9"
+                "reference": "7dee6a43493f39b51ff6c5bb2bd576fe40a76c86"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/mime/zipball/37bade585ea100d235c031b258eff93b5b6bb9a9",
-                "reference": "37bade585ea100d235c031b258eff93b5b6bb9a9",
+                "url": "https://api.github.com/repos/symfony/mime/zipball/7dee6a43493f39b51ff6c5bb2bd576fe40a76c86",
+                "reference": "7dee6a43493f39b51ff6c5bb2bd576fe40a76c86",
                 "shasum": ""
             },
             "require": {
@@ -4601,7 +4599,7 @@
                 "mime-type"
             ],
             "support": {
-                "source": "https://github.com/symfony/mime/tree/v5.2.2"
+                "source": "https://github.com/symfony/mime/tree/v5.2.3"
             },
             "funding": [
                 {
@@ -4617,11 +4615,11 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-01-25T14:08:25+00:00"
+            "time": "2021-02-02T06:10:15+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
-            "version": "v1.22.0",
+            "version": "v1.22.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",
@@ -4680,7 +4678,7 @@
                 "portable"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-ctype/tree/v1.22.0"
+                "source": "https://github.com/symfony/polyfill-ctype/tree/v1.22.1"
             },
             "funding": [
                 {
@@ -4700,16 +4698,16 @@
         },
         {
             "name": "symfony/polyfill-iconv",
-            "version": "v1.22.0",
+            "version": "v1.22.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-iconv.git",
-                "reference": "b34bfb8c4c22650ac080d2662ae3502e5f2f4ae6"
+                "reference": "06fb361659649bcfd6a208a0f1fcaf4e827ad342"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-iconv/zipball/b34bfb8c4c22650ac080d2662ae3502e5f2f4ae6",
-                "reference": "b34bfb8c4c22650ac080d2662ae3502e5f2f4ae6",
+                "url": "https://api.github.com/repos/symfony/polyfill-iconv/zipball/06fb361659649bcfd6a208a0f1fcaf4e827ad342",
+                "reference": "06fb361659649bcfd6a208a0f1fcaf4e827ad342",
                 "shasum": ""
             },
             "require": {
@@ -4760,7 +4758,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-iconv/tree/v1.22.0"
+                "source": "https://github.com/symfony/polyfill-iconv/tree/v1.22.1"
             },
             "funding": [
                 {
@@ -4776,20 +4774,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-01-07T16:49:33+00:00"
+            "time": "2021-01-22T09:19:47+00:00"
         },
         {
             "name": "symfony/polyfill-intl-idn",
-            "version": "v1.22.0",
+            "version": "v1.22.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-intl-idn.git",
-                "reference": "0eb8293dbbcd6ef6bf81404c9ce7d95bcdf34f44"
+                "reference": "2d63434d922daf7da8dd863e7907e67ee3031483"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-intl-idn/zipball/0eb8293dbbcd6ef6bf81404c9ce7d95bcdf34f44",
-                "reference": "0eb8293dbbcd6ef6bf81404c9ce7d95bcdf34f44",
+                "url": "https://api.github.com/repos/symfony/polyfill-intl-idn/zipball/2d63434d922daf7da8dd863e7907e67ee3031483",
+                "reference": "2d63434d922daf7da8dd863e7907e67ee3031483",
                 "shasum": ""
             },
             "require": {
@@ -4847,7 +4845,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-intl-idn/tree/v1.22.0"
+                "source": "https://github.com/symfony/polyfill-intl-idn/tree/v1.22.1"
             },
             "funding": [
                 {
@@ -4863,20 +4861,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-01-07T16:49:33+00:00"
+            "time": "2021-01-22T09:19:47+00:00"
         },
         {
             "name": "symfony/polyfill-intl-normalizer",
-            "version": "v1.22.0",
+            "version": "v1.22.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-intl-normalizer.git",
-                "reference": "6e971c891537eb617a00bb07a43d182a6915faba"
+                "reference": "43a0283138253ed1d48d352ab6d0bdb3f809f248"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-intl-normalizer/zipball/6e971c891537eb617a00bb07a43d182a6915faba",
-                "reference": "6e971c891537eb617a00bb07a43d182a6915faba",
+                "url": "https://api.github.com/repos/symfony/polyfill-intl-normalizer/zipball/43a0283138253ed1d48d352ab6d0bdb3f809f248",
+                "reference": "43a0283138253ed1d48d352ab6d0bdb3f809f248",
                 "shasum": ""
             },
             "require": {
@@ -4931,7 +4929,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-intl-normalizer/tree/v1.22.0"
+                "source": "https://github.com/symfony/polyfill-intl-normalizer/tree/v1.22.1"
             },
             "funding": [
                 {
@@ -4947,20 +4945,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-01-07T17:09:11+00:00"
+            "time": "2021-01-22T09:19:47+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.22.0",
+            "version": "v1.22.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "f377a3dd1fde44d37b9831d68dc8dea3ffd28e13"
+                "reference": "5232de97ee3b75b0360528dae24e73db49566ab1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/f377a3dd1fde44d37b9831d68dc8dea3ffd28e13",
-                "reference": "f377a3dd1fde44d37b9831d68dc8dea3ffd28e13",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/5232de97ee3b75b0360528dae24e73db49566ab1",
+                "reference": "5232de97ee3b75b0360528dae24e73db49566ab1",
                 "shasum": ""
             },
             "require": {
@@ -5011,7 +5009,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.22.0"
+                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.22.1"
             },
             "funding": [
                 {
@@ -5027,11 +5025,11 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-01-07T16:49:33+00:00"
+            "time": "2021-01-22T09:19:47+00:00"
         },
         {
             "name": "symfony/polyfill-php72",
-            "version": "v1.22.0",
+            "version": "v1.22.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php72.git",
@@ -5087,7 +5085,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-php72/tree/v1.22.0"
+                "source": "https://github.com/symfony/polyfill-php72/tree/v1.22.1"
             },
             "funding": [
                 {
@@ -5107,7 +5105,7 @@
         },
         {
             "name": "symfony/polyfill-php73",
-            "version": "v1.22.0",
+            "version": "v1.22.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php73.git",
@@ -5166,7 +5164,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-php73/tree/v1.22.0"
+                "source": "https://github.com/symfony/polyfill-php73/tree/v1.22.1"
             },
             "funding": [
                 {
@@ -5186,7 +5184,7 @@
         },
         {
             "name": "symfony/polyfill-php80",
-            "version": "v1.22.0",
+            "version": "v1.22.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php80.git",
@@ -5249,7 +5247,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-php80/tree/v1.22.0"
+                "source": "https://github.com/symfony/polyfill-php80/tree/v1.22.1"
             },
             "funding": [
                 {

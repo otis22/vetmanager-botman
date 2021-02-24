@@ -8,7 +8,6 @@ namespace App\Conversations;
 
 use App\Http\Helpers\Rest\Users;
 use App\Vetmanager\UserData\UserRepository\User;
-use App\Vetmanager\UserData\UserRepository\UserInterface;
 use App\Vetmanager\UserData\UserRepository\UserRepository;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\Answer;
