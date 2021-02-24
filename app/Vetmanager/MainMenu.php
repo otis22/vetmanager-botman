@@ -12,7 +12,7 @@ final class MainMenu
      * @var string[]
      */
     private $commandsConfig = [
-        'auth' => 'Авторизация(Необходима для работы бота)',
+        'auth' => 'Сменить пользователя',
         'timesheet' => 'График работы сотрудников',
         'admissions' =>  'Мои запланированные визиты',
         'notification' => 'Управление уведомлениями',
@@ -56,9 +56,6 @@ final class MainMenu
      */
     private function titles(): array
     {
-        if ($this->isAuthorized) {
-            $this->commandsConfig['auth'] = 'Сменить пользователя';
-        }
         return array_values($this->commandsConfig);
     }
 
@@ -73,8 +70,8 @@ final class MainMenu
                     function ($command, $title) use ($buttonFactory) {
                         return $buttonFactory($title)->value($command);
                     },
-                    $this->commands(),
-                    $this->titles()
+                    $this->isAuthorized ? $this->commands() : ['auth'],
+                    $this->isAuthorized ? $this->titles() : ['Авторизация(Необходима для работы бота)']
                 )
             );
     }
