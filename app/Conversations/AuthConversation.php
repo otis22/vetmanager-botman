@@ -96,7 +96,8 @@ final class AuthConversation extends Conversation
                     $chatId,
                     $this->getBot()->userStorage()->get('clinicDomain'),
                     $token,
-                    $vmUserId
+                    $vmUserId,
+                    $this->getBot()->getDriver()->getName()
                 );
                 UserRepository::save($user);
                 $this->getBot()->userStorage()->save(['is_authorized' => true]);

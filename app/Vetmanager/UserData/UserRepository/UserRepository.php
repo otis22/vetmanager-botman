@@ -23,6 +23,6 @@ class UserRepository implements IUserRepository
             return new IsNotAuthenticatedUser();
         }
 
-        return new User($user->chat_id, $user->clinic_domain, $user->clinic_token, $user->vm_user_id, $user->notification_enabled);
+        return new User($user->chat_id, $user->clinic_domain, $user->clinic_token, $user->vm_user_id, $user->channel, $user->notification_enabled);
     }
 }
