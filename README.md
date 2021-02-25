@@ -19,7 +19,11 @@ You can find the BotMan and BotMan Studio documentation at [http://botman.io](ht
 
 ## Functions 
 
-Now only Auth converstation works
+- Authorization
+- Check own admissions
+- Check doctors timesheets
+- Notifications
+- Rating and review
 
 ## For contributors 
 
