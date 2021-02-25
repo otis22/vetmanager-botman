@@ -15,7 +15,7 @@ use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Outgoing\Question;
 
 
-final class AdmissionConversation extends Conversation
+final class AdmissionConversation extends VetmanagerConversation
 {
     /**
      * @var UserInterface
@@ -67,6 +67,7 @@ final class AdmissionConversation extends Conversation
         } catch (\Throwable $exception) {
             $this->sayError("Ошибка: " . $exception->getMessage());
         }
+        $this->endConversation();
     }
 
     public function sayError(string $message) {

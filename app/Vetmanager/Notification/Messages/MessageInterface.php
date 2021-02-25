@@ -4,8 +4,9 @@
 namespace App\Vetmanager\Notification\Messages;
 
 
-interface MessageInterface
+use ElegantBro\Interfaces\Stringify;
+
+interface MessageInterface extends Stringify
 {
     public function __construct($data);
-    public function asString();
 }

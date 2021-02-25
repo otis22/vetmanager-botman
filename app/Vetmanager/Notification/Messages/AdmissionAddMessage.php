@@ -4,19 +4,19 @@
 namespace App\Vetmanager\Notification\Messages;
 
 
-class RollbackMessage implements MessageInterface
+class AdmissionAddMessage implements MessageInterface
 {
     /**
      * @var string
      */
-    private $message = "Откатили счет {{id}} на сумму {{summa}}";
+    private $message = "Создан прием - [%admission_date%] [%pet_alias%], [%pet_type%], [%pet_breed%], [%pet_years%], ФИО [%client_fio%].";
     /**
      * @var array
      */
     private $data;
 
     /**
-     * RollbackMessage constructor.
+     * AdmissionAddMessage constructor.
      * @param $data
      */
     public function __construct($data)

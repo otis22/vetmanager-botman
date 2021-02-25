@@ -7,15 +7,13 @@ namespace App\Conversations;
 use App\Http\Helpers\Rest\Clinics;
 use App\Vetmanager\Api\AuthenticatedClientFactory;
 use App\Vetmanager\UserData\UserRepository\UserRepository;
-use BotMan\BotMan\Messages\Conversations\Conversation;
 use App\Http\Helpers\Rest\Users;
 use BotMan\BotMan\Messages\Incoming\Answer;
-use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use App\Http\Helpers\Rest\Schedules;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 
-final class TimesheetConversation extends Conversation
+final class TimesheetConversation extends VetmanagerConversation
 {
 
     public function saySchedule(): void
@@ -37,6 +35,7 @@ final class TimesheetConversation extends Conversation
             $type = $schedules->getTypeNameById($timesheet['type']);
             $this->say($date . PHP_EOL ."$from - $to" . PHP_EOL . $type);
         }
+        $this->endConversation();
     }
 
     private function askClinicId()

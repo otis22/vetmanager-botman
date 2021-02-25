@@ -19,7 +19,7 @@ use function Otis22\VetmanagerToken\token;
 use function Otis22\VetmanagerToken\credentials;
 use function config;
 
-final class AuthConversation extends Conversation
+final class AuthConversation extends VetmanagerConversation
 {
     /**
      * @var string
@@ -101,7 +101,8 @@ final class AuthConversation extends Conversation
                 );
                 UserRepository::save($user);
                 $this->getBot()->userStorage()->save(['is_authorized' => true]);
-                $this->say('Успех! Введите start для вывода списка команд');
+                $this->say('Успех!');
+                $this->endConversation();
             } catch (\Throwable $exception) {
                 $this->say("Попробуйте еще раз. Ошибка: " . $exception->getMessage());
                 $this->askDomain();
