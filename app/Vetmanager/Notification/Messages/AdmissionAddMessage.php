@@ -4,9 +4,7 @@
 namespace App\Vetmanager\Notification\Messages;
 
 
-use ElegantBro\Interfaces\Stringify;
-
-class AdmissionAddMessage implements MessageInterface, Stringify
+class AdmissionAddMessage implements MessageInterface
 {
     /**
      * @var string

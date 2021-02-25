@@ -23,25 +23,6 @@ class Pets
     }
 
     /**
-     * @return array{success:bool}
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function all(): array
-    {
-        $request = $this->httpClient->request(
-            'GET',
-            uri("pet")->asString()
-        );
-        $result = json_decode(
-            strval(
-                $request->getBody()
-            ),
-            true
-        );
-        return $result;
-    }
-
-    /**
      * @int $id
      * @return array{success:bool}
      * @throws \GuzzleHttp\Exception\GuzzleException

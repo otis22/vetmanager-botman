@@ -4,9 +4,7 @@
 namespace App\Vetmanager\Notification\Messages;
 
 
-use ElegantBro\Interfaces\Stringify;
-
-class RollbackMessage implements MessageInterface, Stringify
+class RollbackMessage implements MessageInterface
 {
     /**
      * @var string
