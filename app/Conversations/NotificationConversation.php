@@ -6,18 +6,12 @@ namespace App\Conversations;
 
 use App\Http\Helpers\Rest\ComboManual;
 use App\Vetmanager\Api\AuthenticatedClientFactory;
-use App\Vetmanager\UserData\ClinicToken;
-use App\Vetmanager\UserData\ClinicUrl;
 use App\Vetmanager\UserData\UserRepository\UserRepository;
-use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
-use GuzzleHttp\Client;
-use Otis22\VetmanagerToken\Token\Concrete;
-use function Otis22\VetmanagerUrl\url;
 
-final class NotificationConversation extends Conversation
+final class NotificationConversation extends VetmanagerConversation
 {
     public function manageNotification()
     {
@@ -30,7 +24,7 @@ final class NotificationConversation extends Conversation
                 ]
             );
 
-        $this->bot->ask($question, function (Answer $answer) {
+        $this->ask($question, function (Answer $answer) {
             if ($answer->isInteractiveMessageReply()) {
                 $user = UserRepository::getById($this->getBot()->getUser()->getId());
                 $clientFactory = new AuthenticatedClientFactory($user);
@@ -46,8 +40,10 @@ final class NotificationConversation extends Conversation
                     $this->say("Уведомления выключены.");
                 }
                 UserRepository::save($user);
+                $this->endConversation();
             }
         });
+
     }
 
     public function run()

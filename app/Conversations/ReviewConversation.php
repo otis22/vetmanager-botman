@@ -10,7 +10,7 @@ use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use Illuminate\Support\Facades\DB;
 
-final class ReviewConversation extends Conversation
+final class ReviewConversation extends VetmanagerConversation
 {
     public function askMark()
     {
@@ -45,6 +45,7 @@ final class ReviewConversation extends Conversation
                 'created_at' => date("Y-m-d H:i:s"),
             ]);
             $this->say("Благодарим за отзыв!");
+            $this->endConversation();
         });
     }
 
