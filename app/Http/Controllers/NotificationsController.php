@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Http\Helpers\Rest\Pets;
-use App\Vetmanager\Api\AuthenticatedClientFactory;
-use App\Vetmanager\Notification\Messages\Admission\AdmissionMessageData;
+use App\Vetmanager\Notification\Messages\Admission\AdmissionAddMessage;
+use App\Vetmanager\Notification\Messages\Admission\AdmissionConfirmMessage;
+use App\Vetmanager\Notification\Messages\Admission\AdmissionEditMessage;
+use App\Vetmanager\Notification\Messages\Admission\AdmissionMessageDataFactory;
 use App\Vetmanager\Notification\Messages\RollbackMessage;
 use App\Vetmanager\Notification\Notification;
 use App\Vetmanager\Notification\Routers\ConcretteUserRoute;
 use App\Vetmanager\Notification\Routers\EveryoneRoute;
-use App\Vetmanager\UserData\UserRepository\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -22,30 +22,65 @@ final class NotificationsController extends Controller
     {
         $botman = resolve('botman');
         $input = $request->all();
-        $users = DB::table('users')
-            ->where('clinic_domain', '=', $domain)
-            ->where('notification_enabled', '=', true);
         switch ($input['name']) {
             case 'invoiceRollback':
-                $notification = new Notification(new RollbackMessage($input), new EveryoneRoute($users->get()->toArray()), $botman);
+                $users = $this->allDomainUsers($domain);
+                $notification = new Notification(new RollbackMessage($input), new EveryoneRoute($users), $botman);
                 $notification->send();
             break;
             case 'admissionAdd':
-            case 'admissionEdit':
-            case 'admissionConfirm':
-                $messageClass = 'App\Vetmanager\Notification\Messages\Admission\\'.ucfirst($input['name']).'Message';
                 $userId = $input['data']['user_id'];
-                $user = $users->where('vm_user_id', '=', $userId)->get()->toArray();
-                if (!empty($user)) {
-                    $clientFactory = new AuthenticatedClientFactory(UserRepository::getById($user[0]->chat_id));
-                    $client = $clientFactory->create();
-                    $pets = new Pets($client);
-                    $pet = $pets->byId(intval($input['data']['patient_id']))['data']['pet'];
-                    $admissionData = new AdmissionMessageData($pet, $input);
-                    $notification = new Notification(new $messageClass($admissionData), new ConcretteUserRoute($user, $input), $botman);
-                    $notification->send();
-                }
+                $user = $this->currentUser($domain, $userId);
+                $notification = new Notification(
+                    new AdmissionAddMessage(
+                        (new AdmissionMessageDataFactory($user, $input))->create()
+                    ),
+                    new ConcretteUserRoute($user, $input),
+                    $botman
+                );
+                $notification->send();
+                break;
+            case 'admissionEdit':
+                $userId = $input['data']['user_id'];
+                $user = $this->currentUser($domain, $userId);
+                $notification = new Notification(
+                    new AdmissionEditMessage(
+                        (new AdmissionMessageDataFactory($user, $input))->create()
+                    ),
+                    new ConcretteUserRoute($user, $input),
+                    $botman
+                );
+                $notification->send();
+                break;
+            case 'admissionConfirm':
+                $userId = $input['data']['user_id'];
+                $user = $this->currentUser($domain, $userId);
+                $notification = new Notification(
+                    new AdmissionConfirmMessage(
+                        (new AdmissionMessageDataFactory($user, $input))->create()
+                    ),
+                    new ConcretteUserRoute($user, $input),
+                    $botman
+                );
+                $notification->send();
             break;
         }
+    }
+
+    private function allDomainUsers($domain) {
+        return DB::table('users')
+        ->where('clinic_domain', '=', $domain)
+        ->where('notification_enabled', '=', true)->get()->toArray();
+    }
+
+    private function currentUser($domain, $userId) {
+        $user = DB::table('users')
+            ->where('clinic_domain', '=', $domain)
+            ->where('vm_user_id', '=', $userId)
+            ->where('notification_enabled', '=', true)->get()->toArray();
+        if (empty($user)) {
+            throw new \Exception("This user is not in the database");
+        }
+        return $user;
     }
 }
