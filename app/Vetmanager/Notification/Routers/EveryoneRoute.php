@@ -12,19 +12,12 @@ class EveryoneRoute implements NotificationRouteInterface
     private $users;
 
     /**
-     * @var array
-     */
-    private $data;
-
-    /**
      * EveryoneRoute constructor.
      * @param $users
-     * @param $data
      */
-    public function __construct($users, $data)
+    public function __construct($users)
     {
         $this->users = $users;
-        $this->data = $data;
     }
 
     /**

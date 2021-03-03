@@ -8,5 +8,5 @@ use ElegantBro\Interfaces\Stringify;
 
 interface MessageInterface extends Stringify
 {
-    public function __construct($data);
+
 }
