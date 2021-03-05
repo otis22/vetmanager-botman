@@ -13,7 +13,7 @@ class User implements UserInterface
     protected $channel;
     protected $notificationEnabled;
 
-    public function __construct($chatId, $domain, $token, $vmUserId, $channel, $notificationEnabled=true)
+    public function __construct($chatId, $domain, $token, $vmUserId, $channel, $notificationEnabled)
     {
         $this->chatId = $chatId;
         $this->domain = $domain;

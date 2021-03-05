@@ -8,11 +8,12 @@ class UserRepository implements IUserRepository
 {
     public static function save(UserInterface $user): bool
     {
+        $now = date('Y-m-d H:i:s');
         $existUser = DB::table('users')->where('chat_id', '=', $user->getId());
         if (!empty($existUser->get()->toArray())) {
-            return $existUser->update($user->toArray());
+            return $existUser->update(array_merge($user->toArray(), ['updated_at' => $now]));
         }
-        return DB::table('users')->insert($user->toArray());
+        return DB::table('users')->insert(array_merge($user->toArray(), ['created_at' => $now]));
     }
 
     public static function getById($chatId): UserInterface

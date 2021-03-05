@@ -97,7 +97,8 @@ final class AuthConversation extends VetmanagerConversation
                     $this->getBot()->userStorage()->get('clinicDomain'),
                     $token,
                     $vmUserId,
-                    $this->getBot()->getDriver()->getName()
+                    $this->getBot()->getDriver()->getName(),
+                    true
                 );
                 UserRepository::save($user);
                 $this->getBot()->userStorage()->save(['is_authorized' => true]);
