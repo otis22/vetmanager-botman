@@ -28,6 +28,10 @@ class AdmissionAddMessage implements MessageInterface
 
     public function asString(): string
     {
-        return str_replace(array_keys($this->data->asArray()), array_values($this->data->asArray()), $this->message);
+        return str_replace(
+            array_keys($this->data->asArray()),
+            array_values($this->data->asArray()),
+            $this->message
+        );
     }
 }

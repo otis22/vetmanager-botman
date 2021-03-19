@@ -6,7 +6,9 @@ namespace App\Http\Controllers;
 
 use App\Vetmanager\Notification\Messages\Admission\AdmissionAddMessage;
 use App\Vetmanager\Notification\Messages\Admission\AdmissionConfirmMessage;
+use App\Vetmanager\Notification\Messages\Admission\AdmissionDirectedMessage;
 use App\Vetmanager\Notification\Messages\Admission\AdmissionEditMessage;
+use App\Vetmanager\Notification\Messages\Admission\AdmissionInTreatmentMessage;
 use App\Vetmanager\Notification\Messages\Admission\AdmissionMessageDataFactory;
 use App\Vetmanager\Notification\Messages\RollbackMessage;
 use App\Vetmanager\Notification\Notification;
@@ -64,6 +66,30 @@ final class NotificationsController extends Controller
                 );
                 $notification->send();
             break;
+            case 'admissionDirected':
+                $userId = $input['data']['user_id'];
+                $user = $this->currentUser($domain, $userId);
+                $notification = new Notification(
+                    new AdmissionDirectedMessage(
+                        (new AdmissionMessageDataFactory($user, $input))->create()
+                    ),
+                    new ConcretteUserRoute($user, $input),
+                    $botman
+                );
+                $notification->send();
+                break;
+            case 'admissionInTreatment':
+                $userId = $input['data']['user_id'];
+                $user = $this->currentUser($domain, $userId);
+                $notification = new Notification(
+                    new AdmissionInTreatmentMessage(
+                        (new AdmissionMessageDataFactory($user, $input))->create()
+                    ),
+                    new ConcretteUserRoute($user, $input),
+                    $botman
+                );
+                $notification->send();
+                break;
         }
     }
 

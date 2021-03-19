@@ -6,12 +6,12 @@ namespace App\Vetmanager\Notification\Messages\Admission;
 
 use App\Vetmanager\Notification\Messages\MessageInterface;
 
-class AdmissionEditMessage implements MessageInterface
+class AdmissionDirectedMessage implements MessageInterface
 {
     /**
      * @var string
      */
-    private $message = "Прием изменен - [%admission_date%] [%pet_alias%], [%pet_type%], [%pet_breed%], Возраст: [%pet_years%], ФИО [%client_fio%].";
+    private $message = "Ожидает на прием - [%admission_date%] [%pet_alias%], [%pet_type%], [%pet_breed%], Возраст: [%pet_years%], ФИО [%client_fio%].";
     /**
      * @var array
      */
