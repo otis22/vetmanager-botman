@@ -31,7 +31,7 @@ class Notification
             DB::table('statistic')->insert([
                 'created_at' => date("Y-m-d H:i:s"),
                 'user_id' => $user->chat_id,
-                'channel' => $this->botman->getDriver()->getName(),
+                'channel' => $user->channel,
                 'event' => 'notification message'
             ]);
         }
