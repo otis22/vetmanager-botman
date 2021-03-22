@@ -6,7 +6,7 @@ use GuzzleHttp\Client;
 
 use function Otis22\VetmanagerRestApi\uri;
 
-class Pets
+class PetsApi
 {
     /**
      * @var Client

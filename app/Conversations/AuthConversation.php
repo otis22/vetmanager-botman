@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace App\Conversations;
 
-use App\Http\Helpers\Rest\Users;
+use App\Http\Helpers\Rest\UsersApi;
 use App\Vetmanager\UserData\UserRepository\User;
 use App\Vetmanager\UserData\UserRepository\UserRepository;
 use BotMan\BotMan\Messages\Conversations\Conversation;
@@ -91,7 +91,7 @@ final class AuthConversation extends VetmanagerConversation
                         'headers' => ['X-USER-TOKEN' => $token, 'X-APP-NAME' => config('app.name')]
                     ]
                 );
-                $vmUserId = (new Users($client))->getUserIdByToken($token);
+                $vmUserId = (new UsersApi($client))->getUserIdByToken($token);
                 $user = new User(
                     $chatId,
                     $this->getBot()->userStorage()->get('clinicDomain'),

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Conversations;
 
-use App\Http\Helpers\Rest\Clinics;
+use App\Http\Helpers\Rest\ClinicsApi;
 use App\Vetmanager\Api\AuthenticatedClientFactory;
 use App\Vetmanager\UserData\UserRepository\UserRepository;
-use App\Http\Helpers\Rest\Users;
+use App\Http\Helpers\Rest\UsersApi;
 use BotMan\BotMan\Messages\Incoming\Answer;
-use App\Http\Helpers\Rest\Schedules;
+use App\Http\Helpers\Rest\SchedulesApi;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 
@@ -20,7 +20,7 @@ final class TimesheetConversation extends VetmanagerConversation
     {
         $user = UserRepository::getById($this->getBot()->getUser()->getId());
         $clientFactory = new AuthenticatedClientFactory($user);
-        $schedules = new Schedules($clientFactory->create());
+        $schedules = new SchedulesApi($clientFactory->create());
         $daysCount = 7;
         $doctorId = $this->bot->userStorage()->get('doctorId');
         $clinicId = $this->bot->userStorage()->get('clinicId');
@@ -43,7 +43,7 @@ final class TimesheetConversation extends VetmanagerConversation
         $user = UserRepository::getById($this->getBot()->getUser()->getId());
         $clientFactory = new AuthenticatedClientFactory($user);
         $clinics = (
-            new Clinics($clientFactory->create())
+            new ClinicsApi($clientFactory->create())
         )->all()['data']['clinics'];
 
         if (count($clinics) == 1) {
@@ -77,7 +77,7 @@ final class TimesheetConversation extends VetmanagerConversation
         $clientFactory = new AuthenticatedClientFactory($user);
         $currentUserId = $user->getVmUserId();
         $buttons[] = Button::create('Мой график')->value($currentUserId);
-        $users = new Users($clientFactory->create());
+        $users = new UsersApi($clientFactory->create());
         foreach ($users->allActive()['data']['user'] as $user) {
             if ($user['id'] != $currentUserId) {
                 $text = $user['first_name'] . " " . $user['last_name'] . " " . $user['login'];
@@ -93,7 +93,7 @@ final class TimesheetConversation extends VetmanagerConversation
             if ($answer->isInteractiveMessageReply()) {
                 $user = UserRepository::getById($this->getBot()->getUser()->getId());
                 $clientFactory = new AuthenticatedClientFactory($user);
-                $users = new Users($clientFactory->create());
+                $users = new UsersApi($clientFactory->create());
                 $doctorId = intval($answer->getValue());
                 $this->say("Результаты для " . $users->byId($doctorId)['data']['user']['login']);
                 try {

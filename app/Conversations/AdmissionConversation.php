@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\Conversations;
 
-use App\Http\Helpers\Rest\Admission;
+use App\Http\Helpers\Rest\AdmissionApi;
 use App\Vetmanager\Api\AuthenticatedClientFactory;
 use App\Vetmanager\MainMenu;
+use App\Vetmanager\MessageBuilders\Admission\AdmissionMessageBuilder;
 use App\Vetmanager\UserData\UserRepository\UserInterface;
 use App\Vetmanager\UserData\UserRepository\UserRepository;
 use BotMan\BotMan\Messages\Conversations\Conversation;
-use App\Http\Helpers\Rest\Users;
+use App\Http\Helpers\Rest\UsersApi;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Outgoing\Question;
 
@@ -35,40 +36,29 @@ final class AdmissionConversation extends VetmanagerConversation
         return $this->user;
     }
 
-    public function sayTop10()
+    public function showTenNearestAdmissions()
     {
         try {
-            $clientFactory = new AuthenticatedClientFactory($this->user());
-            $client = $clientFactory->create();
+            $client = (new AuthenticatedClientFactory($this->user()))->create();
+            $users = new UsersApi($client);
             $currentUserLogin = $this->getBot()->userStorage()->get('userLogin');
-            $users = new Users($client);
             $currentUserId = $users->getUserIdByLogin($currentUserLogin);
-            $admission = new Admission($client);
-            $last10Admissions = array_slice($admission->getByUserId($currentUserId)['data']['admission'], 0, 10, true);
-            if (!empty($last10Admissions)) {
-                foreach ($last10Admissions as $concrete) {
-                    $message = $concrete['admission_date'] .PHP_EOL;
-                    if (isset($concrete['client'])) {
-                        $message .= "Клиент: ";
-                        $message .= $concrete['client']['last_name'] . " " . $concrete['client']['first_name'] . PHP_EOL;
-                    } else {
-                        $message .= "Клиент: <пусто>";
-                    }
-                    if (isset($concrete['pet'])) {
-                        $message .= "Кличка питомца: " . $concrete['pet']['alias'] . PHP_EOL;
-                        $message .= "Тип: " . $concrete['pet']['pet_type_data']['title'] . PHP_EOL;
-                        $message .= "Порода: " . $concrete['pet']['breed_data']['title'];
-                    }
-                    $this->say($message);
-                }
-            } else {
-                $this->say("У вас нет запланированных визитов.");
-            }
+            $admission = new AdmissionApi($client);
+            $last10Admissions = array_slice(
+                $admission->getByUserId($currentUserId)['data']['admission'],
+                0,
+                10,
+                true
+            );
+            $messageBuilder = new AdmissionMessageBuilder($last10Admissions);
+            $message = $messageBuilder->buildMessage();
+            $this->say($message);
         } catch (\Throwable $exception) {
             $this->sayError("Ошибка: " . $exception->getMessage());
         }
         $this->endConversation();
     }
+
 
     public function sayError(string $message) {
         $this->say($message);
@@ -85,6 +75,6 @@ final class AdmissionConversation extends VetmanagerConversation
 
     public function run()
     {
-        $this->sayTop10();
+        $this->showTenNearestAdmissions();
     }
 }

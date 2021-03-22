@@ -12,7 +12,7 @@ use Otis22\VetmanagerRestApi\Query\Filters;
 
 use function Otis22\VetmanagerRestApi\uri;
 
-class Schedules
+class SchedulesApi
 {
     /**
      * @var Client
