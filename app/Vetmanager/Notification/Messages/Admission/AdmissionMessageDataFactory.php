@@ -4,7 +4,7 @@
 namespace App\Vetmanager\Notification\Messages\Admission;
 
 
-use App\Http\Helpers\Rest\Pets;
+use App\Http\Helpers\Rest\PetsApi;
 use App\Vetmanager\Api\AuthenticatedClientFactory;
 use App\Vetmanager\UserData\UserRepository\UserRepository;
 
@@ -23,7 +23,7 @@ class AdmissionMessageDataFactory
     {
         $clientFactory = new AuthenticatedClientFactory(UserRepository::getById($this->user[0]->chat_id));
         $client = $clientFactory->create();
-        $pets = new Pets($client);
+        $pets = new PetsApi($client);
         $pet = $pets->byId(intval($this->input['data']['patient_id']))['data']['pet'];
         return new AdmissionMessageData($pet, $this->input);
     }

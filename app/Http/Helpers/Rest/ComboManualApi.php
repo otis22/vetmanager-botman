@@ -12,7 +12,7 @@ use Otis22\VetmanagerRestApi\Query\Filters;
 use PHPUnit\Runner\Exception;
 use function Otis22\VetmanagerRestApi\uri;
 
-class ComboManual
+class ComboManualApi
 {
     /**
      * @var Client

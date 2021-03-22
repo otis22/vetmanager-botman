@@ -11,7 +11,7 @@ use Otis22\VetmanagerRestApi\Query\Filters;
 
 use function Otis22\VetmanagerRestApi\uri;
 
-class Admission
+class AdmissionApi
 {
     /**
      * @var Client

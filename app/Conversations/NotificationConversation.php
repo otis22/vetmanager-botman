@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Conversations;
 
-use App\Http\Helpers\Rest\ComboManual;
+use App\Http\Helpers\Rest\ComboManualApi;
 use App\Vetmanager\Api\AuthenticatedClientFactory;
 use App\Vetmanager\UserData\UserRepository\UserRepository;
 use BotMan\BotMan\Messages\Incoming\Answer;
@@ -29,7 +29,7 @@ final class NotificationConversation extends VetmanagerConversation
                 $user = UserRepository::getById($this->getBot()->getUser()->getId());
                 $clientFactory = new AuthenticatedClientFactory($user);
 
-                $comboManual = new ComboManual($clientFactory->create());
+                $comboManual = new ComboManualApi($clientFactory->create());
                 if ($answer->getValue() == "on")
                 {
                     $user->enableNotifications();
