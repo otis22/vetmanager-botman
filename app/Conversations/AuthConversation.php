@@ -21,20 +21,7 @@ use function config;
 
 final class AuthConversation extends VetmanagerConversation
 {
-    /**
-     * @var string
-     */
-    protected $clinicUrl;
-    /**
-     * @var string
-     */
-    protected $userLogin;
-    /**
-     * @var string
-     */
-    protected $token;
-
-    /**
+     /**
      * @return Conversation
      */
     public function askDomain(): Conversation
@@ -49,7 +36,6 @@ final class AuthConversation extends VetmanagerConversation
                     ->save(
                         ['clinicDomain' => $domainName]
                     );
-                $this->clinicUrl = url($domainName)->asString();
                 $this->askLogin();
             } catch (\Throwable $exception) {
                 $this->say("Попробуйте еще раз. Ошибка: " . $exception->getMessage());
@@ -64,10 +50,10 @@ final class AuthConversation extends VetmanagerConversation
     public function askLogin(): Conversation
     {
         return $this->ask("Введите login вашего пользователя в Ветменеджер", function (Answer $answer) {
-            $this->userLogin = $answer->getText();
+            $userLogin = $answer->getText();
             $this->getBot()->userStorage()
                 ->save(
-                    ['userLogin' => $this->userLogin]
+                    ['userLogin' => $userLogin]
                 );
             $this->askPassword();
         });
@@ -77,38 +63,52 @@ final class AuthConversation extends VetmanagerConversation
     {
         return $this->ask("Введите пароль вашего пользователя в Ветменеджер", function (Answer $answer) {
             $password = $answer->getText();
+            $this->getBot()->userStorage()
+                ->save(
+                    ['userPassword' => $password]
+                );
+            $this->authentificate();
+        });
+    }
+
+    private function authentificate()
+    {
+        try {
+            $userLogin = $this->getBot()->userStorage()->get('userLogin');
+            $userPassword = $this->getBot()->userStorage()->get('userPassword');
+            $clinicDomain = $this->getBot()->userStorage()->get('clinicDomain');
+            $clinicUrl = url($clinicDomain)->asString();
+
             $credentials = credentials(
-                $this->userLogin,
-                $password,
+                $userLogin,
+                $userPassword,
                 config('app.name')
             );
-            try {
-                $token = token($credentials, $this->clinicUrl)->asString();
-                $chatId = $this->getBot()->getUser()->getId();
-                $client = new Client(
-                    [
-                        'base_uri' => $this->clinicUrl,
-                        'headers' => ['X-USER-TOKEN' => $token, 'X-APP-NAME' => config('app.name')]
-                    ]
-                );
-                $vmUserId = (new UsersApi($client))->getUserIdByToken($token);
-                $user = new User(
-                    $chatId,
-                    $this->getBot()->userStorage()->get('clinicDomain'),
-                    $token,
-                    $vmUserId,
-                    $this->getBot()->getDriver()->getName(),
-                    true
-                );
-                UserRepository::save($user);
-                $this->getBot()->userStorage()->save(['is_authorized' => true]);
-                $this->say('Успех!');
-                $this->endConversation();
-            } catch (\Throwable $exception) {
-                $this->say("Попробуйте еще раз. Ошибка: " . $exception->getMessage());
-                $this->askDomain();
-            }
-        });
+            $token = token($credentials, $clinicUrl)->asString();
+            $chatId = $this->getBot()->getUser()->getId();
+            $client = new Client(
+                [
+                    'base_uri' => $clinicUrl,
+                    'headers' => ['X-USER-TOKEN' => $token, 'X-APP-NAME' => config('app.name')]
+                ]
+            );
+            $vmUserId = (new UsersApi($client))->getUserIdByToken($token);
+            $user = new User(
+                $chatId,
+                $this->getBot()->userStorage()->get('clinicDomain'),
+                $token,
+                $vmUserId,
+                $this->getBot()->getDriver()->getName(),
+                true
+            );
+            UserRepository::save($user);
+            $this->getBot()->userStorage()->save(['is_authorized' => true]);
+            $this->say('Успех!');
+            $this->endConversation();
+        } catch (\Throwable $exception) {
+            $this->say("Попробуйте еще раз. Ошибка: " . $exception->getMessage());
+            $this->askDomain();
+        }
     }
 
     public function run()
