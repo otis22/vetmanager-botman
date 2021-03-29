@@ -12,19 +12,12 @@ class ConcretteUserRoute implements NotificationRouteInterface
     private $user;
 
     /**
-     * @var array
-     */
-    private $data;
-
-    /**
      * ConcretteUserRoute constructor.
      * @param $user
-     * @param $data
      */
-    public function __construct($user, $data)
+    public function __construct($user)
     {
         $this->user = $user;
-        $this->data = $data;
     }
 
     /**

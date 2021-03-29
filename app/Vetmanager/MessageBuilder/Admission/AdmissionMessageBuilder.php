@@ -6,10 +6,10 @@
  * Time: 9:43
  */
 
-namespace App\Vetmanager\MessageBuilders\Admission;
+namespace App\Vetmanager\MessageBuilder\Admission;
 
 
-use App\Vetmanager\MessageBuilders\MessageBuilderInterface;
+use App\Vetmanager\MessageBuilder\MessageBuilderInterface;
 
 class AdmissionMessageBuilder implements MessageBuilderInterface
 {
@@ -46,6 +46,7 @@ class AdmissionMessageBuilder implements MessageBuilderInterface
                     $message .= "Тип: " . $concrete['pet']['pet_type_data']['title'] . PHP_EOL;
                     $message .= "Порода: " . $concrete['pet']['breed_data']['title'];
                 }
+                $message .= PHP_EOL . PHP_EOL;
             }
         } else {
             $message = "У вас нет запланированных визитов.";

@@ -26,4 +26,16 @@ class UserRepository implements IUserRepository
 
         return new User($user->chat_id, $user->clinic_domain, $user->clinic_token, $user->vm_user_id, $user->channel, $user->notification_enabled);
     }
+
+    public static function all(): array
+    {
+        $users = DB::table('users')->get()->toArray();
+        if (empty($users)) {
+            return [];
+        }
+        foreach ($users as $user) {
+            $result[] = new User($user->chat_id, $user->clinic_domain, $user->clinic_token, $user->vm_user_id, $user->channel, $user->notification_enabled);
+        }
+        return $result;
+    }
 }
