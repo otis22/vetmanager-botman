@@ -10,7 +10,7 @@ use App\Vetmanager\MessageBuilder\Admission\TimesheetMessageBuilder;
 use Illuminate\Foundation\Inspiring;
 use App\Vetmanager\UserData\UserRepository\UserRepository;
 use App\Vetmanager\Notification\Notification;
-use App\Vetmanager\Notification\Messages\ScheduledMessage;
+use App\Vetmanager\Notification\Messages\Message;
 use App\Vetmanager\Notification\Routers\ConcretteUserRoute;
 
 /*
@@ -31,39 +31,46 @@ Artisan::command('inspire', function () {
 Artisan::command('send_schedule', function () {
     $users = UserRepository::all();
     foreach ($users as $user) {
-        $client = (new AuthenticatedClientFactory($user))->create();
-        $currentUserId = $user->getVmUserId();
-
-        $schedules = new SchedulesApi($client);
-        $timesheets = $schedules->byIntervalInDays(1, $currentUserId)['data']['timesheet'];
-        if (!empty($timesheets)) {
-            $messageBuilder = new TimesheetMessageBuilder($timesheets, $schedules);
-            $scheduleMessage = $messageBuilder->buildMessage();
-        } else {
-            $scheduleMessage = "Не заданно";
-        }
-
-        $admissions = (new AdmissionApi($client))->getByUserId($currentUserId)['data']['admission'];
-        if (!empty($admissions)) {
-            $tomorrowAdmissions = array_filter($admissions, function ($admission) {
-                $today = new DateTime();
-                $today->setTime(0,0);
-                $admissionDate = new DateTime($admission['admission_date']);
-                return ($today->diff($admissionDate)->days === 1);
-            });
-            $messageBuilder = new AdmissionMessageBuilder($tomorrowAdmissions);
-            $admissionsMessage = $messageBuilder->buildMessage();
-        } else {
-            $admissionsMessage = "Планов нет.";
-        }
-
         $botman = resolve('botman');
         $dbUser = DB::table('users')->where('chat_id', '=', $user->getId())->get()->toArray();
-        $notification = new Notification(
-            new ScheduledMessage($scheduleMessage, $admissionsMessage),
-            new ConcretteUserRoute($dbUser),
-            $botman
-        );
-        $notification->send();
+        $client = (new AuthenticatedClientFactory($user))->create();
+        $currentUserId = $user->getVmUserId();
+        try {
+            $schedules = new SchedulesApi($client);
+            $timesheets = $schedules->byIntervalInDays(1, $currentUserId)['data']['timesheet'];
+            if (!empty($timesheets)) {
+                $messageBuilder = new TimesheetMessageBuilder($timesheets, $schedules);
+                $scheduleMessage = $messageBuilder->buildMessage();
+                $notification = new Notification(
+                    new Message($scheduleMessage),
+                    new ConcretteUserRoute($dbUser),
+                    $botman
+                );
+                $notification->send();
+            }
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+        try {
+            $admissions = (new AdmissionApi($client))->getByUserId($currentUserId)['data']['admission'];
+            if (!empty($admissions)) {
+                $tomorrowAdmissions = array_filter($admissions, function ($admission) {
+                    $today = new DateTime();
+                    $today->setTime(0,0);
+                    $admissionDate = new DateTime($admission['admission_date']);
+                    return ($today->diff($admissionDate)->days === 1);
+                });
+                $messageBuilder = new AdmissionMessageBuilder($tomorrowAdmissions);
+                $admissionsMessage = $messageBuilder->buildMessage();
+                $notification = new Notification(
+                    new Message($admissionsMessage),
+                    new ConcretteUserRoute($dbUser),
+                    $botman
+                );
+                $notification->send();
+            }
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
     }
 })->describe('Run sheduled messages with user appointments and time table');
