@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Conversations;
 
+use App\Exceptions\VmEmptyScheduleException;
 use App\Http\Helpers\Rest\ClinicsApi;
 use App\Vetmanager\Api\AuthenticatedClientFactory;
 use App\Vetmanager\MessageBuilder\Admission\TimesheetMessageBuilder;
@@ -24,9 +25,13 @@ final class TimesheetConversation extends VetmanagerConversation
         $schedules = new SchedulesApi($clientFactory->create());
         $doctorId = $this->bot->userStorage()->get('doctorId');
         $clinicId = $this->bot->userStorage()->get('clinicId');
-        $timesheets = $schedules->byIntervalInDays(7, $doctorId, $clinicId)['data']['timesheet'];
-        $messageBuilder = new TimesheetMessageBuilder($timesheets, $schedules);
-        $this->say($messageBuilder->buildMessage());
+        try {
+            $timesheets = $schedules->byIntervalInDays(7, $doctorId, $clinicId);
+            $messageBuilder = new TimesheetMessageBuilder($timesheets, $schedules);
+            $this->say($messageBuilder->buildMessage());
+        } catch (VmEmptyScheduleException $e) {
+            $this->say("У вас нет рабочих графиков.");
+        }
         $this->endConversation();
     }
 

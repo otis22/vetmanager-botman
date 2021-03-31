@@ -37,18 +37,16 @@ Artisan::command('send_schedule', function () {
         $currentUserId = $user->getVmUserId();
         try {
             $schedules = new SchedulesApi($client);
-            $timesheets = $schedules->byIntervalInDays(1, $currentUserId)['data']['timesheet'];
-            if (!empty($timesheets)) {
-                $messageBuilder = new TimesheetMessageBuilder($timesheets, $schedules);
-                $scheduleMessage = $messageBuilder->buildMessage();
-                $notification = new Notification(
-                    new Message($scheduleMessage),
-                    new ConcretteUserRoute($dbUser),
-                    $botman
-                );
-                $notification->send();
-            }
-        } catch (Exception $e) {
+            $timesheets = $schedules->byIntervalInDays(1, $currentUserId);
+            $messageBuilder = new TimesheetMessageBuilder($timesheets, $schedules);
+            $scheduleMessage = $messageBuilder->buildMessage();
+            $notification = new Notification(
+                new Message($scheduleMessage),
+                new ConcretteUserRoute($dbUser),
+                $botman
+            );
+            $notification->send();
+        } catch (Throwable $e) {
             echo $e->getMessage();
         }
         try {

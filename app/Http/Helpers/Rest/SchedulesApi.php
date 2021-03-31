@@ -2,6 +2,7 @@
 
 namespace App\Http\Helpers\Rest;
 
+use App\Exceptions\VmEmptyScheduleException;
 use GuzzleHttp\Client;
 use Otis22\VetmanagerRestApi\Query\Filter\MoreThan;
 use Otis22\VetmanagerRestApi\Query\Filter\LessThan;
@@ -66,13 +67,16 @@ class SchedulesApi
                 "query" => $filters->asKeyValue()
             ]
         );
-        $result = json_decode(
+        $schedules = json_decode(
             strval(
                 $request->getBody()
             ),
             true
-        );
-        return $result;
+        )['data']['timesheet'];
+        if (empty($schedules)) {
+            throw new VmEmptyScheduleException("Schedules is empty");
+        }
+        return $schedules;
     }
 
     public function getTypeNameById($id): string
