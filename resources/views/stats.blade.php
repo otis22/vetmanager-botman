@@ -8,41 +8,7 @@
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" type="text/css">
-
-    <!-- Styles -->
-    <style>
-        body {
-            font-family: "Varela Round", sans-serif;
-            margin: 0;
-            padding: 0;
-            background: radial-gradient(#57bfc7, #45a6b3);
-        }
-
-        .container {
-            display: flex;
-            height: 100vh;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .content {
-            width: 40%;
-            background-color: white;
-            text-align: center;
-            justify-content: space-between;
-        }
-
-        .stats-block {
-            justify-content: space-between;
-            display: inline-block;
-        }
-
-        .stats-block:not(:first-child):not(:last-child) {
-            margin-left: 60px;
-            margin-right: 60px;
-        }
-
-    </style>
+    <link href="/css/style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <div class="container">
@@ -58,6 +24,20 @@
             <h1>{{$notifies}}</h1>
         </div>
         <canvas id="chart" width="400" height="400"></canvas>
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>mark</th>
+                    <th>best feature</th>
+                </tr>
+            </thead>
+            @foreach($reviews as $review)
+                <tr>
+                    <td>{{$review->mark}}</td>
+                    <td>{{$review->the_best_feature}}</td>
+                </tr>
+            @endforeach
+        </table>
     </div>
 </div>
 
