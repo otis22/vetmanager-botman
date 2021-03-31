@@ -9,6 +9,8 @@
 namespace App\Vetmanager\MessageBuilder\Admission;
 
 
+use _HumbugBox221ad6f1b81f\Nette\Neon\Exception;
+use App\Exceptions\VmEmptyScheduleException;
 use App\Http\Helpers\Rest\SchedulesApi;
 use App\Vetmanager\MessageBuilder\MessageBuilderInterface;
 
@@ -40,6 +42,9 @@ class TimesheetMessageBuilder implements MessageBuilderInterface
     public function buildMessage()
     {
         $message = "";
+        if (empty($this->timesheets)) {
+            throw new VmEmptyScheduleException("Message haven't builded cause empty timesheet");
+        }
         foreach ($this->timesheets as $timesheet) {
             $date = date_format(date_create($timesheet['begin_datetime']), "d.m.Y");
             $from = date_format(date_create($timesheet['begin_datetime']), "H:i:s");
