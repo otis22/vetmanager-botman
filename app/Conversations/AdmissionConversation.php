@@ -55,12 +55,12 @@ final class AdmissionConversation extends VetmanagerConversation
             $messageBuilder = new AdmissionMessageBuilder($last10Admissions);
             $message = $messageBuilder->buildMessage();
             $this->say($message);
-        } catch (\Throwable $exception) {
-            if ($exception instanceof VmEmptyAdmissionsException) {
-                $this->say("У вас нет запланированных приёмов.");
-            } else {
-                $this->say("Ошибка: " . $exception->getMessage());
-            }
+        }
+        catch (VmEmptyAdmissionsException $exception) {
+            $this->say("У вас нет запланированных приёмов.");
+        }
+        catch (\Throwable $exception) {
+            $this->say("Ошибка: " . $exception->getMessage());
         }
         $this->endConversation();
     }
