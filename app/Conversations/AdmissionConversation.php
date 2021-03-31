@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Conversations;
 
+use App\Exceptions\VmEmptyAdmissionsException;
+use App\Exceptions\VmEmptyScheduleException;
 use App\Http\Helpers\Rest\AdmissionApi;
 use App\Vetmanager\Api\AuthenticatedClientFactory;
 use App\Vetmanager\MainMenu;
@@ -45,7 +47,7 @@ final class AdmissionConversation extends VetmanagerConversation
             $currentUserId = $users->getUserIdByLogin($currentUserLogin);
             $admission = new AdmissionApi($client);
             $last10Admissions = array_slice(
-                $admission->getByUserId($currentUserId)['data']['admission'],
+                $admission->getByUserId($currentUserId),
                 0,
                 10,
                 true
@@ -53,24 +55,14 @@ final class AdmissionConversation extends VetmanagerConversation
             $messageBuilder = new AdmissionMessageBuilder($last10Admissions);
             $message = $messageBuilder->buildMessage();
             $this->say($message);
-        } catch (\Throwable $exception) {
-            $this->sayError("Ошибка: " . $exception->getMessage());
+        }
+        catch (VmEmptyAdmissionsException $exception) {
+            $this->say("У вас нет запланированных приёмов.");
+        }
+        catch (\Throwable $exception) {
+            $this->say("Ошибка: " . $exception->getMessage());
         }
         $this->endConversation();
-    }
-
-
-    public function sayError(string $message) {
-        $this->say($message);
-        $this->say(
-            (
-                new MainMenu(
-                    [Question::class, 'create'],
-                    [Button::class, 'create'],
-                    $this->user()->isAuthorized()
-                )
-            )->asQuestion()
-        );
     }
 
     public function run()

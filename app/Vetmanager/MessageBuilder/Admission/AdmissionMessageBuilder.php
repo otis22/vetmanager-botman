@@ -9,6 +9,7 @@
 namespace App\Vetmanager\MessageBuilder\Admission;
 
 
+use App\Exceptions\VmEmptyAdmissionsException;
 use App\Vetmanager\MessageBuilder\MessageBuilderInterface;
 
 class AdmissionMessageBuilder implements MessageBuilderInterface
@@ -32,24 +33,24 @@ class AdmissionMessageBuilder implements MessageBuilderInterface
      */
     public function buildMessage()
     {
-        if (!empty($this->admissions)) {
-            foreach ($this->admissions as $concrete) {
-                $message = $concrete['admission_date'] .PHP_EOL;
-                if (isset($concrete['client'])) {
-                    $message .= "Клиент: ";
-                    $message .= $concrete['client']['last_name'] . " " . $concrete['client']['first_name'] . PHP_EOL;
-                } else {
-                    $message .= "Клиент: <пусто>";
-                }
-                if (isset($concrete['pet'])) {
-                    $message .= "Кличка питомца: " . $concrete['pet']['alias'] . PHP_EOL;
-                    $message .= "Тип: " . $concrete['pet']['pet_type_data']['title'] . PHP_EOL;
-                    $message .= "Порода: " . $concrete['pet']['breed_data']['title'];
-                }
-                $message .= PHP_EOL . PHP_EOL;
+        $message = "";
+        if (empty($this->admissions)) {
+            throw new VmEmptyAdmissionsException("Message haven't builded cause empty timesheet");
+        }
+        foreach ($this->admissions as $concrete) {
+            $message = $concrete['admission_date'] .PHP_EOL;
+            if (isset($concrete['client'])) {
+                $message .= "Клиент: ";
+                $message .= $concrete['client']['last_name'] . " " . $concrete['client']['first_name'] . PHP_EOL;
+            } else {
+                $message .= "Клиент: <пусто>";
             }
-        } else {
-            $message = "У вас нет запланированных визитов.";
+            if (isset($concrete['pet'])) {
+                $message .= "Кличка питомца: " . $concrete['pet']['alias'] . PHP_EOL;
+                $message .= "Тип: " . $concrete['pet']['pet_type_data']['title'] . PHP_EOL;
+                $message .= "Порода: " . $concrete['pet']['breed_data']['title'];
+            }
+            $message .= PHP_EOL . PHP_EOL;
         }
         return $message;
     }
