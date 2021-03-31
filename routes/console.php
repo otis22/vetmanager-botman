@@ -50,24 +50,22 @@ Artisan::command('send_schedule', function () {
             echo $e->getMessage();
         }
         try {
-            $admissions = (new AdmissionApi($client))->getByUserId($currentUserId)['data']['admission'];
-            if (!empty($admissions)) {
-                $tomorrowAdmissions = array_filter($admissions, function ($admission) {
-                    $today = new DateTime();
-                    $today->setTime(0,0);
-                    $admissionDate = new DateTime($admission['admission_date']);
-                    return ($today->diff($admissionDate)->days === 1);
-                });
-                $messageBuilder = new AdmissionMessageBuilder($tomorrowAdmissions);
-                $admissionsMessage = $messageBuilder->buildMessage();
-                $notification = new Notification(
-                    new Message($admissionsMessage),
-                    new ConcretteUserRoute($dbUser),
-                    $botman
-                );
-                $notification->send();
-            }
-        } catch (Exception $e) {
+            $admissions = (new AdmissionApi($client))->getByUserId($currentUserId);
+            $tomorrowAdmissions = array_filter($admissions, function ($admission) {
+                $today = new DateTime();
+                $today->setTime(0,0);
+                $admissionDate = new DateTime($admission['admission_date']);
+                return ($today->diff($admissionDate)->days === 1);
+            });
+            $messageBuilder = new AdmissionMessageBuilder($tomorrowAdmissions);
+            $admissionsMessage = $messageBuilder->buildMessage();
+            $notification = new Notification(
+                new Message($admissionsMessage),
+                new ConcretteUserRoute($dbUser),
+                $botman
+            );
+            $notification->send();
+        } catch (Throwable $e) {
             echo $e->getMessage();
         }
     }

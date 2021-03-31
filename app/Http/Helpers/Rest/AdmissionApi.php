@@ -2,6 +2,7 @@
 
 namespace App\Http\Helpers\Rest;
 
+use App\Exceptions\VmEmptyAdmissionsException;
 use GuzzleHttp\Client;
 use Otis22\VetmanagerRestApi\Query\Filter\MoreThan;
 use Otis22\VetmanagerRestApi\Model\Property;
@@ -48,7 +49,10 @@ class AdmissionApi
                 $request->getBody()
             ),
             true
-        );
+        )['data']['admission'];
+        if (empty($result)) {
+            throw new VmEmptyAdmissionsException("Haven't planned admissions");
+        }
         return $result;
     }
 }
