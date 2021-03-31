@@ -1,0 +1,65 @@
+body {
+    font-family: "Varela Round", sans-serif;
+    margin: 0;
+    padding: 0;
+    background: radial-gradient(#57bfc7, #45a6b3);
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+
+.content {
+    width: 40%;
+    background-color: white;
+    text-align: center;
+    justify-content: space-between;
+}
+
+.stats-block {
+    justify-content: space-between;
+    display: inline-block;
+}
+
+.stats-block:not(:first-child):not(:last-child) {
+    margin-left: 60px;
+    margin-right: 60px;
+}
+
+.styled-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    width: 100%;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+.styled-table thead tr {
+    background-color: #009879;
+    color: #ffffff;
+    text-align: left;
+}
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+    border-left: 1px solid black;
+}
+.styled-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:last-of-type {
+    border-bottom: 2px solid #009879;
+}
+.styled-table tbody tr.active-row {
+    font-weight: bold;
+    color: #009879;
+}
+

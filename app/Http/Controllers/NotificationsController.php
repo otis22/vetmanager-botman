@@ -37,7 +37,7 @@ final class NotificationsController extends Controller
                     new AdmissionAddMessage(
                         (new AdmissionMessageDataFactory($user, $input))->create()
                     ),
-                    new ConcretteUserRoute($user, $input),
+                    new ConcretteUserRoute($user),
                     $botman
                 );
                 $notification->send();
@@ -49,7 +49,7 @@ final class NotificationsController extends Controller
                     new AdmissionEditMessage(
                         (new AdmissionMessageDataFactory($user, $input))->create()
                     ),
-                    new ConcretteUserRoute($user, $input),
+                    new ConcretteUserRoute($user),
                     $botman
                 );
                 $notification->send();
@@ -61,7 +61,7 @@ final class NotificationsController extends Controller
                     new AdmissionConfirmMessage(
                         (new AdmissionMessageDataFactory($user, $input))->create()
                     ),
-                    new ConcretteUserRoute($user, $input),
+                    new ConcretteUserRoute($user),
                     $botman
                 );
                 $notification->send();
@@ -73,7 +73,7 @@ final class NotificationsController extends Controller
                     new AdmissionDirectedMessage(
                         (new AdmissionMessageDataFactory($user, $input))->create()
                     ),
-                    new ConcretteUserRoute($user, $input),
+                    new ConcretteUserRoute($user),
                     $botman
                 );
                 $notification->send();
@@ -85,7 +85,7 @@ final class NotificationsController extends Controller
                     new AdmissionInTreatmentMessage(
                         (new AdmissionMessageDataFactory($user, $input))->create()
                     ),
-                    new ConcretteUserRoute($user, $input),
+                    new ConcretteUserRoute($user),
                     $botman
                 );
                 $notification->send();

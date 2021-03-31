@@ -6,7 +6,7 @@
  * Time: 9:37
  */
 
-namespace App\Vetmanager\MessageBuilders;
+namespace App\Vetmanager\MessageBuilder;
 
 
 interface MessageBuilderInterface

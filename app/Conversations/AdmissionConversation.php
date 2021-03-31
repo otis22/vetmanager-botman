@@ -7,7 +7,7 @@ namespace App\Conversations;
 use App\Http\Helpers\Rest\AdmissionApi;
 use App\Vetmanager\Api\AuthenticatedClientFactory;
 use App\Vetmanager\MainMenu;
-use App\Vetmanager\MessageBuilders\Admission\AdmissionMessageBuilder;
+use App\Vetmanager\MessageBuilder\Admission\AdmissionMessageBuilder;
 use App\Vetmanager\UserData\UserRepository\UserInterface;
 use App\Vetmanager\UserData\UserRepository\UserRepository;
 use BotMan\BotMan\Messages\Conversations\Conversation;

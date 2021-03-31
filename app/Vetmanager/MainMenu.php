@@ -16,16 +16,28 @@ final class MainMenu
         'timesheet' => 'График работы сотрудников',
         'admissions' =>  'Мои запланированные визиты',
         'notification' => 'Управление уведомлениями',
-        'review' => 'Оцените меня'
+        'review' => 'Оцените меня',
+        'stats' => "Статистика Бота"
     ];
+
+    /**
+     * @var string[]
+     */
+    private $unauthCommandsConfig = [
+        'auth' => 'Авторизация(Необходима для работы бота)',
+        'stats' => 'Статистика Бота'
+    ];
+
     /**
      * @var callable(string $questionTitle): Question
      */
     private $questionFactory;
+
     /**
      * @var callable(string $buttonTitle): Button
      */
     private $buttonFactory;
+
     /**
      * @var bool
      */
@@ -48,7 +60,8 @@ final class MainMenu
      */
     private function commands(): array
     {
-        return array_keys($this->commandsConfig);
+        $config = $this->isAuthorized ? $this->commandsConfig : $this->unauthCommandsConfig;
+        return array_keys($config);
     }
 
     /**
@@ -56,7 +69,8 @@ final class MainMenu
      */
     private function titles(): array
     {
-        return array_values($this->commandsConfig);
+        $config = $this->isAuthorized ? $this->commandsConfig : $this->unauthCommandsConfig;
+        return array_values($config);
     }
 
     public function asQuestion(): Question
@@ -70,8 +84,8 @@ final class MainMenu
                     function ($command, $title) use ($buttonFactory) {
                         return $buttonFactory($title)->value($command);
                     },
-                    $this->isAuthorized ? $this->commands() : ['auth'],
-                    $this->isAuthorized ? $this->titles() : ['Авторизация(Необходима для работы бота)']
+                    $this->commands(),
+                    $this->titles()
                 )
             );
     }

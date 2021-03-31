@@ -6,6 +6,7 @@ namespace App\Conversations;
 
 use App\Http\Helpers\Rest\ClinicsApi;
 use App\Vetmanager\Api\AuthenticatedClientFactory;
+use App\Vetmanager\MessageBuilder\Admission\TimesheetMessageBuilder;
 use App\Vetmanager\UserData\UserRepository\UserRepository;
 use App\Http\Helpers\Rest\UsersApi;
 use BotMan\BotMan\Messages\Incoming\Answer;
@@ -21,20 +22,11 @@ final class TimesheetConversation extends VetmanagerConversation
         $user = UserRepository::getById($this->getBot()->getUser()->getId());
         $clientFactory = new AuthenticatedClientFactory($user);
         $schedules = new SchedulesApi($clientFactory->create());
-        $daysCount = 7;
         $doctorId = $this->bot->userStorage()->get('doctorId');
         $clinicId = $this->bot->userStorage()->get('clinicId');
-        $timesheets = $schedules->byIntervalInDays($daysCount, $doctorId, $clinicId)['data']['timesheet'];
-        if (empty($timesheets)) {
-            $this->say("Нет данных");
-        }
-        foreach ($timesheets as $timesheet) {
-            $date = date_format(date_create($timesheet['begin_datetime']), "d.m.Y");
-            $from = date_format(date_create($timesheet['begin_datetime']), "H:i:s");
-            $to = date_format(date_create($timesheet['end_datetime']), "H:i:s");
-            $type = $schedules->getTypeNameById($timesheet['type']);
-            $this->say($date . PHP_EOL ."$from - $to" . PHP_EOL . $type);
-        }
+        $timesheets = $schedules->byIntervalInDays(7, $doctorId, $clinicId)['data']['timesheet'];
+        $messageBuilder = new TimesheetMessageBuilder($timesheets, $schedules);
+        $this->say($messageBuilder->buildMessage());
         $this->endConversation();
     }
 
