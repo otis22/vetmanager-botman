@@ -5,12 +5,12 @@ use App\Http\Controllers\VetmanagerController;
 use App\Vetmanager\MainMenu;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
-use App\Http\Middleware\BotMan\ReceivedMiddleware;
+use App\Http\Middleware\BotMan\CapturedMiddleware;
 use App\Vetmanager\UserData\UserRepository\UserRepository;
 
 $botman = resolve('botman');
 
-$botman->middleware->captured((new ReceivedMiddleware()));
+$botman->middleware->captured((new CapturedMiddleware()));
 
 $botman->fallback(function (Botman $bot) {
     $bot->ask(

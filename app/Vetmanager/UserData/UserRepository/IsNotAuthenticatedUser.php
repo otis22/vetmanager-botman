@@ -51,4 +51,20 @@ final class IsNotAuthenticatedUser implements UserInterface
     {
         return false;
     }
+
+    public function isBlocked(): bool
+    {
+        throw new \Exception("Is not authenticated user");
+    }
+
+    public function block()
+    {
+        throw new \Exception("Is not authenticated user");
+    }
+
+    public function unblock()
+    {
+        throw new \Exception("Is not authenticated user");
+    }
+
 }

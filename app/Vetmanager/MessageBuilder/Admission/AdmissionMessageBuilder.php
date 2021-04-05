@@ -35,7 +35,7 @@ class AdmissionMessageBuilder implements MessageBuilderInterface
     {
         $message = "";
         if (empty($this->admissions)) {
-            throw new VmEmptyAdmissionsException("Message haven't builded cause empty timesheet");
+            throw new VmEmptyAdmissionsException("Message haven't builded cause empty admissions");
         }
         foreach ($this->admissions as $concrete) {
             $message = $concrete['admission_date'] .PHP_EOL;
