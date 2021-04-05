@@ -79,6 +79,16 @@ php artisan migrate
 #than yes
 ```
 
+3. Set up scheduler
+
+```shell
+heroku addons:create scheduler:standard
+#enter into sheduller
+heroku addons:open scheduler
+```
+
+And set up command `php artisan send_schedule` on 17.00 MSK
+
 ## Telegram 
 
 * [how to create bot](https://unnikked.ga/getting-started-with-telegram-bots-9e467d922d69)
