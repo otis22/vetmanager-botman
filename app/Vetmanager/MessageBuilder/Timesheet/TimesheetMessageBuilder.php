@@ -6,10 +6,9 @@
  * Time: 9:43
  */
 
-namespace App\Vetmanager\MessageBuilder\Admission;
+namespace App\Vetmanager\MessageBuilder\Timesheet;
 
 
-use _HumbugBox221ad6f1b81f\Nette\Neon\Exception;
 use App\Exceptions\VmEmptyScheduleException;
 use App\Http\Helpers\Rest\SchedulesApi;
 use App\Vetmanager\MessageBuilder\MessageBuilderInterface;
