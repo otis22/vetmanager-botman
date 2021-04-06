@@ -63,7 +63,8 @@ class BotManController extends Controller
      */
     public function stats()
     {
-        $userCount = DB::table('users')->count();
+        $activeUsers = DB::table('users')->where('is_blocked', '=', '0')->get();
+        $blockedUsers = DB::table('users')->where('is_blocked', '=', '1')->get();
         $notifies = DB::table('statistic')->where('event', '=', 'notification message')->count();
         $reviews = DB::table('review')->get()->toArray();
         $marks = array_column($reviews, 'mark');
@@ -76,6 +77,6 @@ class BotManController extends Controller
         $statistic = array_reverse($statistic);
         $eventsLast10Days['labels'] = array_column($statistic, 'date');
         $eventsLast10Days['data'] = array_column($statistic, 'count');
-        return view('stats')->with(compact(['notifies', 'userCount', 'eventsLast10Days', 'reviews', 'avgReviewMark']));
+        return view('stats')->with(compact(['notifies', 'activeUsers', 'blockedUsers', 'eventsLast10Days', 'reviews', 'avgReviewMark']));
     }
 }

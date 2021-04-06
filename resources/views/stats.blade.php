@@ -16,8 +16,12 @@
         <h1>Statistics</h1>
         <h2>Average rating: {{$avgReviewMark}}</h2>
         <div class="stats-block">
-            <h6>Users Count</h6>
-            <h1>{{$userCount}}</h1>
+            <h6>Active Users Count</h6>
+            <h1>{{$activeUsers->count()}}</h1>
+        </div>
+        <div class="stats-block">
+            <h6>Blocked Users Count</h6>
+            <h1>{{$blockedUsers->count()}}</h1>
         </div>
         <div class="stats-block">
             <h6>Incoming notify</h6>
