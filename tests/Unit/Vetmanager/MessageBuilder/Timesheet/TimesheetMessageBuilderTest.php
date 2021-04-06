@@ -6,7 +6,7 @@ namespace Tests\Unit\Vetmanager\MessageBuilder\Timesheet;
 
 use App\Exceptions\VmEmptyScheduleException;
 use App\Http\Helpers\Rest\SchedulesApi;
-use App\Vetmanager\MessageBuilder\Admission\TimesheetMessageBuilder;
+use App\Vetmanager\MessageBuilder\Timesheet\TimesheetMessageBuilder;
 use Tests\TestCase;
 
 class TimesheetMessageBuilderTest extends TestCase
