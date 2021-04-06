@@ -6,7 +6,7 @@ use App\Http\Helpers\Rest\SchedulesApi;
 use App\Http\Helpers\Rest\UsersApi;
 use App\Vetmanager\Api\AuthenticatedClientFactory;
 use App\Vetmanager\MessageBuilder\Admission\AdmissionMessageBuilder;
-use App\Vetmanager\MessageBuilder\Admission\TimesheetMessageBuilder;
+use App\Vetmanager\MessageBuilder\Timesheet\TimesheetMessageBuilder;
 use Illuminate\Foundation\Inspiring;
 use App\Vetmanager\UserData\UserRepository\UserRepository;
 use App\Vetmanager\Notification\Notification;
