@@ -4,12 +4,12 @@
 namespace App\Vetmanager\Notification;
 
 
+use App\Vetmanager\Logging\LoggerInterface;
 use App\Vetmanager\Notification\Messages\MessageInterface;
 use App\Vetmanager\Notification\Routers\NotificationRouteInterface;
 use BotMan\BotMan\BotMan;
 use BotMan\Drivers\Telegram\TelegramDriver;
 use BotMan\Drivers\Web\WebDriver;
-use Illuminate\Support\Facades\DB;
 
 class Notification
 {
@@ -28,13 +28,15 @@ class Notification
     {
         foreach ($this->route->asArray() as $user) {
             $this->botman->say($this->message->asString(), $user->chat_id, $this->driver($user->channel));
-            DB::table('statistic')->insert([
-                'created_at' => date("Y-m-d H:i:s"),
-                'user_id' => $user->chat_id,
-                'channel' => $user->channel,
-                'event' => 'notification message'
-            ]);
+            if (isset($this->logger)) {
+                $this->logger->log($user);
+            }
         }
+    }
+
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
     }
 
     private function driver($channel)

@@ -30,7 +30,6 @@ class BotManController extends Controller
                 UserRepository::save($user);
             }
         }
-        file_put_contents('/application/log.txt', print_r($request->all(), true));
         $botman->listen();
     }
 

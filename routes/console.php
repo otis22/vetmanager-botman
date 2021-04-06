@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\DB;
 use App\Http\Helpers\Rest\AdmissionApi;
 use App\Http\Helpers\Rest\SchedulesApi;
-use App\Http\Helpers\Rest\UsersApi;
+use App\Vetmanager\Logging\ScheduleLogger;
 use App\Vetmanager\Api\AuthenticatedClientFactory;
 use App\Vetmanager\MessageBuilder\Admission\AdmissionMessageBuilder;
 use App\Vetmanager\MessageBuilder\Timesheet\TimesheetMessageBuilder;
@@ -45,6 +45,7 @@ Artisan::command('send_schedule', function () {
                 new ConcretteUserRoute($dbUser),
                 $botman
             );
+            $notification->setLogger((new ScheduleLogger()));
             $notification->send();
         } catch (Throwable $e) {
             echo $e->getMessage();
@@ -64,6 +65,7 @@ Artisan::command('send_schedule', function () {
                 new ConcretteUserRoute($dbUser),
                 $botman
             );
+            $notification->setLogger((new ScheduleLogger()));
             $notification->send();
         } catch (Throwable $e) {
             echo $e->getMessage();
