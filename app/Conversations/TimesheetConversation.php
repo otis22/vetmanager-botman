@@ -7,7 +7,7 @@ namespace App\Conversations;
 use App\Exceptions\VmEmptyScheduleException;
 use App\Http\Helpers\Rest\ClinicsApi;
 use App\Vetmanager\Api\AuthenticatedClientFactory;
-use App\Vetmanager\MessageBuilder\Admission\TimesheetMessageBuilder;
+use App\Vetmanager\MessageBuilder\Timesheet\TimesheetMessageBuilder;
 use App\Vetmanager\UserData\UserRepository\UserRepository;
 use App\Http\Helpers\Rest\UsersApi;
 use BotMan\BotMan\Messages\Incoming\Answer;
