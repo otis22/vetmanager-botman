@@ -2,22 +2,53 @@
 
 namespace App\Http\Controllers;
 
+use App\Vetmanager\UserData\UserRepository\UserRepository;
 use BotMan\BotMan\BotMan;
 use Illuminate\Http\Request;
-use App\Conversations\ExampleConversation;
 use Illuminate\Support\Facades\DB;
 
 class BotManController extends Controller
 {
+
     /**
-     * Place your BotMan logic here.
+     * @param Request $request
      */
-    public function handle()
+    public function handle(Request $request)
     {
         $botman = app('botman');
-
+        $input = $request->all();
+        if ($this->isUserUpdated($input)) {
+            if ($this->isKicked($input))
+            {
+                $user = UserRepository::getById($input['my_chat_member']['from']['id']);
+                $user->block();
+                UserRepository::save($user);
+            }
+            if ($this->isMember($input)) {
+                $user = UserRepository::getById($input['my_chat_member']['from']['id']);
+                $user->unblock();
+                UserRepository::save($user);
+            }
+        }
+        file_put_contents('/application/log.txt', print_r($request->all(), true));
         $botman->listen();
     }
+
+    private function isUserUpdated($input)
+    {
+        return isset($input['my_chat_member']);
+    }
+
+    private function isKicked($input)
+    {
+        return $input['my_chat_member']['new_chat_member']['status'] == 'kicked';
+    }
+
+    private function isMember($input)
+    {
+        return $input['my_chat_member']['new_chat_member']['status'] == 'member';
+    }
+
 
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -32,7 +63,8 @@ class BotManController extends Controller
      */
     public function stats()
     {
-        $userCount = DB::table('users')->count();
+        $activeUsers = DB::table('users')->where('is_blocked', '=', '0')->get();
+        $blockedUsers = DB::table('users')->where('is_blocked', '=', '1')->get();
         $notifies = DB::table('statistic')->where('event', '=', 'notification message')->count();
         $reviews = DB::table('review')->get()->toArray();
         $marks = array_column($reviews, 'mark');
@@ -45,15 +77,6 @@ class BotManController extends Controller
         $statistic = array_reverse($statistic);
         $eventsLast10Days['labels'] = array_column($statistic, 'date');
         $eventsLast10Days['data'] = array_column($statistic, 'count');
-        return view('stats')->with(compact(['notifies', 'userCount', 'eventsLast10Days', 'reviews', 'avgReviewMark']));
-    }
-
-    /**
-     * Loaded through routes/botman.php
-     * @param  BotMan $bot
-     */
-    public function startConversation(BotMan $bot)
-    {
-        $bot->startConversation(new ExampleConversation());
+        return view('stats')->with(compact(['notifies', 'activeUsers', 'blockedUsers', 'eventsLast10Days', 'reviews', 'avgReviewMark']));
     }
 }

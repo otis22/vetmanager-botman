@@ -3,12 +3,11 @@
 
 namespace App\Http\Middleware\BotMan;
 
-use BotMan\BotMan\BotMan;
-use BotMan\BotMan\Interfaces\Middleware\Captured;
+use BotMan\BotMan\Interfaces\Middleware\Received;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
-use Illuminate\Support\Facades\DB;
+use BotMan\BotMan\BotMan;
 
-class ReceivedMiddleware implements Captured
+class ReceivedMiddleware implements Received
 {
     /**
      * Handle an incoming message.
@@ -19,15 +18,10 @@ class ReceivedMiddleware implements Captured
      *
      * @return mixed
      */
-    public function captured(IncomingMessage $message, $next, BotMan $bot)
+    public function received(IncomingMessage $message, $next, BotMan $bot)
     {
-        DB::table('statistic')->insert([
-            'created_at' => date("Y-m-d H:i:s"),
-            'user_id' => $message->getSender(),
-            'channel' => $bot->getDriver()->getName(),
-            'event' => 'incoming message'
-        ]);
-
+        file_put_contents('/application/log.txt', print_r($message->getRecipient(), true));
         return $next($message);
     }
 }
+

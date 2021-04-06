@@ -24,7 +24,7 @@ class UserRepository implements IUserRepository
             return new IsNotAuthenticatedUser();
         }
 
-        return new User($user->chat_id, $user->clinic_domain, $user->clinic_token, $user->vm_user_id, $user->channel, $user->notification_enabled);
+        return new User($user->chat_id, $user->clinic_domain, $user->clinic_token, $user->vm_user_id, $user->channel, $user->notification_enabled, $user->is_blocked);
     }
 
     public static function all(): array
@@ -34,7 +34,7 @@ class UserRepository implements IUserRepository
             return [];
         }
         foreach ($users as $user) {
-            $result[] = new User($user->chat_id, $user->clinic_domain, $user->clinic_token, $user->vm_user_id, $user->channel, $user->notification_enabled);
+            $result[] = new User($user->chat_id, $user->clinic_domain, $user->clinic_token, $user->vm_user_id, $user->channel, $user->notification_enabled, $user->is_blocked);
         }
         return $result;
     }

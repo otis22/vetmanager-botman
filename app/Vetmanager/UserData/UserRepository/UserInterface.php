@@ -21,4 +21,10 @@ interface UserInterface
     public function toArray(): array;
 
     public function isAuthorized(): bool;
+
+    public function isBlocked(): bool;
+
+    public function block();
+
+    public function unblock();
 }
