@@ -15,6 +15,7 @@ use App\Vetmanager\Notification\Messages\RollbackMessage;
 use App\Vetmanager\Notification\Notification;
 use App\Vetmanager\Notification\Routers\ConcretteUserRoute;
 use App\Vetmanager\Notification\Routers\EveryoneRoute;
+use App\Vetmanager\Notification\SendAction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -24,12 +25,16 @@ final class NotificationsController extends Controller
     public function handleNotifications(Request $request, $domain)
     {
         $botman = resolve('botman');
+        $logger = new NotificationLogger();
         $input = $request->all();
         switch ($input['name']) {
             case 'invoiceRollback':
                 $users = $this->allDomainUsers($domain);
-                $notification = new Notification(new RollbackMessage($input), new EveryoneRoute($users), $botman);
-                $notification->setLogger((new NotificationLogger()));
+                $notification = new Notification(
+                    new RollbackMessage($input),
+                    new EveryoneRoute($users),
+                    new SendAction($botman, $logger)
+                );
                 $notification->send();
             break;
             case 'admissionAdd':
@@ -40,9 +45,8 @@ final class NotificationsController extends Controller
                         (new AdmissionMessageDataFactory($user, $input))->create()
                     ),
                     new ConcretteUserRoute($user),
-                    $botman
+                    new SendAction($botman, $logger)
                 );
-                $notification->setLogger((new NotificationLogger()));
                 $notification->send();
                 break;
             case 'admissionEdit':
@@ -53,9 +57,8 @@ final class NotificationsController extends Controller
                         (new AdmissionMessageDataFactory($user, $input))->create()
                     ),
                     new ConcretteUserRoute($user),
-                    $botman
+                    new SendAction($botman, $logger)
                 );
-                $notification->setLogger((new NotificationLogger()));
                 $notification->send();
                 break;
             case 'admissionConfirm':
@@ -66,9 +69,8 @@ final class NotificationsController extends Controller
                         (new AdmissionMessageDataFactory($user, $input))->create()
                     ),
                     new ConcretteUserRoute($user),
-                    $botman
+                    new SendAction($botman, $logger)
                 );
-                $notification->setLogger((new NotificationLogger()));
                 $notification->send();
             break;
             case 'admissionDirected':
@@ -79,9 +81,8 @@ final class NotificationsController extends Controller
                         (new AdmissionMessageDataFactory($user, $input))->create()
                     ),
                     new ConcretteUserRoute($user),
-                    $botman
+                    new SendAction($botman, $logger)
                 );
-                $notification->setLogger((new NotificationLogger()));
                 $notification->send();
                 break;
             case 'admissionInTreatment':
@@ -92,9 +93,8 @@ final class NotificationsController extends Controller
                         (new AdmissionMessageDataFactory($user, $input))->create()
                     ),
                     new ConcretteUserRoute($user),
-                    $botman
+                    new SendAction($botman, $logger)
                 );
-                $notification->setLogger((new NotificationLogger()));
                 $notification->send();
                 break;
         }
