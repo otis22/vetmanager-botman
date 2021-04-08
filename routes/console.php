@@ -1,5 +1,6 @@
 <?php
 
+use App\Vetmanager\Notification\SendAction;
 use Illuminate\Support\Facades\DB;
 use App\Http\Helpers\Rest\AdmissionApi;
 use App\Http\Helpers\Rest\SchedulesApi;
@@ -32,6 +33,7 @@ Artisan::command('send_schedule', function () {
     $users = UserRepository::all();
     foreach ($users as $user) {
         $botman = resolve('botman');
+        $logger = new ScheduleLogger();
         $dbUser = DB::table('users')->where('chat_id', '=', $user->getId())->get()->toArray();
         $client = (new AuthenticatedClientFactory($user))->create();
         $currentUserId = $user->getVmUserId();
@@ -43,9 +45,8 @@ Artisan::command('send_schedule', function () {
             $notification = new Notification(
                 new Message($scheduleMessage),
                 new ConcretteUserRoute($dbUser),
-                $botman
+                new SendAction($botman, $logger)
             );
-            $notification->setLogger((new ScheduleLogger()));
             $notification->send();
         } catch (Throwable $e) {
             echo $e->getMessage();
@@ -63,9 +64,8 @@ Artisan::command('send_schedule', function () {
             $notification = new Notification(
                 new Message($admissionsMessage),
                 new ConcretteUserRoute($dbUser),
-                $botman
+                new SendAction($botman, $logger)
             );
-            $notification->setLogger((new ScheduleLogger()));
             $notification->send();
         } catch (Throwable $e) {
             echo $e->getMessage();

@@ -13,30 +13,31 @@ use BotMan\Drivers\Web\WebDriver;
 
 class Notification
 {
+    /**
+     * @var MessageInterface
+     */
     private $message;
+    /**
+     * @var NotificationRouteInterface
+     */
     private $route;
-    private $botman;
+    /**
+     * @var SendAction
+     */
+    private $sendAction;
 
-    public function __construct(MessageInterface $message, NotificationRouteInterface $route, BotMan $botman)
+    public function __construct(MessageInterface $message, NotificationRouteInterface $route, SendAction $sendAction)
     {
         $this->message = $message;
         $this->route = $route;
-        $this->botman = $botman;
+        $this->sendAction = $sendAction;
     }
 
     public function send()
     {
         foreach ($this->route->asArray() as $user) {
-            $this->botman->say($this->message->asString(), $user->chat_id, $this->driver($user->channel));
-            if (isset($this->logger)) {
-                $this->logger->log($user);
-            }
+            $this->sendAction->do($this->message, $user, $this->driver($user->channel));
         }
-    }
-
-    public function setLogger(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
     }
 
     private function driver($channel)
