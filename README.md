@@ -109,4 +109,26 @@ Where token is authtoken from @GodFather
 
 ## Contributing 
 
-1. No default value for constructor arguments. It is wrong code `__construct($user = null)` 
+1. We are not using default params in constructor. It is wrong code `__construct($id = null)` 
+We are using secondary constructors instead
+```php
+class Student
+{
+    public function __construct() {
+        // allocate your stuff
+    }
+
+    public static function withID( $id ) {
+        $instance = new self();
+        $instance->loadByID( $id );
+        return $instance;
+    }
+
+    public static function withRow( array $row ) {
+        $instance = new self();
+        $instance->fill( $row );
+        return $instance;
+    }
+}
+```
+2. We are not using `compact`. We are using plain arrays instead

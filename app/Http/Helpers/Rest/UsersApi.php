@@ -19,7 +19,6 @@ class UsersApi
 
     /**
      * Users constructor.
-     * @param Client $httpClient
      */
     public function __construct(Client $httpClient)
     {
@@ -36,13 +35,12 @@ class UsersApi
             'GET',
             uri("user")->asString()
         );
-        $result = json_decode(
+        return json_decode(
             strval(
                 $request->getBody()
             ),
             true
         );
-        return $result;
     }
 
     public function allActive(): array
@@ -63,13 +61,12 @@ class UsersApi
                 "query" => $filters->asKeyValue()
             ]
         );
-        $result = json_decode(
+        return json_decode(
             strval(
                 $request->getBody()
             ),
             true
         );
-        return $result;
     }
 
     /**
@@ -83,13 +80,12 @@ class UsersApi
             'GET',
             uri("user")->asString() . '/' . $id
         );
-        $result = json_decode(
+        return json_decode(
             strval(
                 $request->getBody()
             ),
             true
         );
-        return $result;
     }
 
     public function getUserIdByToken($token)

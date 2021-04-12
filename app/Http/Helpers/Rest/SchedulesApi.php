@@ -22,7 +22,6 @@ class SchedulesApi
 
     /**
      * Schedules constructor.
-     * @param Client $httpClient
      */
     public function __construct(Client $httpClient)
     {

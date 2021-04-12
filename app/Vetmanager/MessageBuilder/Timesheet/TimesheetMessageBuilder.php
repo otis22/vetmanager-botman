@@ -27,7 +27,6 @@ class TimesheetMessageBuilder implements MessageBuilderInterface
 
     /**
      * AdmissionMessageBuilder constructor.
-     * @param array $timesheets
      */
     public function __construct(array $timesheets, SchedulesApi $api)
     {

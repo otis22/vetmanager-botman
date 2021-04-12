@@ -15,7 +15,6 @@ class PetsApi
 
     /**
      * Pets constructor.
-     * @param Client $httpClient
      */
     public function __construct(Client $httpClient)
     {
@@ -33,12 +32,11 @@ class PetsApi
             'GET',
             uri("pet")->asString() . '/' . $id
         );
-        $result = json_decode(
+        return json_decode(
             strval(
                 $request->getBody()
             ),
             true
         );
-        return $result;
     }
 }

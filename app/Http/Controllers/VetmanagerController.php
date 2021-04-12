@@ -16,7 +16,6 @@ final class VetmanagerController extends Controller
 {
     /**
      * Loaded through routes/botman.php
-     * @param  BotMan $bot
      */
     public function authConversation(BotMan $bot)
     {

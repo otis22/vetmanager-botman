@@ -20,9 +20,6 @@ class EveryoneRoute implements NotificationRouteInterface
         $this->users = $users;
     }
 
-    /**
-     * @return array
-     */
     public function asArray(): array
     {
         return $this->users;

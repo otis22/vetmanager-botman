@@ -20,9 +20,6 @@ class ConcretteUserRoute implements NotificationRouteInterface
         $this->user = $user;
     }
 
-    /**
-     * @return array
-     */
     public function asArray(): array
     {
         return $this->user;

@@ -9,7 +9,7 @@ unit:
 botman-tests:
 	docker-compose -f ./.docker/docker-compose.yml run php-fpm composer botman-tests
 exec:
-	docker-compose -f ./.docker/docker-compose.yml exec php-fpm bash
+	docker-compose -f ./.docker/docker-compose.yml run php-fpm bash
 
 all: build unit botman-tests
 

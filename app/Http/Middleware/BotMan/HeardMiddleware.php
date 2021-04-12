@@ -14,9 +14,7 @@ class HeardMiddleware implements Heard
     /**
      * Handle a message that was successfully heard, but not processed yet.
      *
-     * @param IncomingMessage $message
      * @param callable $next
-     * @param BotMan $bot
      *
      * @return mixed
      */

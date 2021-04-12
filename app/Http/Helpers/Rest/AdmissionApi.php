@@ -21,7 +21,6 @@ class AdmissionApi
 
     /**
      * Admission constructor.
-     * @param Client $httpClient
      */
     public function __construct(Client $httpClient)
     {
