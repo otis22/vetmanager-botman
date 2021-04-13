@@ -19,6 +19,10 @@ use Rector\CodeQuality\Rector\If_\CombineIfRector;
 use Rector\CodeQuality\Rector\Assign\CombinedAssignRector;
 use Rector\CodeQuality\Rector\NotEqual\CommonNotEqualRector;
 use Rector\CodeQuality\Rector\FuncCall\CompactToVariablesRector;
+use Rector\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector;
+use Rector\CodeQuality\Rector\If_\ConsecutiveNullCompareReturnsToNullCoalesceQueueRector;
+use Rector\CodeQuality\Rector\ClassMethod\DateTimeToDateTimeInterfaceRector;
+use Rector\CodeQuality\Rector\If_\ExplicitBoolCompareRector;
 
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -51,4 +55,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(CombinedAssignRector::class);
     $services->set(CommonNotEqualRector::class);
     $services->set(CompactToVariablesRector::class);
+    $services->set(CompleteDynamicPropertiesRector::class);
+    $services->set(ConsecutiveNullCompareReturnsToNullCoalesceQueueRector::class);
+    $services->set(DateTimeToDateTimeInterfaceRector::class);
+    $services->set(ExplicitBoolCompareRector::class);
 };
