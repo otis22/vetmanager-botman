@@ -23,7 +23,14 @@ use Rector\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector;
 use Rector\CodeQuality\Rector\If_\ConsecutiveNullCompareReturnsToNullCoalesceQueueRector;
 use Rector\CodeQuality\Rector\ClassMethod\DateTimeToDateTimeInterfaceRector;
 use Rector\CodeQuality\Rector\If_\ExplicitBoolCompareRector;
-
+use Rector\CodeQuality\Rector\For_\ForRepeatedCountToOwnVariableRector;
+use Rector\CodeQuality\Rector\For_\ForToForeachRector;
+use Rector\CodeQuality\Rector\Foreach_\ForeachItemsAssignToEmptyArrayToAssignRector;
+use Rector\CodeQuality\Rector\Foreach_\ForeachToInArrayRector;
+use Rector\CodeQuality\Rector\Identical\GetClassToInstanceOfRector;
+use Rector\CodeQuality\Rector\FuncCall\InArrayAndArrayKeysToArrayKeyExistsRector;
+use Rector\CodeQuality\Rector\Expression\InlineIfToExplicitIfRector;
+use Rector\CodeQuality\Rector\FuncCall\IntvalToTypeCastRector;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     // get parameters
@@ -59,4 +66,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ConsecutiveNullCompareReturnsToNullCoalesceQueueRector::class);
     $services->set(DateTimeToDateTimeInterfaceRector::class);
     $services->set(ExplicitBoolCompareRector::class);
+    $services->set(ForRepeatedCountToOwnVariableRector::class);
+    $services->set(ForToForeachRector::class);
+    $services->set(ForeachItemsAssignToEmptyArrayToAssignRector::class);
+    $services->set(ForeachToInArrayRector::class);
+    $services->set(GetClassToInstanceOfRector::class);
+    $services->set(InArrayAndArrayKeysToArrayKeyExistsRector::class);
+    $services->set(InlineIfToExplicitIfRector::class);
+    $services->set(IntvalToTypeCastRector::class);
 };
