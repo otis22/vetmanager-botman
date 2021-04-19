@@ -37,7 +37,7 @@ class AdmissionMessageBuilder implements MessageBuilderInterface
             throw new VmEmptyAdmissionsException("Message haven't builded cause empty admissions");
         }
         foreach ($this->admissions as $concrete) {
-            $message = $concrete['admission_date'] .PHP_EOL;
+            $message .= $concrete['admission_date'] .PHP_EOL;
             if (isset($concrete['client'])) {
                 $message .= "Клиент: ";
                 $message .= $concrete['client']['last_name'] . " " . $concrete['client']['first_name'] . PHP_EOL;
