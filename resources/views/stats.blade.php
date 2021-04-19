@@ -35,7 +35,7 @@
                     <th>best feature</th>
                 </tr>
             </thead>
-            @foreach($reviews as $review)
+            @foreach(array_reverse($reviews) as $review)
                 <tr>
                     <td>{{$review->mark}}</td>
                     <td>{{$review->the_best_feature}}</td>
