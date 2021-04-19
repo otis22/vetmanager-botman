@@ -21,7 +21,7 @@ final class StatsConversation extends VetmanagerConversation
 
     public function showStatsUrl()
     {
-        $this->say("https://" . env('APP_NAME') . '.herokuapp.com/stats');
+        $this->say("http://vetmanager-botman.herokuapp.com/stats");
         $this->endConversation();
     }
 
