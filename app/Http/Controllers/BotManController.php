@@ -65,7 +65,7 @@ class BotManController extends Controller
         $activeUsers = DB::table('users')->where('is_blocked', '=', '0')->get();
         $blockedUsers = DB::table('users')->where('is_blocked', '=', '1')->get();
         $notifies = DB::table('statistic')->where('event', '=', 'notification message')->count();
-        $reviews = DB::table('review')->get()->toArray();
+        $reviews = DB::table('review')->orderBy('id', 'desc')->take(10)->get()->toArray();
         $marks = array_column($reviews, 'mark');
         $avgReviewMark = (!empty($marks)) ? array_sum($marks) / count($marks) : "Оценок нет";
         $statistic = DB::table('statistic')
