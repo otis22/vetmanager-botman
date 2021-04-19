@@ -13,6 +13,7 @@ use App\Vetmanager\UserData\UserRepository\UserRepository;
 use App\Vetmanager\Notification\Notification;
 use App\Vetmanager\Notification\Messages\Message;
 use App\Vetmanager\Notification\Routers\ConcretteUserRoute;
+use Illuminate\Support\Facades\URL;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,10 @@ use App\Vetmanager\Notification\Routers\ConcretteUserRoute;
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->describe('Display an inspiring quote');
+
+Artisan::command('url', function () {
+    echo URL::to('/');
+})->describe('Display application URL');
 
 Artisan::command('send_schedule', function () {
     $users = UserRepository::all();
