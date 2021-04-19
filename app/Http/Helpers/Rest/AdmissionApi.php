@@ -10,6 +10,7 @@ use Otis22\VetmanagerRestApi\Query\Filter\Value\StringValue;
 use Otis22\VetmanagerRestApi\Query\Filter\EqualTo;
 use Otis22\VetmanagerRestApi\Query\Filters;
 
+use Otis22\VetmanagerRestApi\Query\Query;
 use Otis22\VetmanagerRestApi\Query\Sort\AscBy;
 use Otis22\VetmanagerRestApi\Query\Sorts;
 use function Otis22\VetmanagerRestApi\uri;
@@ -46,10 +47,14 @@ class AdmissionApi
                 new Property('admission_date')
             )
         );
+        $query = new Query(
+            $filters,
+            $sorts
+        );
         $request = $this->httpClient->request(
             'GET',
             uri("admission")->asString(),
-            ["query" => array_merge($filters->asKeyValue(), $sorts->asKeyValue())]
+            ["query" => $query->asKeyValue()]
         );
         $result = json_decode(
             strval(
