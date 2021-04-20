@@ -68,9 +68,32 @@ class ComboManualApi
             ),
             true
         );
-        if($result['success'])
-            return true;
-        return false;
+        return $result['success'];
+    }
+
+    public function updateExistNotificationRoute($domainName)
+    {
+        $id = $this->getExistHookId();
+        if ($id) {
+            $request = $this->httpClient->request(
+                'PUT',
+                uri("comboManualItem")->asString() . "/" . $id,
+                [
+                    "body" => json_encode([
+                        'title' => 'Botman',
+                        'value' => URL::to('/') . "/event/" . $domainName,
+                        'combo_manual_id' => 11
+                    ])
+                ]
+            );
+            $result = json_decode(
+                strval(
+                    $request->getBody()
+                ),
+                true
+            );
+            return $result['success'];
+        }
     }
 
     public function getExistHookId()
