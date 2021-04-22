@@ -1,5 +1,6 @@
 <?php
 
+use Otis22\VetmanagerUrl\Url\Part\Domain;
 use App\Http\Helpers\Rest\ComboManualApi;
 use App\Vetmanager\Notification\SendAction;
 use Illuminate\Support\Facades\DB;
