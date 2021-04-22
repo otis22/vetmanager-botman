@@ -1,6 +1,6 @@
 <?php
 
-use Otis22\VetmanagerUrl\Url\Part\Domain;
+use App\Http\Helpers\Rest\ComboManualApi;
 use App\Vetmanager\Notification\SendAction;
 use Illuminate\Support\Facades\DB;
 use App\Http\Helpers\Rest\AdmissionApi;
@@ -34,6 +34,15 @@ Artisan::command('inspire', function () {
 Artisan::command('url', function () {
     echo URL::to('/');
 })->describe('Display application URL');
+
+Artisan::command('fix_notification_route', function () {
+    $users = UserRepository::all();
+    foreach ($users as $user) {
+        $clientFactory = new AuthenticatedClientFactory($user);
+        $comboManual = new ComboManualApi($clientFactory->create());
+        $comboManual->updateExistNotificationRoute($user->getDomain());
+    }
+})->describe('Change Vetmanager\'s hook url to actual');
 
 Artisan::command('fix_domains', function () {
     $users = UserRepository::all();
