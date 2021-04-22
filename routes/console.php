@@ -44,6 +44,15 @@ Artisan::command('fix_notification_route', function () {
     }
 })->describe('Change Vetmanager\'s hook url to actual');
 
+Artisan::command('fix_domains', function () {
+    $users = UserRepository::all();
+    foreach ($users as $user) {
+        DB::table('users')
+            ->where('chat_id', '=', $user->getId())
+            ->update(['clinic_domain' => (new Domain($user->getDomain()))->asString()]);
+    }
+})->describe('Fix domain names');
+
 Artisan::command('send_schedule', function () {
     $users = UserRepository::all();
     foreach ($users as $user) {
