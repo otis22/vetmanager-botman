@@ -14,6 +14,7 @@ use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Storages\Storage;
 use GuzzleHttp\Client;
 
+use Otis22\VetmanagerUrl\Url\Part\Domain;
 use function Otis22\VetmanagerUrl\url;
 use function Otis22\VetmanagerToken\token;
 use function Otis22\VetmanagerToken\credentials;
@@ -28,10 +29,11 @@ final class AuthConversation extends VetmanagerConversation
                 if (empty(trim($answer->getText()))) {
                     throw new \Exception("Can't be empty text");
                 }
-                $domainName = $answer->getText();
+                $input = $answer->getText();
+                $domain = new Domain($input);
                 $this->getBot()->userStorage()
                     ->save(
-                        ['clinicDomain' => $domainName]
+                        ['clinicDomain' => $domain->asString()]
                     );
                 $this->askLogin();
             } catch (\Throwable $exception) {
