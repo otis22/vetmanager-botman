@@ -31,28 +31,10 @@ class AdmissionApi
         $this->httpClient = $httpClient;
     }
 
-    public function getByUserId($id)
+    private function sendRequest(Query $query, $method)
     {
-        $filteringParams[] = new MoreThan(
-            new Property('admission_date'),
-            new StringValue(date('Y-m-d H:i:s'))
-        );
-        $filteringParams[] = new EqualTo(
-            new Property('user_id'),
-            new StringValue(strval($id))
-        );
-        $filters = new Filters(...$filteringParams);
-        $sorts = new Sorts(
-            new AscBy(
-                new Property('admission_date')
-            )
-        );
-        $query = new Query(
-            $filters,
-            $sorts
-        );
         $request = $this->httpClient->request(
-            'GET',
+            $method,
             uri("admission")->asString(),
             ["query" => $query->asKeyValue()]
         );
@@ -63,8 +45,46 @@ class AdmissionApi
             true
         )['data']['admission'];
         if (empty($result)) {
-            throw new VmEmptyAdmissionsException("Haven't planned admissions");
+            throw new VmEmptyAdmissionsException(json_encode($query->asKeyValue()));
         }
         return $result;
+    }
+
+    public function getByUserIdAndDate($id, $date)
+    {
+        $filteringParams[] = new EqualTo(
+            new Property('user_id'),
+            new StringValue(strval($id))
+        );
+        $filteringParams[] = new EqualTo(
+            new Property('admission_date'),
+            new StringValue(date('Y-m-d', strtotime($date)))
+        );
+        $query = new Query(
+            new Filters(...$filteringParams),
+            new Sorts(
+                new AscBy(
+                    new Property('admission_date')
+                )
+            )
+        );
+        return $this->sendRequest($query, "GET");
+    }
+
+    public function getByUserId($id)
+    {
+        $filteringParams[] = new EqualTo(
+            new Property('user_id'),
+            new StringValue(strval($id))
+        );
+        $query = new Query(
+            new Filters(...$filteringParams),
+            new Sorts(
+                new AscBy(
+                    new Property('admission_date')
+                )
+            )
+        );
+        return $this->sendRequest($query, "GET");
     }
 }
