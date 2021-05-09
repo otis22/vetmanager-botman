@@ -24,7 +24,7 @@ final class ReviewConversation extends VetmanagerConversation
         $this->ask($question, function (Answer $answer) {
             $mark = $answer->getText();
             if (in_array($mark, range(1,10))) {
-                $this->getBot()->userStorage()->save(compact('mark'));
+                $this->getBot()->userStorage()->save(['mark' => $mark]);
                 $this->askFeature();
             } else {
                 $this->say("Ошибка ввода");

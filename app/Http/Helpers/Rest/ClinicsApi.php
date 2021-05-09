@@ -19,7 +19,6 @@ class ClinicsApi
 
     /**
      * Users constructor.
-     * @param Client $httpClient
      */
     public function __construct(Client $httpClient)
     {
@@ -36,13 +35,12 @@ class ClinicsApi
             'GET',
             uri("clinics")->asString()
         );
-        $result = json_decode(
+        return json_decode(
             strval(
                 $request->getBody()
             ),
             true
         );
-        return $result;
     }
 
     /**
@@ -56,13 +54,12 @@ class ClinicsApi
             'GET',
             uri("clinics")->asString() . '/' . $id
         );
-        $result = json_decode(
+        return json_decode(
             strval(
                 $request->getBody()
             ),
             true
         );
-        return $result;
     }
 
 }

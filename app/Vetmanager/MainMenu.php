@@ -45,8 +45,6 @@ final class MainMenu
 
     /**
      * MainMenu constructor.
-     * @param callable $questionFactory
-     * @param callable $buttonFactory
      */
     public function __construct(callable $questionFactory, callable $buttonFactory, bool $isAuthorized)
     {

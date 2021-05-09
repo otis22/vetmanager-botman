@@ -22,10 +22,7 @@ use function config;
 
 final class AuthConversation extends VetmanagerConversation
 {
-     /**
-     * @return Conversation
-     */
-    public function askDomain(): Conversation
+     public function askDomain(): Conversation
     {
         return $this->ask("Введите доменное имя или адрес программы. Пример: myclinic или https://myclinic.vetmanager.ru", function (Answer $answer) {
             try {
@@ -46,9 +43,6 @@ final class AuthConversation extends VetmanagerConversation
         });
     }
 
-    /**
-     * @return Conversation
-     */
     public function askLogin(): Conversation
     {
         return $this->ask("Введите login вашего пользователя в Ветменеджер", function (Answer $answer) {

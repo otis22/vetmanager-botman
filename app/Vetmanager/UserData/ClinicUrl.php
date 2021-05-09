@@ -17,8 +17,6 @@ final class ClinicUrl implements Stringify
 
     /**
      * ClinicUrl constructor.
-     * @param callable $urlBuilder
-     * @param UserInterface $user
      */
     public function __construct(callable $urlBuilder, UserInterface $user)
     {

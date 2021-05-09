@@ -21,7 +21,6 @@ class AdmissionMessageBuilder implements MessageBuilderInterface
 
     /**
      * AdmissionMessageBuilder constructor.
-     * @param array $admissions
      */
     public function __construct(array $admissions)
     {

@@ -21,7 +21,6 @@ class ComboManualApi
 
     /**
      * ComboManual constructor.
-     * @param Client $httpClient
      */
     public function __construct(Client $httpClient)
     {
@@ -38,13 +37,12 @@ class ComboManualApi
             'GET',
             uri("comboManualItem")->asString()
         );
-        $result = json_decode(
+        return json_decode(
             strval(
                 $request->getBody()
             ),
             true
         );
-        return $result;
     }
 
     public function addNotificationRoute($domainName)

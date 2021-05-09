@@ -22,7 +22,6 @@ final class AuthenticatedClientFactory
 
     /**
      * ClientFactory constructor.
-     * @param UserInterface $user
      */
     public function __construct(UserInterface $user)
     {

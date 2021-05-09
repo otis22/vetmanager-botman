@@ -57,7 +57,7 @@ final class TimesheetConversation extends VetmanagerConversation
 
         $this->ask($question, function (Answer $answer) {
             $clinicId = $answer->getText();
-            $this->getBot()->userStorage()->save(compact('clinicId'));
+            $this->getBot()->userStorage()->save(['clinicId' => $clinicId]);
             try {
                 if (!is_numeric($clinicId)) {
                     throw new \Exception("Ошибка. Проверьте введенные данные!");
@@ -97,7 +97,7 @@ final class TimesheetConversation extends VetmanagerConversation
                     if (!is_numeric($doctorId)) {
                         throw new \Exception("Ошибка. Проверьте введенные данные!");
                     }
-                    $this->bot->userStorage()->save(compact('doctorId'));
+                    $this->bot->userStorage()->save(['doctorId' => $doctorId]);
                     return $this->saySchedule();
                 } catch (\Exception $e) {
                     $this->say($e->getMessage());

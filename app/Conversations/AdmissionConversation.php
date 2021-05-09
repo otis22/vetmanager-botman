@@ -23,9 +23,6 @@ final class AdmissionConversation extends VetmanagerConversation
      */
     private $user;
 
-    /**
-     * @return UserInterface
-     */
     private function user(): UserInterface
     {
         if (empty($this->user)) {

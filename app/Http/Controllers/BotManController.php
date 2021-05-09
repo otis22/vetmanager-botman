@@ -10,9 +10,6 @@ use Illuminate\Support\Facades\DB;
 class BotManController extends Controller
 {
 
-    /**
-     * @param Request $request
-     */
     public function handle(Request $request)
     {
         $botman = app('botman');
@@ -76,6 +73,15 @@ class BotManController extends Controller
         $statistic = array_reverse($statistic);
         $eventsLast10Days['labels'] = array_column($statistic, 'date');
         $eventsLast10Days['data'] = array_column($statistic, 'count');
-        return view('stats')->with(compact(['notifies', 'activeUsers', 'blockedUsers', 'eventsLast10Days', 'reviews', 'avgReviewMark']));
+        return view('stats')->with(
+            [
+                'notifies' => $notifies,
+                'activeUsers' => $activeUsers,
+                'blockedUsers' => $blockedUsers,
+                'eventsLast10Days' => $eventsLast10Days,
+                'reviews' => $reviews,
+                'avgReviewMark' => $avgReviewMark
+            ]
+        );
     }
 }

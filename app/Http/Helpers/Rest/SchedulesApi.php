@@ -22,7 +22,6 @@ class SchedulesApi
 
     /**
      * Schedules constructor.
-     * @param Client $httpClient
      */
     public function __construct(Client $httpClient)
     {
@@ -47,13 +46,13 @@ class SchedulesApi
             new Property('end_datetime'),
             new StringValue(date('Y-m-d', intval(strtotime($now . " +" . $days . " days"))) . " 23:59:59")
         );
-        if ($doctor_id) {
+        if ($doctor_id !== 0) {
             $filteringParams[] = new EqualTo(
                 new Property('doctor_id'),
                 new StringValue(strval($doctor_id))
             );
         }
-        if ($clinic_id) {
+        if ($clinic_id !== 0) {
             $filteringParams[] = new EqualTo(
                 new Property('clinic_id'),
                 new StringValue(strval($clinic_id))
