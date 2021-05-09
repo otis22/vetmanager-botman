@@ -11,7 +11,7 @@ class AdmissionAddMessage implements MessageInterface
     /**
      * @var string
      */
-    private $message = "Создан прием - [%admission_date%] [%pet_alias%], [%pet_type%], [%pet_breed%], Возраст: [%pet_years%], ФИО [%client_fio%].";
+    private $message = "Создан прием - [%admission_date%] [%pet_alias%], [%pet_type%], [%pet_breed%], Возраст: [%pet_years%], ФИО [%client_fio%] [%cell_phone%].";
     /**
      * @var array
      */
