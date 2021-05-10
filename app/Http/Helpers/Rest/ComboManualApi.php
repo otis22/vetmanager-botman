@@ -58,7 +58,8 @@ class ComboManualApi
                 "body" => json_encode([
                     'title' => 'Botman',
                     'value' => URL::to('/') . "/event/" . $domainName,
-                    'combo_manual_id' => 11
+                    'combo_manual_id' => 11,
+                    'is_active' => 1
                 ])
             ]
         );
@@ -82,7 +83,8 @@ class ComboManualApi
                     "body" => json_encode([
                         'title' => 'Botman',
                         'value' => URL::to('/') . "/event/" . $domainName,
-                        'combo_manual_id' => 11
+                        'combo_manual_id' => 11,
+                        'is_active' => 1
                     ])
                 ]
             );
