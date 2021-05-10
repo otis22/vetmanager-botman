@@ -41,6 +41,10 @@ class AdmissionMessageBuilder implements MessageBuilderInterface
             if (isset($concrete['client'])) {
                 $message .= "Клиент: ";
                 $message .= $concrete['client']['last_name'] . " " . $concrete['client']['first_name'] . PHP_EOL;
+                if ($concrete['client']['cell_phone']) {
+                    $message .= "Телефон: ";
+                    $message .= $concrete['client']['cell_phone'] . PHP_EOL;
+                }
             } else {
                 $message .= "Клиент: <пусто>";
             }

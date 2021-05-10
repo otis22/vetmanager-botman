@@ -24,13 +24,15 @@ class AdmissionMessageData implements MessageDataInterface
         $interval = $now->diff($birthday);
         $pet_years = $interval->format('%y');
         $fio = $this->petData['owner']['last_name'] . " " . $this->petData['owner']['first_name'] . " " . $this->petData['owner']['middle_name'];
+        $cell_phone = $this->petData['owner']['cell_phone'];
         return [
             '[%admission_date%]' => $this->admissionData['data']['admission_date'],
             '[%pet_alias%]' => $this->petData['alias'],
             '[%pet_type%]' => $this->petData['type']['title'],
             '[%pet_breed%]' => $this->petData['breed']['title'],
             '[%pet_years%]' => $pet_years,
-            '[%client_fio%]' => $fio
+            '[%client_fio%]' => $fio,
+            '[%cell_phone%]' => $cell_phone
         ];
     }
 }

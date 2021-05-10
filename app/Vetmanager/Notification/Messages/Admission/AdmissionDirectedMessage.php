@@ -11,7 +11,7 @@ class AdmissionDirectedMessage implements MessageInterface
     /**
      * @var string
      */
-    private $message = "Ожидает на прием - [%admission_date%] [%pet_alias%], [%pet_type%], [%pet_breed%], Возраст: [%pet_years%], ФИО [%client_fio%].";
+    private $message = "Ожидает на прием - [%admission_date%] [%pet_alias%], [%pet_type%], [%pet_breed%], Возраст: [%pet_years%], ФИО [%client_fio%] [%cell_phone%].";
     /**
      * @var array
      */
