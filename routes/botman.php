@@ -55,6 +55,7 @@ $botman->hears('admissions', VetmanagerController::class.'@admissionConversation
 $botman->hears('notification', VetmanagerController::class.'@notificationConversation');
 $botman->hears('review', VetmanagerController::class.'@reviewConversation');
 $botman->hears('stats', VetmanagerController::class.'@statsConversation');
+$botman->hears('clientBrief {id}', VetmanagerController::class.'@clientBriefConversation');
 
 /** Examples
 $botman->fallback(function (Botman $bot) {

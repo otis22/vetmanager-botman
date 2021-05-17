@@ -17,14 +17,14 @@ class AdmissionMessageBuilder implements MessageBuilderInterface
     /**
      * @var array
      */
-    private $admissions;
+    private $admission;
 
     /**
      * AdmissionMessageBuilder constructor.
      */
-    public function __construct(array $admissions)
+    public function __construct(array $admission)
     {
-        $this->admissions = $admissions;
+        $this->admission = $admission;
     }
 
     /**
@@ -33,28 +33,23 @@ class AdmissionMessageBuilder implements MessageBuilderInterface
     public function buildMessage()
     {
         $message = "";
-        if (empty($this->admissions)) {
-            throw new VmEmptyAdmissionsException("Message haven't builded cause empty admissions");
-        }
-        foreach ($this->admissions as $concrete) {
-            $message .= $concrete['admission_date'] .PHP_EOL;
-            if (isset($concrete['client'])) {
-                $message .= "Клиент: ";
-                $message .= $concrete['client']['last_name'] . " " . $concrete['client']['first_name'] . PHP_EOL;
-                if ($concrete['client']['cell_phone']) {
-                    $message .= "Телефон: ";
-                    $message .= $concrete['client']['cell_phone'] . PHP_EOL;
-                }
-            } else {
-                $message .= "Клиент: <пусто>";
+        $message .= $this->admission['admission_date'] . PHP_EOL;
+        if (isset($this->admission['client'])) {
+            $message .= "Клиент: ";
+            $message .= $this->admission['client']['last_name'] . " " . $this->admission['client']['first_name'] . PHP_EOL;
+            if ($this->admission['client']['cell_phone']) {
+                $message .= "Телефон: ";
+                $message .= $this->admission['client']['cell_phone'] . PHP_EOL;
             }
-            if (isset($concrete['pet'])) {
-                $message .= "Кличка питомца: " . $concrete['pet']['alias'] . PHP_EOL;
-                $message .= "Тип: " . $concrete['pet']['pet_type_data']['title'] . PHP_EOL;
-                $message .= "Порода: " . $concrete['pet']['breed_data']['title'];
-            }
-            $message .= PHP_EOL . PHP_EOL;
+        } else {
+            $message .= "Клиент: <пусто>";
         }
+        if (isset($this->admission['pet'])) {
+            $message .= "Кличка питомца: " . $this->admission['pet']['alias'] . PHP_EOL;
+            $message .= "Тип: " . $this->admission['pet']['pet_type_data']['title'] . PHP_EOL;
+            $message .= "Порода: " . $this->admission['pet']['breed_data']['title'];
+        }
+        $message .= PHP_EOL . PHP_EOL;
         return $message;
     }
 }

@@ -41,7 +41,9 @@ Artisan::command('fix_notification_route', function () {
     foreach ($users as $user) {
         $clientFactory = new AuthenticatedClientFactory($user);
         $comboManual = new ComboManualApi($clientFactory->create());
-        $comboManual->updateExistNotificationRoute($user->getDomain());
+        try {
+            $comboManual->updateExistNotificationRoute($user->getDomain());
+        } catch (Exception $e) {}
     }
 })->describe('Change Vetmanager\'s hook url to actual');
 

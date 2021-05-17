@@ -1,9 +1,10 @@
 <?php
 
+
 namespace App\Http\Helpers\Rest;
 
-use GuzzleHttp\Client;
 
+use GuzzleHttp\Client;
 use Otis22\VetmanagerRestApi\Model\Property;
 use Otis22\VetmanagerRestApi\Query\Filter\EqualTo;
 use Otis22\VetmanagerRestApi\Query\Filter\Value\StringValue;
@@ -13,7 +14,7 @@ use Otis22\VetmanagerRestApi\Query\Sort\AscBy;
 use Otis22\VetmanagerRestApi\Query\Sorts;
 use function Otis22\VetmanagerRestApi\uri;
 
-class PetsApi
+class MedCardsApi
 {
     /**
      * @var Client
@@ -21,52 +22,53 @@ class PetsApi
     private $httpClient;
 
     /**
-     * Pets constructor.
+     * Admission constructor.
      */
     public function __construct(Client $httpClient)
     {
         $this->httpClient = $httpClient;
     }
 
-    /**
-     * @int $id
-     * @return array{success:bool}
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function byId(int $id): array
+    private function sendRequest(Query $query, $method)
     {
         $request = $this->httpClient->request(
-            'GET',
-            uri("pet")->asString() . '/' . $id
+            $method,
+            uri("medicalCards")->asString(),
+            ["query" => $query->asKeyValue()]
         );
-        return json_decode(
+        $result = json_decode(
             strval(
                 $request->getBody()
             ),
             true
-        );
+        )['data']['medicalCards'];
+        return $result;
     }
 
-    public function byUserId(int $id): array
+    public function getByPetId($id)
     {
         $filteringParams[] = new EqualTo(
-            new Property('owner_id'),
+            new Property('patient_id'),
             new StringValue(strval($id))
         );
         $query = new Query(
             new Filters(...$filteringParams)
         );
+        return $this->sendRequest($query, "GET");
+    }
 
+    public function getVaccinationsByPetId($id)
+    {
         $request = $this->httpClient->request(
             'GET',
-            uri("pet")->asString() . '/',
-            ["query" => $query->asKeyValue()]
+            uri("medicalCards")->asString() . "/Vaccinations?pet_id=" . $id
         );
-        return json_decode(
+        $result = json_decode(
             strval(
                 $request->getBody()
             ),
             true
-        )['data']['pet'];
+        );
+        return $result['data']['medicalcards'];
     }
 }
