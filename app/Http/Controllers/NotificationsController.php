@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Vetmanager\Logging\NotificationLogger;
+use App\Vetmanager\Notification\AdmissionSendAction;
 use App\Vetmanager\Notification\Messages\Admission\AdmissionAddMessage;
 use App\Vetmanager\Notification\Messages\Admission\AdmissionConfirmMessage;
 use App\Vetmanager\Notification\Messages\Admission\AdmissionDirectedMessage;
@@ -45,7 +46,7 @@ final class NotificationsController extends Controller
                         (new AdmissionMessageDataFactory($user, $input))->create()
                     ),
                     new ConcretteUserRoute($user),
-                    new SendAction($botman, $logger)
+                    new AdmissionSendAction($botman, $logger)
                 );
                 $notification->send();
                 break;
@@ -57,7 +58,7 @@ final class NotificationsController extends Controller
                         (new AdmissionMessageDataFactory($user, $input))->create()
                     ),
                     new ConcretteUserRoute($user),
-                    new SendAction($botman, $logger)
+                    new AdmissionSendAction($botman, $logger)
                 );
                 $notification->send();
                 break;
@@ -69,7 +70,7 @@ final class NotificationsController extends Controller
                         (new AdmissionMessageDataFactory($user, $input))->create()
                     ),
                     new ConcretteUserRoute($user),
-                    new SendAction($botman, $logger)
+                    new AdmissionSendAction($botman, $logger)
                 );
                 $notification->send();
             break;
@@ -81,7 +82,7 @@ final class NotificationsController extends Controller
                         (new AdmissionMessageDataFactory($user, $input))->create()
                     ),
                     new ConcretteUserRoute($user),
-                    new SendAction($botman, $logger)
+                    new AdmissionSendAction($botman, $logger)
                 );
                 $notification->send();
                 break;
@@ -93,7 +94,7 @@ final class NotificationsController extends Controller
                         (new AdmissionMessageDataFactory($user, $input))->create()
                     ),
                     new ConcretteUserRoute($user),
-                    new SendAction($botman, $logger)
+                    new AdmissionSendAction($botman, $logger)
                 );
                 $notification->send();
                 break;

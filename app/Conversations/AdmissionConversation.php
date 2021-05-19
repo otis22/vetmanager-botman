@@ -69,9 +69,11 @@ final class AdmissionConversation extends VetmanagerConversation
             $currentUserId = $users->getUserIdByLogin($currentUserLogin);
             $date = $this->getBot()->userStorage()->get('admission_date');
             $admissions = (new AdmissionApi($client))->getByUserIdAndDate($currentUserId, $date);
-            $messageBuilder = new AdmissionMessageBuilder($admissions);
-            $message = $messageBuilder->buildMessage();
-            $this->say($message);
+            foreach ($admissions as $admission) {
+                $messageBuilder = new AdmissionMessageBuilder($admission);
+                $message = $messageBuilder->buildMessage();
+                $this->say($message);
+            }
         }
         catch (VmEmptyAdmissionsException $exception) {
             $this->say("У вас нет запланированных приёмов.");

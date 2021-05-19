@@ -26,7 +26,7 @@ class Notification
      */
     private $sendAction;
 
-    public function __construct(MessageInterface $message, NotificationRouteInterface $route, SendAction $sendAction)
+    public function __construct(MessageInterface $message, NotificationRouteInterface $route, SendActionInterface $sendAction)
     {
         $this->message = $message;
         $this->route = $route;
