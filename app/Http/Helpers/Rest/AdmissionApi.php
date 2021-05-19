@@ -52,16 +52,17 @@ class AdmissionApi
 
     public function getByUserIdAndDate($id, $date)
     {
-        $filteringParams[] = new EqualTo(
-            new Property('user_id'),
-            new StringValue(strval($id))
-        );
-        $filteringParams[] = new EqualTo(
-            new Property('admission_date'),
-            new StringValue(date('Y-m-d', strtotime($date)))
-        );
         $query = new Query(
-            new Filters(...$filteringParams),
+            new Filters(
+                new EqualTo(
+                    new Property('user_id'),
+                    new StringValue(strval($id))
+                ),
+                new EqualTo(
+                    new Property('admission_date'),
+                    new StringValue(date('Y-m-d', strtotime($date)))
+                )
+            ),
             new Sorts(
                 new AscBy(
                     new Property('admission_date')
@@ -73,12 +74,13 @@ class AdmissionApi
 
     public function getByUserId($id)
     {
-        $filteringParams[] = new EqualTo(
-            new Property('user_id'),
-            new StringValue(strval($id))
-        );
         $query = new Query(
-            new Filters(...$filteringParams),
+            new Filters(
+                new EqualTo(
+                    new Property('user_id'),
+                    new StringValue(strval($id))
+                )
+            ),
             new Sorts(
                 new AscBy(
                     new Property('admission_date')
@@ -90,16 +92,17 @@ class AdmissionApi
 
     public function getLastVisitByPetId($id)
     {
-        $filteringParams[] = new EqualTo(
-            new Property('patient_id'),
-            new StringValue(strval($id))
-        );
-        $filteringParams[] = new LessThan(
-            new Property('admission_date'),
-            new StringValue(date('Y-m-d H:i:s'))
-        );
         $query = new Query(
-            new Filters(...$filteringParams),
+            new Filters(
+                new EqualTo(
+                    new Property('patient_id'),
+                    new StringValue(strval($id))
+                ),
+                new LessThan(
+                    new Property('admission_date'),
+                    new StringValue(date('Y-m-d H:i:s'))
+                )
+            ),
             new Sorts(
                 new DescBy(
                     new Property('admission_date')

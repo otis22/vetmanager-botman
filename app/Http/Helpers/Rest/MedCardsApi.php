@@ -47,12 +47,13 @@ class MedCardsApi
 
     public function getByPetId($id)
     {
-        $filteringParams[] = new EqualTo(
-            new Property('patient_id'),
-            new StringValue(strval($id))
-        );
         $query = new Query(
-            new Filters(...$filteringParams)
+            new Filters(
+                new EqualTo(
+                    new Property('patient_id'),
+                    new StringValue(strval($id))
+                )
+            )
         );
         return $this->sendRequest($query, "GET");
     }

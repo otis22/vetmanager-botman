@@ -11,6 +11,8 @@ namespace App\Vetmanager\MessageBuilder\Admission;
 
 use App\Exceptions\VmEmptyAdmissionsException;
 use App\Vetmanager\MessageBuilder\MessageBuilderInterface;
+use BotMan\BotMan\Messages\Outgoing\Actions\Button;
+use BotMan\BotMan\Messages\Outgoing\Question;
 
 class AdmissionMessageBuilder implements MessageBuilderInterface
 {
@@ -28,7 +30,7 @@ class AdmissionMessageBuilder implements MessageBuilderInterface
     }
 
     /**
-     * @return string
+     * @return Question
      */
     public function buildMessage()
     {
@@ -50,6 +52,7 @@ class AdmissionMessageBuilder implements MessageBuilderInterface
             $message .= "Порода: " . $this->admission['pet']['breed_data']['title'];
         }
         $message .= PHP_EOL . PHP_EOL;
-        return $message;
+        return Question::create($message)
+            ->addButtons([Button::create("Сводка по клиенту")->value('clientBrief ' . $this->admission['client']['id'])]);
     }
 }

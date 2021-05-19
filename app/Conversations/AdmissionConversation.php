@@ -72,9 +72,7 @@ final class AdmissionConversation extends VetmanagerConversation
             foreach ($admissions as $admission) {
                 $messageBuilder = new AdmissionMessageBuilder($admission);
                 $message = $messageBuilder->buildMessage();
-                $button = Question::create($message)
-                    ->addButtons([Button::create("Сводка по клиенту")->value('clientBrief ' . $admission['client']['id'])]);
-                $this->say($button);
+                $this->say($message);
             }
         }
         catch (VmEmptyAdmissionsException $exception) {

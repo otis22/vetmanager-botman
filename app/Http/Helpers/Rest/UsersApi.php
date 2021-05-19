@@ -45,15 +45,16 @@ class UsersApi
 
     public function allActive(): array
     {
-        $filteringParams[] = new EqualTo(
-            new Property('is_active'),
-            new StringValue(strval(1))
+        $filters = new Filters(
+            new EqualTo(
+                new Property('is_active'),
+                new StringValue(strval(1))
+            ),
+            new EqualTo(
+                new Property('is_limited'),
+                new StringValue(strval(0))
+            )
         );
-        $filteringParams[] = new EqualTo(
-            new Property('is_limited'),
-            new StringValue(strval(0))
-        );
-        $filters = new Filters(...$filteringParams);
         $request = $this->httpClient->request(
             'GET',
             uri("user")->asString() . '/',
@@ -105,11 +106,12 @@ class UsersApi
 
     public function getUserIdByLogin($login)
     {
-        $filteringParams[] = new EqualTo(
-            new Property('login'),
-            new StringValue(strval($login))
+        $filters = new Filters(
+            new EqualTo(
+                new Property('login'),
+                new StringValue(strval($login))
+            )
         );
-        $filters = new Filters(...$filteringParams);
         $request = $this->httpClient->request(
             'GET',
             uri("user")->asString() . '/',

@@ -49,12 +49,13 @@ class PetsApi
 
     public function byUserId(int $id): array
     {
-        $filteringParams[] = new EqualTo(
-            new Property('owner_id'),
-            new StringValue(strval($id))
-        );
         $query = new Query(
-            new Filters(...$filteringParams)
+            new Filters(
+                new EqualTo(
+                    new Property('owner_id'),
+                    new StringValue(strval($id))
+                )
+            )
         );
 
         $request = $this->httpClient->request(

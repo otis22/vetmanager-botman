@@ -100,11 +100,12 @@ class ComboManualApi
 
     public function getExistHookId()
     {
-        $filteringParams[] = new EqualTo(
-            new Property('title'),
-            new StringValue(strval('Botman'))
+        $filters = new Filters(
+            new EqualTo(
+                new Property('title'),
+                new StringValue(strval('Botman'))
+            )
         );
-        $filters = new Filters(...$filteringParams);
         $request = $this->httpClient->request(
             'GET',
             uri("comboManualItem")->asString() . '/',
