@@ -12,31 +12,23 @@ class AdmissionMessageBuilderTest extends TestCase
 {
     public function testBuildMessage()
     {
-        $admissions = $this->admissions();
-        $messageBuilder = new AdmissionMessageBuilder($admissions);
+        $admission = $this->admission();
+        $messageBuilder = new AdmissionMessageBuilder($admission);
         $this->assertEquals(
-            "2021-03-29 11:54:01\nКлиент: Тест Тестов\nКличка питомца: Тестик\nТип: Тестовый вид\nПорода: Тестовая порода\n\n",
-            $messageBuilder->buildMessage()
+            "2021-03-29 11:54:01\nКлиент: Тест Тестов\nТелефон: 0956666666\nКличка питомца: Тестик\nТип: Тестовый вид\nПорода: Тестовая порода\n\n",
+            $messageBuilder->buildMessage()->getText()
         );
     }
 
-    public function testBuildMessageWithEmptyTimesheet()
-    {
-        $admissions = [];
-        $messageBuilder = new AdmissionMessageBuilder($admissions);
-        $this->expectException(VmEmptyAdmissionsException::class);
-        $messageBuilder->buildMessage();
-    }
-
-
-    private function admissions()
+    private function admission()
     {
         return [
-            [
                 'admission_date' => '2021-03-29 11:54:01',
                 'client' => [
+                    'id' => 66,
                     'first_name' => 'Тестов',
                     'last_name' => 'Тест',
+                    'cell_phone' => '0956666666'
                 ],
                 'pet' => [
                     'alias' => 'Тестик',
@@ -47,7 +39,6 @@ class AdmissionMessageBuilderTest extends TestCase
                         'title' => 'Тестовая порода'
                     ]
                 ]
-            ]
-        ];
+            ];
     }
 }
