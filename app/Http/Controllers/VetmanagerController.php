@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Conversations\AuthConversation;
 use App\Conversations\ClientBriefConversation;
 use App\Conversations\NotificationConversation;
+use App\Conversations\PriceListConversation;
 use App\Conversations\ReviewConversation;
 use App\Conversations\StatsConversation;
 use App\Conversations\TimesheetConversation;
@@ -51,5 +52,10 @@ final class VetmanagerController extends Controller
     public function clientBriefConversation(BotMan $bot, $id)
     {
         $bot->startConversation(new ClientBriefConversation($id));
+    }
+
+    public function priceListConversation(BotMan $bot)
+    {
+        $bot->startConversation(new PriceListConversation());
     }
 }
