@@ -10,8 +10,8 @@ class PriceListConversation extends VetmanagerConversation
     {
         $userId = $this->user()->getVmUserId();
         $domainName = $this->user()->getDomain();
-        $md5 = md5($domainName . ":" . $userId);
-        $this->say("https://vetmanager-botman.herokuapp.com/price/" . $md5);
+        $md5 = md5($domainName . $userId);
+        $this->say("https://vetmanager-botman.herokuapp.com/price/" . $md5 . "/");
         $this->endConversation();
     }
 
