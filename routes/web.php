@@ -19,4 +19,5 @@ Route::match(['get', 'post'], '/botman', 'BotManController@handle');
 Route::get('/botman/tinker', 'BotManController@tinker');
 Route::get('/stats', 'BotManController@stats');
 Route::post('/event/{domain}', 'NotificationsController@handleNotifications');
-Route::get('/price/{md5}', 'PriceController@price');
+Route::get('/price/{md5}/{clinicId}/', 'PriceController@groups');
+Route::get('/price/{md5}/{clinicId}/{groupId}', 'PriceController@priceList');

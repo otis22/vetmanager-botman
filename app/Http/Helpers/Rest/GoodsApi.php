@@ -59,8 +59,8 @@ class GoodsApi
         );
         $request = $this->httpClient->request(
             'GET',
-            uri("good")->asString() . "/180",
-            $query->asKeyValue()
+            uri("good")->asString(),
+            ["query" => $query->asKeyValue()]
         );
         return json_decode(
             strval(
@@ -68,5 +68,33 @@ class GoodsApi
             ),
             true
         )['data']['good'];
+    }
+
+    public function getGoodCalculatedPrice($goodId, $saleParamId, $clinicId)
+    {
+        $request = $this->httpClient->request(
+            'GET',
+            uri("good")->asString() . "/GoodSalePriceByIdSaleParamIdClinicId/?good_id={$goodId}&good_sale_param_id={$saleParamId}&clinic_id={$clinicId}&quantity=1"
+        );
+        return json_decode(
+            strval(
+                $request->getBody()
+            ),
+            true
+        )['data']['good_sale_price_info']['price'];
+    }
+
+    public function getSaleParam($id)
+    {
+        $request = $this->httpClient->request(
+            'GET',
+            uri("goodSaleParam")->asString() . $id
+        );
+        return json_decode(
+            strval(
+                $request->getBody()
+            ),
+            true
+        )['data']['goodSaleParam'];
     }
 }
