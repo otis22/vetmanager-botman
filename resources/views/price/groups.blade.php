@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Statistics</title>
+    <title>Выберите группу товаров</title>
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" type="text/css">
@@ -14,7 +14,7 @@
     <div class="container">
         <div class="content">
             @foreach($goodGroups as $goodGroup)
-                <a class="good-group" href="{{$goodGroup['id']}}">{{ $goodGroup['title'] }}</a>
+                <a class="good-group" href="{{ Request::url() }}/{{$goodGroup['id']}}">{{ $goodGroup['title'] }}</a>
             @endforeach
         </div>
     </div>
