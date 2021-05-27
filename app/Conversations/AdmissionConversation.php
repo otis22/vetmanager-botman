@@ -21,17 +21,6 @@ final class AdmissionConversation extends VetmanagerConversation
     /**
      * @var UserInterface
      */
-    private $user;
-
-    private function user(): UserInterface
-    {
-        if (empty($this->user)) {
-            $this->user = UserRepository::getById(
-                $this->getBot()->getUser()->getId()
-            );
-        }
-        return $this->user;
-    }
 
     private function getDatesButtons(): array {
         $buttons = [];
