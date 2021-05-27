@@ -41,9 +41,9 @@ class PriceController
                 if ($saleParam['clinic_id'] == $clinicId) {
                     $calculatedPrice = $goodsApi->getGoodCalculatedPrice($good['id'], $clinicId, $saleParam['id']);
                     if ($calculatedPrice) {
-                        $goodsToView[] = ['title' => $good['title'], 'price' => $calculatedPrice];
+                        $goodsToView[] = ['title' => $good['title'], 'price' => number_format($calculatedPrice, 2)];
                     } else {
-                        $goodsToView[] = ['title' => $good['title'], 'price' => $saleParam['price']];
+                        $goodsToView[] = ['title' => $good['title'], 'price' => number_format($saleParam['price'], 2)];
                     }
                 }
             }
