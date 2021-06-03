@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Helpers\Rest\GoodsApi;
 use App\Vetmanager\Api\AuthenticatedClientFactory;
+use App\Vetmanager\Logging\PriceListLogger;
 use App\Vetmanager\UserData\UserRepository\UserRepository;
 use Illuminate\Support\Facades\DB;
 
@@ -48,6 +49,8 @@ class PriceController
                 }
             }
         }
+        $logger = new PriceListLogger();
+        $logger->log($user);
         return view('price.list')->with(
             [
                 'goods' => $goodsToView
