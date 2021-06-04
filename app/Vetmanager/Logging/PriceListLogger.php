@@ -11,7 +11,7 @@ class PriceListLogger implements LoggerInterface
     {
         DB::table('statistic')->insert([
             'created_at' => date("Y-m-d H:i:s"),
-            'user_id' => $user->chat_id,
+            'user_id' => $user->getId(),
             'channel' => 'browser',
             'event' => 'open price list'
         ]);
