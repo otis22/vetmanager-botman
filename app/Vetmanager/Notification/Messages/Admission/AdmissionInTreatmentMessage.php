@@ -11,7 +11,7 @@ class AdmissionInTreatmentMessage implements MessageInterface
     /**
      * @var string
      */
-    private $message = "Направлен к врачу - [%admission_date%] [%pet_alias%], [%pet_type%], [%pet_breed%], [%pet_years%], ФИО [%client_fio%] [%cell_phone%].";
+    private $message = "Направлен к врачу - [%admission_date%] [%pet_alias%], [%pet_type%], [%pet_breed%], [%pet_age%], ФИО [%client_fio%] [%cell_phone%].";
     /**
      * @var array
      */

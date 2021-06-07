@@ -37,7 +37,7 @@ class AdmissionMessageData implements MessageDataInterface
             '[%pet_alias%]' => $this->petData['alias'],
             '[%pet_type%]' => $this->petData['type']['title'],
             '[%pet_breed%]' => $this->petData['breed']['title'],
-            '[%pet_years%]' => $pet_age,
+            '[%pet_age%]' => $pet_age,
             '[%client_fio%]' => $fio,
             '[%cell_phone%]' => $cell_phone
         ];
