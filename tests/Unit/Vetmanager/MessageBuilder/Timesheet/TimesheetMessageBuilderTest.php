@@ -19,7 +19,7 @@ class TimesheetMessageBuilderTest extends TestCase
             ->willReturn('some timesheet type');
         $messageBuilder = new TimesheetMessageBuilder($timesheets, $schedulesApi);
         $this->assertEquals(
-            "29.03.2021\n11:54:01 - 12:54:01\nsome timesheet type\n\n",
+            "Ваш график работы:\n\n29.03.2021 понедельник\n11:54:01 - 12:54:01\nsome timesheet type\n\nВсяческих успехов!",
             $messageBuilder->buildMessage()
         );
     }
