@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Helpers\Rest\UsersApi;
 use Otis22\VetmanagerUrl\Url\Part\Domain;
 use App\Http\Helpers\Rest\ComboManualApi;
 use App\Vetmanager\Notification\SendAction;
@@ -10,6 +11,9 @@ use App\Vetmanager\Logging\ScheduleLogger;
 use App\Vetmanager\Api\AuthenticatedClientFactory;
 use App\Vetmanager\MessageBuilder\Admission\AdmissionMessageBuilder;
 use App\Vetmanager\MessageBuilder\Timesheet\TimesheetMessageBuilder;
+use App\Vetmanager\MessageBuilder\Statistics\StatisticsMessageBuilder;
+use App\Vetmanager\MessageBuilder\Statistics\StatisticsMessageData;
+use App\Vetmanager\Notification\StatisticsSendAction;
 use Illuminate\Foundation\Inspiring;
 use App\Vetmanager\UserData\UserRepository\UserRepository;
 use App\Vetmanager\Notification\Notification;
@@ -99,3 +103,23 @@ Artisan::command('send_schedule', function () {
         }
     }
 })->describe('Run sheduled messages with user appointments and time table');
+
+Artisan::command('send_stats', function () {
+    $users = UserRepository::all();
+    $botman = resolve('botman');
+    $logger = new ScheduleLogger();
+    foreach ($users as $user) {
+        $dbUser = DB::table('users')->where('chat_id', '=', $user->getId())->get()->toArray();
+        $statsMessageBuilder = new StatisticsMessageBuilder(
+            new StatisticsMessageData($user)
+        );
+        $statsMessage = $statsMessageBuilder->buildMessage();
+        $notification = new Notification(
+            new Message($statsMessage),
+            new ConcretteUserRoute($dbUser),
+            new StatisticsSendAction($botman, $logger)
+        );
+        $notification->send();
+    }
+    })->describe('Send stats to users');
+
