@@ -25,22 +25,44 @@ class StatisticsMessageData
         $this->user = $user;
     }
 
-    public function asArray(): array
+    private function userFirstName(): string
     {
         $clientFactory = new AuthenticatedClientFactory($this->user);
         $usersApi = new UsersApi($clientFactory->create());
-        $firstName = $usersApi->byId($this->user->getVmUserId())['data']['user']['first_name'];
+        return $usersApi->byId($this->user->getVmUserId())['data']['user']['first_name'];
+    }
+
+    private function avgReviewMark()
+    {
         $reviews = DB::table('review')->orderBy('id', 'desc')->take(10)->get()->toArray();
         $marks = array_column($reviews, 'mark');
-        $avgReviewMark = (!empty($marks)) ? array_sum($marks) / count($marks) : "Оценок нет";
+        return (!empty($marks)) ? array_sum($marks) / count($marks) : "Оценок нет";
+    }
+
+    private function eventsCount()
+    {
         $lastWeek = \Carbon\Carbon::today()->subDays(7);
         $events = DB::table('statistic')->where('created_at', '>=', $lastWeek)->get();
-        $eventsForUser = $events->where('user_id', '=', $this->user->getId());
+        return count($events);
+    }
+
+    private function userEventsCount()
+    {
+        $lastWeek = \Carbon\Carbon::today()->subDays(7);
+        $events = DB::table('statistic')->where([
+            ['created_at', '>=', $lastWeek],
+            ['user_id', '=', $this->user->getId()]
+        ])->get();
+        return count($events);
+    }
+
+    public function asArray(): array
+    {
         return [
-            'firstName' => $firstName,
-            'avgMark' => $avgReviewMark,
-            'eventsCount' => count($events->toArray()),
-            'eventsForUser' => count($eventsForUser->toArray())
+            'firstName' => $this->userFirstName(),
+            'avgMark' => $this->avgReviewMark(),
+            'eventsCount' => $this->eventsCount(),
+            'eventsForUser' => $this->userEventsCount()
         ];
     }
 }

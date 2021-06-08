@@ -23,9 +23,10 @@ class StatisticsMessageBuilder implements MessageBuilderInterface
 
     public function buildMessage(): string
     {
-        return "Приветствую, {$this->data['firstName']}. Это статистика Vetmanager Bot." . PHP_EOL . PHP_EOL .
-            "Средний рейтинг бота {$this->data['avgMark']} из 10." . PHP_EOL .
-            "За неделю бот обратал {$this->data['eventsCount']} событий, из них для вас мы обработали {$this->data['eventsForUser']} событий.";
+        $dataArray = $this->data->asArray();
+        return "Приветствую, {$dataArray['firstName']}. Это статистика Vetmanager Bot." . PHP_EOL . PHP_EOL .
+            "Средний рейтинг бота {$dataArray['avgMark']} из 10." . PHP_EOL .
+            "За неделю бот обратал {$dataArray['eventsCount']} событий, из них для вас мы обработали {$dataArray['eventsForUser']} событий.";
     }
 
 }
