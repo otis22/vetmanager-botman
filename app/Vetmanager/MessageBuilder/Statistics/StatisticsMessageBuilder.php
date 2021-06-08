@@ -7,9 +7,16 @@ use App\Vetmanager\MessageBuilder\MessageBuilderInterface;
 
 class StatisticsMessageBuilder implements MessageBuilderInterface
 {
+    /**
+     * @var StatisticsMessageData
+     */
     private $data;
 
-    public function __construct($data)
+    /**
+     * StatisticsMessageBuilder constructor.
+     * @param StatisticsMessageData $data
+     */
+    public function __construct(StatisticsMessageData $data)
     {
         $this->data = $data;
     }

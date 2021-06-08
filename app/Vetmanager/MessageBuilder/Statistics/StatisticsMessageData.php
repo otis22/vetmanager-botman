@@ -6,18 +6,26 @@ namespace App\Vetmanager\MessageBuilder\Statistics;
 
 use App\Http\Helpers\Rest\UsersApi;
 use App\Vetmanager\Api\AuthenticatedClientFactory;
+use App\Vetmanager\UserData\UserRepository\UserInterface;
 use Illuminate\Support\Facades\DB;
 
 class StatisticsMessageData
 {
+    /**
+     * @var UserInterface
+     */
     private $user;
 
-    public function __construct($user)
+    /**
+     * StatisticsMessageData constructor.
+     * @param UserInterface $user
+     */
+    public function __construct(UserInterface $user)
     {
         $this->user = $user;
     }
 
-    public function asArray()
+    public function asArray(): array
     {
         $clientFactory = new AuthenticatedClientFactory($this->user);
         $usersApi = new UsersApi($clientFactory->create());
