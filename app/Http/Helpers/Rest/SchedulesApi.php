@@ -11,6 +11,9 @@ use Otis22\VetmanagerRestApi\Query\Filter\Value\StringValue;
 use Otis22\VetmanagerRestApi\Query\Filter\EqualTo;
 use Otis22\VetmanagerRestApi\Query\Filters;
 
+use Otis22\VetmanagerRestApi\Query\Query;
+use Otis22\VetmanagerRestApi\Query\Sort\AscBy;
+use Otis22\VetmanagerRestApi\Query\Sorts;
 use function Otis22\VetmanagerRestApi\uri;
 
 class SchedulesApi
@@ -38,14 +41,16 @@ class SchedulesApi
     public function byIntervalInDays($days = 7, $doctor_id = 0, $clinic_id = 0): array
     {
         $now = date("Y-m-d");
-        $filteringParams[] = new MoreThan(
-            new Property('begin_datetime'),
-            new StringValue($now . " 00:00:00")
-        );
-        $filteringParams[] = new LessThan(
-            new Property('end_datetime'),
-            new StringValue(date('Y-m-d', intval(strtotime($now . " +" . $days . " days"))) . " 23:59:59")
-        );
+        $filteringParams = [
+            new MoreThan(
+                new Property('begin_datetime'),
+                new StringValue($now . " 00:00:00")
+            ),
+            new LessThan(
+                new Property('end_datetime'),
+                new StringValue(date('Y-m-d', intval(strtotime($now . " +" . $days . " days"))) . " 23:59:59")
+            )
+        ];
         if ($doctor_id !== 0) {
             $filteringParams[] = new EqualTo(
                 new Property('doctor_id'),
@@ -58,12 +63,19 @@ class SchedulesApi
                 new StringValue(strval($clinic_id))
             );
         }
-        $filters = new Filters(...$filteringParams);
+        $query = new Query(
+            new Filters(...$filteringParams),
+            new Sorts(
+                new AscBy(
+                    new Property('begin_datetime')
+                )
+            )
+        );
         $request = $this->httpClient->request(
             'GET',
             uri("timesheet")->asString(),
             [
-                "query" => $filters->asKeyValue()
+                "query" => $query->asKeyValue()
             ]
         );
         $schedules = json_decode(
