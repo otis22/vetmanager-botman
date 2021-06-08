@@ -7,9 +7,10 @@ namespace App\Vetmanager\MessageBuilder\Statistics;
 use App\Http\Helpers\Rest\UsersApi;
 use App\Vetmanager\Api\AuthenticatedClientFactory;
 use App\Vetmanager\UserData\UserRepository\UserInterface;
+use ElegantBro\Interfaces\Arrayee;
 use Illuminate\Support\Facades\DB;
 
-class StatisticsMessageData
+class StatisticsMessageData implements Arrayee
 {
     /**
      * @var UserInterface

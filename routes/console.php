@@ -111,7 +111,7 @@ Artisan::command('send_stats', function () {
     foreach ($users as $user) {
         $dbUser = DB::table('users')->where('chat_id', '=', $user->getId())->get()->toArray();
         $statsMessageBuilder = new StatisticsMessageBuilder(
-            (new StatisticsMessageData($user))
+            new StatisticsMessageData($user)
         );
         $statsMessage = $statsMessageBuilder->buildMessage();
         $notification = new Notification(
