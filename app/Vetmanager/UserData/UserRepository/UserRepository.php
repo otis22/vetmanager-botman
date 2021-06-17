@@ -38,4 +38,16 @@ class UserRepository implements IUserRepository
         }
         return $result;
     }
+
+    public static function allWithEnabledNotifications(): array
+    {
+        $users = DB::table('users')->where('notification_enabled', '=', true)->get()->toArray();
+        if (empty($users)) {
+            return [];
+        }
+        foreach ($users as $user) {
+            $result[] = new User($user->chat_id, $user->clinic_domain, $user->clinic_token, $user->vm_user_id, $user->channel, $user->notification_enabled, $user->is_blocked);
+        }
+        return $result;
+    }
 }

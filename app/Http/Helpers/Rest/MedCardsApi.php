@@ -7,6 +7,8 @@ namespace App\Http\Helpers\Rest;
 use GuzzleHttp\Client;
 use Otis22\VetmanagerRestApi\Model\Property;
 use Otis22\VetmanagerRestApi\Query\Filter\EqualTo;
+use Otis22\VetmanagerRestApi\Query\Filter\LessOrEqualThan;
+use Otis22\VetmanagerRestApi\Query\Filter\MoreOrEqualThan;
 use Otis22\VetmanagerRestApi\Query\Filter\Value\StringValue;
 use Otis22\VetmanagerRestApi\Query\Filters;
 use Otis22\VetmanagerRestApi\Query\Query;
@@ -71,5 +73,34 @@ class MedCardsApi
             true
         );
         return $result['data']['medicalcards'];
+    }
+
+    public function lastWeekMedCards($userId)
+    {
+        $monday = strtotime("last monday");
+        $lastWeekMonday = date('W', $monday)==date('W') ? $monday-7*86400 : $monday;
+        $lastWeekSunday = strtotime(date("Y-m-d",$lastWeekMonday)." +6 days");
+        return $this->medCardsByDateRangeAndUserId($lastWeekMonday, $lastWeekSunday, $userId);
+    }
+
+    public function medCardsByDateRangeAndUserId($startDate, $endDate, $userId)
+    {
+        $query = new Query(
+            new Filters(
+                new MoreOrEqualThan(
+                    new Property('date_create'),
+                    new StringValue(date("Y-m-d", $startDate))
+                ),
+                new LessOrEqualThan(
+                    new Property('date_create'),
+                    new StringValue(date("Y-m-d", $endDate))
+                ),
+                new EqualTo(
+                    new Property("doctor_id"),
+                    new StringValue(strval($userId))
+                )
+            )
+        );
+        return $this->sendRequest($query, "GET");
     }
 }
