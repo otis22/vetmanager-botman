@@ -43,28 +43,8 @@ Artisan::command('url', function () {
     echo URL::to('/');
 })->describe('Display application URL');
 
-Artisan::command('fix_notification_route', function () {
-    $users = UserRepository::all();
-    foreach ($users as $user) {
-        $clientFactory = new AuthenticatedClientFactory($user);
-        $comboManual = new ComboManualApi($clientFactory->create());
-        try {
-            $comboManual->updateExistNotificationRoute($user->getDomain());
-        } catch (Exception $e) {}
-    }
-})->describe('Change Vetmanager\'s hook url to actual');
-
-Artisan::command('fix_domains', function () {
-    $users = UserRepository::all();
-    foreach ($users as $user) {
-        DB::table('users')
-            ->where('chat_id', '=', $user->getId())
-            ->update(['clinic_domain' => (new Domain($user->getDomain()))->asString()]);
-    }
-})->describe('Fix domain names');
-
 Artisan::command('send_schedule', function () {
-    $users = UserRepository::all();
+    $users = UserRepository::allWithEnabledNotifications();
     foreach ($users as $user) {
         $botman = resolve('botman');
         $logger = new ScheduleLogger();
@@ -109,21 +89,23 @@ Artisan::command('send_schedule', function () {
 
 Artisan::command('send_stats', function () {
     if (date('D') == 'Tue') {
-        $users = UserRepository::all();
+        $users = UserRepository::allWithEnabledNotifications();
         $botman = resolve('botman');
         $logger = new ScheduleLogger();
         foreach ($users as $user) {
-            $dbUser = DB::table('users')->where('chat_id', '=', $user->getId())->get()->toArray();
-            $statsMessageBuilder = new StatisticsMessageBuilder(
-                new StatisticsMessageData($user)
-            );
-            $statsMessage = $statsMessageBuilder->buildMessage();
-            $notification = new Notification(
-                new Message($statsMessage),
-                new ConcretteUserRoute($dbUser),
-                new StatisticsSendAction($botman, $logger)
-            );
-            $notification->send();
+            if ($user->isNotificationEnabled()) {
+                $dbUser = DB::table('users')->where('chat_id', '=', $user->getId())->get()->toArray();
+                $statsMessageBuilder = new StatisticsMessageBuilder(
+                    new StatisticsMessageData($user)
+                );
+                $statsMessage = $statsMessageBuilder->buildMessage();
+                $notification = new Notification(
+                    new Message($statsMessage),
+                    new ConcretteUserRoute($dbUser),
+                    new StatisticsSendAction($botman, $logger)
+                );
+                $notification->send();
+            }
         }
     }
 })->describe('Send stats to users');
