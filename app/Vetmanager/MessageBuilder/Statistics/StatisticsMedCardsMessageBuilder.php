@@ -23,12 +23,12 @@ class StatisticsMedCardsMessageBuilder implements MessageBuilderInterface
 
     private function percentageText($percentage): string
     {
-        if ($percentage > 100) {
-            return "Это на " . $percentage . "% больше чем на предыдущей неделе.";
-        } else if ($percentage < 0) {
+        if ($percentage < 0) {
             return "Это на " . abs($percentage) . "% меньше чем на предыдущей неделе.";
-        } else {
+        } else if ($percentage == 0) {
             return "Это столько же, сколько на предыдущей неделе";
+        } else {
+            return "Это на " . $percentage . "% больше чем на предыдущей неделе.";
         }
     }
 

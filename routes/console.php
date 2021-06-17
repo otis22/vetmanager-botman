@@ -93,7 +93,6 @@ Artisan::command('send_stats', function () {
         $botman = resolve('botman');
         $logger = new ScheduleLogger();
         foreach ($users as $user) {
-            if ($user->isNotificationEnabled()) {
                 $dbUser = DB::table('users')->where('chat_id', '=', $user->getId())->get()->toArray();
                 $statsMessageBuilder = new StatisticsMessageBuilder(
                     new StatisticsMessageData($user)
@@ -106,29 +105,32 @@ Artisan::command('send_stats', function () {
                 );
                 $notification->send();
             }
-        }
     }
 })->describe('Send stats to users');
 
 Artisan::command('send_medcard_stats', function () {
-    $users = UserRepository::all();
-    $botman = resolve('botman');
-    $logger = new ScheduleLogger();
-    foreach ($users as $user) {
-        $dbUser = DB::table('users')->where('chat_id', '=', $user->getId())->get()->toArray();
-        $statsMessageBuilder = new StatisticsMedCardsMessageBuilder(
-            new StatisticsMedCardsMessageData($user)
-        );
-        $clientFactory = new AuthenticatedClientFactory($user);
-        $medCardsApi = new MedCardsApi($clientFactory->create());
-        if (count($medCardsApi->lastWeekMedCards($user->getVmUserId())) > 0) {
-            $statsMessage = $statsMessageBuilder->buildMessage();
-            $notification = new Notification(
-                new Message($statsMessage),
-                new ConcretteUserRoute($dbUser),
-                new StatisticsSendAction($botman, $logger)
+    if (date('D') == 'Mon') {
+        $users = UserRepository::allWithEnabledNotifications();
+        $botman = resolve('botman');
+        $logger = new ScheduleLogger();
+        foreach ($users as $user) {
+            $dbUser = DB::table('users')->where('chat_id', '=', $user->getId())->get()->toArray();
+            $statsMessageBuilder = new StatisticsMedCardsMessageBuilder(
+                new StatisticsMedCardsMessageData($user)
             );
-            $notification->send();
+            $clientFactory = new AuthenticatedClientFactory($user);
+            $medCardsApi = new MedCardsApi($clientFactory->create());
+            echo "0";
+            if (count($medCardsApi->lastWeekMedCards($user->getVmUserId())) > 0) {
+                echo 1;
+                $statsMessage = $statsMessageBuilder->buildMessage();
+                $notification = new Notification(
+                    new Message($statsMessage),
+                    new ConcretteUserRoute($dbUser),
+                    new StatisticsSendAction($botman, $logger)
+                );
+                $notification->send();
+            }
         }
     }
 })->describe('Send medcard stats to users');
