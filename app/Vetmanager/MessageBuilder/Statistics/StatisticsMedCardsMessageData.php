@@ -62,7 +62,7 @@ class StatisticsMedCardsMessageData implements Arrayee
     {
         $lastWeekCount = $this->lastWeekMedCardsCount();
         $preLastWeekCount = $this->preLastWeekMedCardsCount();
-        return $lastWeekCount/$preLastWeekCount*100;
+        return ($lastWeekCount - $preLastWeekCount) * 100 / $lastWeekCount;
     }
 
 
