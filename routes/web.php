@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use App\Conversations\VisitConversation;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,6 +17,14 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+//Route::get('/service', function (){
+//    return view('service');
+//})->name('service');
+
+//Route::match(['get', 'post'], '/service', 'VisitController');
+
+
 
 Route::match(['get', 'post'], '/botman', 'BotManController@handle');
 Route::get('/botman/tinker', 'BotManController@tinker');
