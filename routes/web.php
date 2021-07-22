@@ -18,12 +18,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-//Route::get('/service', function (){
-//    return view('service');
-//})->name('service');
-
-//Route::match(['get', 'post'], '/service', 'VisitController');
-
 
 
 Route::match(['get', 'post'], '/botman', 'BotManController@handle');

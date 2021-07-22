@@ -18,7 +18,8 @@ final class MainMenu
         'notification' => 'Управление уведомлениями',
         'review' => 'Оцените меня',
         'stats' => "Статистика Бота",
-        'pricelist' => "Прайс-лист"
+        'pricelist' => "Прайс-лист",
+        'service' => "Сервисы для вашего сайта"
     ];
 
     /**

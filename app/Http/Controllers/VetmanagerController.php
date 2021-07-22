@@ -9,6 +9,7 @@ use App\Conversations\ClientBriefConversation;
 use App\Conversations\NotificationConversation;
 use App\Conversations\PriceListConversation;
 use App\Conversations\ReviewConversation;
+use App\Conversations\ServiceConversation;
 use App\Conversations\StatsConversation;
 use App\Conversations\TimesheetConversation;
 use App\Conversations\AdmissionConversation;
@@ -58,4 +59,10 @@ final class VetmanagerController extends Controller
     {
         $bot->startConversation(new PriceListConversation());
     }
+
+    public function serviceConversation(BotMan $bot)
+    {
+        $bot->startConversation(new ServiceConversation());
+    }
+
 }
