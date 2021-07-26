@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Выберите группу товаров</title>
+    <title>Количество визитов за неделю</title>
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" type="text/css">
@@ -30,10 +30,10 @@
                 <rect width="108" height="20" fill="url(#s)"/>
             </g>
             <g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" text-rendering="geometricPrecision" font-size="110">
-                <text aria-hidden="true" x="395" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="670">$text</text>
-                <text x="395" y="140" transform="scale(.1)" fill="#fff" textLength="670">$text</text>
+                <text aria-hidden="true" x="395" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="670">{{ 'week' }}</text>
+                <text x="395" y="140" transform="scale(.1)" fill="#fff" textLength="670">{{ 'week' }}</text>
                 <text aria-hidden="true" x="915" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="210">{{ $weekVisits }}</text>
-                <text x="915" y="140" transform="scale(.1)" fill="#fff" textLength="210">$num</text>
+                <text x="915" y="140" transform="scale(.1)" fill="#fff" textLength="210">{{ $weekVisits }}</text>
             </g>
         </svg>
     </div>

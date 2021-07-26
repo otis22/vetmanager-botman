@@ -1,11 +1,9 @@
 <?php
 
-
 namespace App\Http\Controllers;
 
 use Abyzs\VetmanagerVisits\AuthToken;
 use Abyzs\VetmanagerVisits\VisitCounter;
-use App\Vetmanager\Api\AuthenticatedClientFactory;
 use App\Vetmanager\UserData\UserRepository\UserRepository;
 use Illuminate\Support\Facades\DB;
 

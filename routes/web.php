@@ -18,8 +18,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/visits/{md5}/today', 'ServiceController@dayCount');
-Route::get('/visits/{md5}/week', 'ServiceController@weekCount');
+Route::get('/shield/{md5}/today', 'ServiceController@dayCount');
+Route::get('/shield/{md5}/week', 'ServiceController@weekCount');
 
 Route::match(['get', 'post'], '/botman', 'BotManController@handle');
 Route::get('/botman/tinker', 'BotManController@tinker');
