@@ -27,7 +27,8 @@
         "otis22/vetmanager-rest-api": "^0.1.1",
         "otis22/vetmanager-token": "~0.2",
         "otis22/vetmanager-url": "~0.3",
-        "predis/predis": "^1.1"
+        "predis/predis": "^1.1",
+      "ext-fileinfo": "*"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",

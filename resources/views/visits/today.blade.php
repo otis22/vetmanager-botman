@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Количество визитов за неделю</title>
+    <title>Количество визитов за день</title>
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" type="text/css">
@@ -13,7 +13,7 @@
 <body>
 <div class="container">
     <div class="content">
-      <img src="{{ $weekVisits }}">
+        <img src="{{ $todayVisits }}">
     </div>
 </div>
 </body>

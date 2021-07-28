@@ -2,54 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use Abyzs\VetmanagerVisits\AuthToken;
-use Abyzs\VetmanagerVisits\VisitCounter;
-use App\Vetmanager\UserData\UserRepository\UserRepository;
-use Illuminate\Support\Facades\DB;
+use App\ServiceModel;
+use Illuminate\Support\Facades\Cache;
 
 
 class ServiceController extends Controller
 {
-    public function dayCount($md5)
+    public function todayCount($md5)
     {
-        $userId = $this->userIdByHash($md5);
-        $user = UserRepository::getById($userId);
-        $appName = config('app.name');
-        $auth = new AuthToken($user->getDomain(), $appName, $user->getToken());
-        $day = new VisitCounter();
-        $dayVisits = $day->dayCount($auth->getInvoices());
+        $today = new ServiceModel();
+        $todayVisits = $today->getImg('today', $today->getTodayVisits($md5));
 
-        if($dayVisits >= 1000) {
-            $dayVisits/1000 . "k";
-        } else {
-            $dayVisits;
+        Cache::put('today_cache', $todayVisits, 10);
+
+        if (Cache::has('today_cache')) {
+            return view ('visits.today')->with(['todayVisits' => Cache::get('today_cache')]);
         }
-        return view ('visits.day')->with(['dayVisits' => $dayVisits]);
     }
 
     public function weekCount($md5)
     {
-        $userId = $this->userIdByHash($md5);
-        $user = UserRepository::getById($userId);
-        $appName = config('app.name');
-        $auth = new AuthToken($user->getDomain(), $appName, $user->getToken());
-        $week = new VisitCounter();
-        $weekVisits = $week->weekCount($auth->getInvoices());
+        $week = new ServiceModel();
+        $weekVisits = $week->getImg('week', $week->getWeekCount($md5));
 
-        if($weekVisits >= 1000) {
-            $weekVisits/1000 . "k";
-        } else {
-            $weekVisits;
-        }
-        return view ('visits.week')->with(['weekVisits' => $weekVisits]);
-    }
+        Cache::put('week_cache', $weekVisits, 10);
 
-    private function userIdByHash($md5)
-    {
-        $userId = DB::table('users')->where(DB::raw('md5(CONCAT(clinic_domain, vm_user_id))'), $md5)->value('chat_id');
-        if (!$userId) {
-            throw new \Exception("Bad link");
+        if (Cache::has('week_cache')) {
+            return view('visits.week')->with(['weekVisits' => Cache::get('week_cache')]);
         }
-        return $userId;
     }
 }
