@@ -45,9 +45,12 @@ class ServiceModel
         return $weekVisits;
     }
 
+
     public function getImg($string, $count)
     {
-        $svg = '<svg
+        header('Content-type: image/svg+xml');
+
+        echo  '<svg
     xmlns="http://www.w3.org/2000/svg"
     xmlns:xlink="http://www.w3.org/1999/xlink" width="108" height="20" role="img" aria-label="jjj: $num">
     <title>: ' . $string . '</title>
@@ -70,8 +73,6 @@ class ServiceModel
         <text x="915" y="140" transform="scale(.1)" fill="#fff" textLength="210">' . $count . '</text>
     </g>
 </svg>';
-
-        return 'data:image/svg+xml;base64,' . base64_encode($svg);
     }
 
     private function userIdByHash($md5)
