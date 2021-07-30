@@ -5,6 +5,7 @@ namespace App;
 use Abyzs\VetmanagerVisits\AuthToken;
 use Abyzs\VetmanagerVisits\VisitCounter;
 use App\Vetmanager\UserData\UserRepository\UserRepository;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class ServiceModel
@@ -45,7 +46,6 @@ class ServiceModel
         return $weekVisits;
     }
 
-
     public function getImg($string, $count)
     {
         header('Content-type: image/svg+xml');
@@ -73,6 +73,19 @@ class ServiceModel
         <text x="915" y="140" transform="scale(.1)" fill="#fff" textLength="210">' . $count . '</text>
     </g>
 </svg>';
+    }
+
+    public function getWeekCache($md5)
+    {
+        $week = $this->getImg('week', $this->getWeekCount($md5));
+        $key = 'week' . $md5;
+
+        $weekCache = Cache::get($key, false);
+
+        if($weekCache === null){
+            $weekCache = Cache::put($key, $week, 6);
+        }
+        return $weekCache;
     }
 
     private function userIdByHash($md5)

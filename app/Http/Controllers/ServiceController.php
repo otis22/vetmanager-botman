@@ -20,23 +20,18 @@ class ServiceController extends Controller
             Cache::put($key, $todayVisits, 600);
             $todayCache = Cache::get($key);
         }
-        $content = view('visits.today')->with(['todayVisits' => $todayCache]);
-        return response($content)->header('Content-type', 'image/svg+xml');
+        return response()
+            ->view('visits.today', ['todayVisits' => $todayCache])
+            ->header('Content-type', 'image/svg+xml');
     }
+
 
     public function weekCount($md5)
     {
-        $week = new ServiceModel();
-        $weekVisits = $week->getImg('week', $week->getWeekCount($md5));
+        $weekCache = new ServiceModel();
 
-        $key = 'week' . $md5;
-        $weekCache = Cache::get($key);
-
-        if($weekCache === null) {
-            Cache::put($key, $weekVisits, 600);
-            $weekCache = Cache::get($key);
-        }
-        $content = view('visits.week')->with(['weekVisits' => $weekCache]);
-        return response($content)->header('Content-type', 'image/svg+xml');
+        return response()
+            ->view('visits.week', ['weekVisits' => $weekCache->getWeekCache($md5)])
+            ->header('Content-type', 'image/svg+xml');
     }
 }
