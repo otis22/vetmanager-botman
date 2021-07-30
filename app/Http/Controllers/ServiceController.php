@@ -13,14 +13,15 @@ class ServiceController extends Controller
         $today = new ServiceModel();
         $todayVisits = $today->getImg('today', $today->getTodayVisits($md5));
 
-        $key = 'today_cache';
+        $key = 'today' . $md5;
         $todayCache = Cache::get($key);
 
         if($todayCache === null) {
-            Cache::put($key, $todayVisits, 6);
+            Cache::put($key, $todayVisits, 600);
             $todayCache = Cache::get($key);
         }
-        return view ('visits.today')->with(['todayVisits' => $todayCache]);
+        $content = view('visits.today')->with(['todayVisits' => $todayCache]);
+        return response($content)->header('Content-type', 'image/svg+xml');
     }
 
     public function weekCount($md5)
@@ -28,13 +29,14 @@ class ServiceController extends Controller
         $week = new ServiceModel();
         $weekVisits = $week->getImg('week', $week->getWeekCount($md5));
 
-        $key = 'week_cache';
+        $key = 'week' . $md5;
         $weekCache = Cache::get($key);
 
         if($weekCache === null) {
-            Cache::put($key, $weekVisits, 6);
+            Cache::put($key, $weekVisits, 600);
             $weekCache = Cache::get($key);
         }
-        return view('visits.week')->with(['weekVisits' => $weekCache]);
+        $content = view('visits.week')->with(['weekVisits' => $weekCache], ['key' => $key]);
+        return response($content)->header('Content-type', 'image/svg+xml');
     }
 }
