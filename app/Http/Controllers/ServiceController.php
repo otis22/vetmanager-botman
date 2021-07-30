@@ -36,7 +36,7 @@ class ServiceController extends Controller
             Cache::put($key, $weekVisits, 600);
             $weekCache = Cache::get($key);
         }
-        $content = view('visits.week')->with(['weekVisits' => $weekCache], ['key' => $key]);
+        $content = view('visits.week')->with(['weekVisits' => $weekCache]);
         return response($content)->header('Content-type', 'image/svg+xml');
     }
 }
