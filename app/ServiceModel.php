@@ -8,6 +8,7 @@ use App\Vetmanager\UserData\UserRepository\UserRepository;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
+
 class ServiceModel
 {
     private function auth($md5): array
@@ -20,37 +21,9 @@ class ServiceModel
         return $auth->getInvoices();
     }
 
-    public function getTodayVisits($md5): int
+    private function getImg($string, $count)
     {
-        $today = new VisitCounter();
-        $todayVisits = $today->dayCount($this->auth($md5));
-
-        if($todayVisits >= 1000) {
-            $todayVisits/1000 . "k";
-        } else {
-            $todayVisits;
-        }
-        return $todayVisits;
-    }
-
-    public function getWeekCount($md5)
-    {
-        $week = new VisitCounter();
-        $weekVisits = $week->weekCount($this->auth($md5));
-
-        if($weekVisits >= 1000) {
-            $weekVisits/1000 . "k";
-        } else {
-            $weekVisits;
-        }
-        return $weekVisits;
-    }
-
-    public function getImg($string, $count)
-    {
-        header('Content-type: image/svg+xml');
-
-        echo  '<svg
+        echo '<svg
     xmlns="http://www.w3.org/2000/svg"
     xmlns:xlink="http://www.w3.org/1999/xlink" width="108" height="20" role="img" aria-label="jjj: $num">
     <title>: ' . $string . '</title>
@@ -75,17 +48,54 @@ class ServiceModel
 </svg>';
     }
 
-    public function getWeekCache($md5)
+    private function getTodayVisits($md5): int
     {
-        $week = $this->getImg('week', $this->getWeekCount($md5));
-        $key = 'week' . $md5;
+        $today = new VisitCounter();
+        $todayVisits = $today->dayCount($this->auth($md5));
 
-        $weekCache = Cache::get($key, false);
-
-        if($weekCache === null){
-            $weekCache = Cache::put($key, $week, 6);
+        if($todayVisits >= 1000) {
+            $todayVisits/1000 . "k";
+        } else {
+            $todayVisits;
         }
-        return $weekCache;
+        return $todayVisits;
+    }
+
+    public function getTodayImg($md5)
+    {
+        $key = 'today' . $md5;
+        $todayCache = Cache::get($key, false);
+        if(!$todayCache){
+            $todayVisits = $this->getTodayVisits($md5);
+            Cache::put($key, $todayVisits, 600);
+            $todayCache = Cache::get($key, false);
+        }
+        return $this->getImg('today', $todayCache);
+    }
+
+    private function getWeekVisits($md5): int
+    {
+        $week = new VisitCounter();
+        $weekVisits = $week->weekCount($this->auth($md5));
+
+        if($weekVisits >= 1000) {
+            $weekVisits/1000 . "k";
+        } else {
+            $weekVisits;
+        }
+        return $weekVisits;
+    }
+
+    public function getWeekImg($md5)
+    {
+        $key = 'week' . $md5;
+        $weekCache = Cache::get($key, false);
+        if(!$weekCache){
+            $weekVisits = $this->getWeekVisits($md5);
+            Cache::put($key, $weekVisits, 600);
+            $weekCache = Cache::get($key, false);
+        }
+        return $this->getImg('week', $weekCache);
     }
 
     private function userIdByHash($md5)

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\ServiceModel;
-use Illuminate\Support\Facades\Cache;
 
 
 class ServiceController extends Controller
@@ -11,27 +10,20 @@ class ServiceController extends Controller
     public function todayCount($md5)
     {
         $today = new ServiceModel();
-        $todayVisits = $today->getImg('today', $today->getTodayVisits($md5));
+        $todayVisits = $today->getTodayImg($md5);
 
-        $key = 'today' . $md5;
-        $todayCache = Cache::get($key);
-
-        if($todayCache === null) {
-            Cache::put($key, $todayVisits, 600);
-            $todayCache = Cache::get($key);
-        }
         return response()
-            ->view('visits.today', ['todayVisits' => $todayCache])
+            ->view('visits.today', compact('todayVisits'))
             ->header('Content-type', 'image/svg+xml');
     }
 
-
     public function weekCount($md5)
     {
-        $weekCache = new ServiceModel();
+        $week = new ServiceModel();
+        $weekVisits = $week->getWeekImg($md5);
 
         return response()
-            ->view('visits.week', ['weekVisits' => $weekCache->getWeekCache($md5)])
+            ->view('visits.week', compact('weekVisits'))
             ->header('Content-type', 'image/svg+xml');
     }
 }
