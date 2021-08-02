@@ -21,33 +21,6 @@ class ServiceModel
         return $auth->getInvoices();
     }
 
-    private function getImg($string, $count)
-    {
-        echo '<svg
-    xmlns="http://www.w3.org/2000/svg"
-    xmlns:xlink="http://www.w3.org/1999/xlink" width="108" height="20" role="img" aria-label="jjj: $num">
-    <title>: ' . $string . '</title>
-    <linearGradient id="s" x2="0" y2="100%">
-        <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>
-        <stop offset="1" stop-opacity=".1"/>
-    </linearGradient>
-    <clipPath id="r">
-        <rect width="108" height="20" rx="3" fill="#fff"/>
-    </clipPath>
-    <g clip-path="url(#r)">
-        <rect width="77" height="20" fill="#555"/>
-        <rect x="77" width="31" height="20" fill="#97ca00"/>
-        <rect width="108" height="20" fill="url(#s)"/>
-    </g>
-    <g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" text-rendering="geometricPrecision" font-size="110">
-        <text aria-hidden="true" x="395" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="670">' . $string . '</text>
-        <text x="395" y="140" transform="scale(.1)" fill="#fff" textLength="670">' . $string . '</text>
-        <text aria-hidden="true" x="915" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="210">' . $count . '</text>
-        <text x="915" y="140" transform="scale(.1)" fill="#fff" textLength="210">' . $count . '</text>
-    </g>
-</svg>';
-    }
-
     private function getTodayVisits($md5): int
     {
         $today = new VisitCounter();
@@ -61,16 +34,15 @@ class ServiceModel
         return $todayVisits;
     }
 
-    public function getTodayImg($md5)
+    public function getTodayCache($md5)
     {
         $key = 'today' . $md5;
         $todayCache = Cache::get($key, false);
         if(!$todayCache){
-            $todayVisits = $this->getTodayVisits($md5);
-            Cache::put($key, $todayVisits, 600);
+            Cache::put($key, $this->getTodayVisits($md5), 600);
             $todayCache = Cache::get($key, false);
         }
-        return $this->getImg('today', $todayCache);
+        return $todayCache;
     }
 
     private function getWeekVisits($md5): int
@@ -86,16 +58,15 @@ class ServiceModel
         return $weekVisits;
     }
 
-    public function getWeekImg($md5)
+    public function getWeekCache($md5)
     {
         $key = 'week' . $md5;
         $weekCache = Cache::get($key, false);
         if(!$weekCache){
-            $weekVisits = $this->getWeekVisits($md5);
-            Cache::put($key, $weekVisits, 600);
+            Cache::put($key, $this->getWeekVisits($md5), 600);
             $weekCache = Cache::get($key, false);
         }
-        return $this->getImg('week', $weekCache);
+        return $weekCache;
     }
 
     private function userIdByHash($md5)
