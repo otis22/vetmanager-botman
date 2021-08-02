@@ -105,7 +105,7 @@ And set up command `php artisan send_schedule` on 17.00 MSK
 1. https://api.telegram.org/bot<token>/setWebhook?url=https://5e86b344.ngrok.io/botman
 
 Where token is authtoken from @GodFather
-`
+
 
 ## Contributing 
 
