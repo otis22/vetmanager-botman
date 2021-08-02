@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,3 +23,5 @@ Route::get('/stats', 'BotManController@stats');
 Route::post('/event/{domain}', 'NotificationsController@handleNotifications');
 Route::get('/price/{md5}/{clinicId}/', 'PriceController@groups');
 Route::get('/price/{md5}/{clinicId}/{groupId}', 'PriceController@priceList');
+Route::get('/shield/{md5}/today', 'ServiceController@todayCount');
+Route::get('/shield/{md5}/week', 'ServiceController@weekCount');

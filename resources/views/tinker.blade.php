@@ -32,6 +32,7 @@
     </style>
 </head>
 <body>
+
 <div class="container">
     <div class="content" id="app">
         <botman-tinker api-endpoint="/botman"></botman-tinker>
