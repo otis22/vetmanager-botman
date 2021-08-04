@@ -8,24 +8,44 @@ use BotMan\BotMan\Messages\Outgoing\Question;
 
 class ServiceConversation extends VetmanagerConversation
 {
-    public function askVisitCount()
+    private function auth()
     {
         $userId = $this->user()->getVmUserId();
         $domainName = $this->user()->getDomain();
         $md5 = md5($domainName . $userId);
 
-        $question = Question::create('Счетчик визитов');
-        $question->addButtons([
-            Button::create('Счетчик посещений за сегодня')->value("http://127.0.0.1:8000/shield/" . $md5 . "/" . 'today'),
-            Button::create('Счетчик посещений за 7 дней')->value("http://127.0.0.1:8000/shield/" . $md5 . "/" . 'week')
-        ]);
-        $this->ask($question, function (Answer $response) {
-            $this->say($response->getText());
-            $this->endConversation();
-        });
+        return $md5;
     }
 
-    public function run ()
+    private function todayVisitLink()
+    {
+        $this->say("https://vetmanager-botman.herokuapp.com/shield/" . $this->auth() . "/" . 'today' . "/");
+        $this->endConversation();
+    }
+
+    private function weekVisitLink()
+    {
+        $this->say("https://vetmanager-botman.herokuapp.com/shield/" . $this->auth() . "/" . 'week' . "/");
+        $this->endConversation();
+    }
+
+    private function askVisitCount()
+    {
+        $question = Question::create('Счетчик визитов');
+        $question->addButtons([
+            Button::create('Счетчик посещений за сегодня')->value("today"),
+            Button::create('Счетчик посещений за 7 дней')->value('week')
+        ]);
+        $this->ask($question, function (Answer $answer){
+        $value = $answer->getText();
+        if($value == 'today') {
+            return $this->todayVisitLink();
+        } else {
+            return $this->weekVisitLink();
+        }});
+     }
+
+     public function run ()
     {
         $this->askVisitCount();
     }
