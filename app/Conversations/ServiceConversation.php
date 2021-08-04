@@ -33,7 +33,7 @@ class ServiceConversation extends VetmanagerConversation
     {
         $question = Question::create('Счетчик визитов');
         $question->addButtons([
-            Button::create('Счетчик посещений за сегодня')->value("today"),
+            Button::create('Счетчик посещений за сегодня')->value('today'),
             Button::create('Счетчик посещений за 7 дней')->value('week')
         ]);
         $this->ask($question, function (Answer $answer){
