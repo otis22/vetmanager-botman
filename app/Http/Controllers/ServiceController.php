@@ -10,7 +10,7 @@ class ServiceController extends Controller
     public function todayCount($md5)
     {
         $today = new ServiceModel();
-        $todayVisits = $today->getTodayCache($md5);
+        $todayVisits = $today->todayCache($md5);
 
         return response()
             ->view('visits.today', compact('todayVisits'))
@@ -20,7 +20,7 @@ class ServiceController extends Controller
     public function weekCount($md5)
     {
         $week = new ServiceModel();
-        $weekVisits = $week->getWeekCache($md5);
+        $weekVisits = $week->weekCache($md5);
 
         return response()
             ->view('visits.week', compact('weekVisits'))
