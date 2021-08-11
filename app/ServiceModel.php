@@ -6,37 +6,32 @@ use Abyzs\VetmanagerVisits\Invoices;
 use Abyzs\VetmanagerVisits\InvoiceFilter;
 use Abyzs\VetmanagerVisits\TodayVisits;
 use Abyzs\VetmanagerVisits\WeekVisits;
+use App\Vetmanager\UserData\UserRepository\UserInterface;
 use App\Vetmanager\UserData\UserRepository\UserRepository;
 use DateInterval;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rules\In;
 use function Otis22\VetmanagerUrl\url;
 use function Otis22\VetmanagerRestApi\byToken;
 
 
 class ServiceModel
 {
-    private function auth($md5): array
+    private function todayInvoices($md5): array
     {
-        $userId = $this->userIdByHash($md5);
-        $user = UserRepository::getById($userId);
-        $appName = config('app.name');
-
-        $invoices = new Invoices(
-            new Client(['base_uri' => url($user->getDomain())->asString()]),
-            byToken($appName, $user->getToken()),
-            new InvoiceFilter(new DateInterval('P1D'))
+        $todayInvoices = new Invoices(
+            new Client(['base_uri' => url($this->auth($md5)->getDomain())->asString()]),
+            byToken(config('app.name'), $this->auth($md5)->getToken()),
+            new InvoiceFilter(new DateInterval('P0D'))
         );
-
-        return $invoices->give();
+        return $todayInvoices->give();
     }
 
     private function todayVisits($md5): int
     {
         $today = new TodayVisits();
-        $todayVisits = $today->count($this->auth($md5));
+        $todayVisits = $today->count($this->todayInvoices($md5));
 
         if($todayVisits >= 1000) {
             $todayVisits/1000 . "k";
@@ -57,10 +52,22 @@ class ServiceModel
         return $todayCache;
     }
 
+    private function weekInvoices($md5): array
+    {
+        $appName = config('app.name');
+
+        $weekInvoices = new Invoices(
+            new Client(['base_uri' => url($this->auth($md5)->getDomain())->asString()]),
+            byToken($appName, $this->auth($md5)->getToken()),
+            new InvoiceFilter(new DateInterval('P7D'))
+        );
+        return $weekInvoices->give();
+    }
+
     private function weekVisits($md5): int
     {
         $week = new WeekVisits();
-        $weekVisits = $week->count($this->auth($md5));
+        $weekVisits = $week->count($this->weekInvoices($md5));
 
         if($weekVisits >= 1000) {
             $weekVisits/1000 . "k";
@@ -79,6 +86,11 @@ class ServiceModel
             $weekCache = Cache::get($key, false);
         }
         return $weekCache;
+    }
+
+    private function auth ($md5): UserInterface
+    {
+        return UserRepository::getById($this->userIdByHash($md5));
     }
 
     private function userIdByHash($md5)

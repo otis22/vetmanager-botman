@@ -13,7 +13,7 @@ class ServiceController extends Controller
         $todayVisits = $today->todayCache($md5);
 
         return response()
-            ->view('visits.today', compact('todayVisits'))
+            ->view('visits.today', compact("todayVisits"))
             ->header('Content-type', 'image/svg+xml');
     }
 
@@ -23,7 +23,7 @@ class ServiceController extends Controller
         $weekVisits = $week->weekCache($md5);
 
         return response()
-            ->view('visits.week', compact('weekVisits'))
+            ->view('visits.week', compact("weekVisits"))
             ->header('Content-type', 'image/svg+xml');
     }
 }
