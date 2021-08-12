@@ -2,29 +2,36 @@
 
 namespace App;
 
-use Abyzs\VetmanagerVisits\AuthToken;
-use Abyzs\VetmanagerVisits\VisitCounter;
+use Abyzs\VetmanagerVisits\Invoices;
+use Abyzs\VetmanagerVisits\InvoiceFilter;
+use Abyzs\VetmanagerVisits\TodayVisits;
+use Abyzs\VetmanagerVisits\WeekVisits;
+use App\Vetmanager\UserData\UserRepository\UserInterface;
 use App\Vetmanager\UserData\UserRepository\UserRepository;
+use DateInterval;
+use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use function Otis22\VetmanagerUrl\url;
+use function Otis22\VetmanagerRestApi\byToken;
 
 
 class ServiceModel
 {
-    private function auth($md5): array
+    private function todayInvoices($md5): array
     {
-        $userId = $this->userIdByHash($md5);
-        $user = UserRepository::getById($userId);
-        $appName = config('app.name');
-        $auth = new AuthToken($user->getDomain(), $appName, $user->getToken());
-
-        return $auth->getInvoices();
+        $todayInvoices = new Invoices(
+            new Client(['base_uri' => url($this->auth($md5)->getDomain())->asString()]),
+            byToken(config('app.name'), $this->auth($md5)->getToken()),
+            new InvoiceFilter(new DateInterval('P0D'))
+        );
+        return $todayInvoices->give();
     }
 
-    private function getTodayVisits($md5): int
+    private function todayVisits($md5): int
     {
-        $today = new VisitCounter();
-        $todayVisits = $today->dayCount($this->auth($md5));
+        $today = new TodayVisits();
+        $todayVisits = $today->count($this->todayInvoices($md5));
 
         if($todayVisits >= 1000) {
             $todayVisits/1000 . "k";
@@ -34,21 +41,33 @@ class ServiceModel
         return $todayVisits;
     }
 
-    public function getTodayCache($md5)
+    public function todayCache($md5)
     {
         $key = 'today' . $md5;
         $todayCache = Cache::get($key, false);
         if(!$todayCache){
-            Cache::put($key, $this->getTodayVisits($md5), 600);
+            Cache::put($key, $this->todayVisits($md5), 600);
             $todayCache = Cache::get($key, false);
         }
         return $todayCache;
     }
 
-    private function getWeekVisits($md5): int
+    private function weekInvoices($md5): array
     {
-        $week = new VisitCounter();
-        $weekVisits = $week->weekCount($this->auth($md5));
+        $appName = config('app.name');
+
+        $weekInvoices = new Invoices(
+            new Client(['base_uri' => url($this->auth($md5)->getDomain())->asString()]),
+            byToken($appName, $this->auth($md5)->getToken()),
+            new InvoiceFilter(new DateInterval('P7D'))
+        );
+        return $weekInvoices->give();
+    }
+
+    private function weekVisits($md5): int
+    {
+        $week = new WeekVisits();
+        $weekVisits = $week->count($this->weekInvoices($md5));
 
         if($weekVisits >= 1000) {
             $weekVisits/1000 . "k";
@@ -58,15 +77,20 @@ class ServiceModel
         return $weekVisits;
     }
 
-    public function getWeekCache($md5)
+    public function weekCache($md5)
     {
         $key = 'week' . $md5;
         $weekCache = Cache::get($key, false);
         if(!$weekCache){
-            Cache::put($key, $this->getWeekVisits($md5), 600);
+            Cache::put($key, $this->weekVisits($md5), 600);
             $weekCache = Cache::get($key, false);
         }
         return $weekCache;
+    }
+
+    private function auth ($md5): UserInterface
+    {
+        return UserRepository::getById($this->userIdByHash($md5));
     }
 
     private function userIdByHash($md5)
