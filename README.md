@@ -102,7 +102,7 @@ And set up command `php artisan send_schedule` on 17.00 MSK
 1. Enter bot data, for devs vetmanager-botman-$username
 1. Run server `make serve`
 1. Start tunnelling with [ngrok](https://otis22.github.io/ngrok,/utils/2021/02/03/ngrok-is-pretty-cool.html) `ngrok http 8080`
-1. https://api.telegram.org/bot<token>/setWebhook?url=https://5e86b344.ngrok.io/botman
+1. php artisan botman:telegram:register --output and pass your url https://5e86b344.ngrok.io/botman
 
 Where token is authtoken from @GodFather
 
