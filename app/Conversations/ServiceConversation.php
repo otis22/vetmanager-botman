@@ -17,15 +17,9 @@ class ServiceConversation extends VetmanagerConversation
         return $md5;
     }
 
-    private function todayVisitLink()
+    private function visitLink()
     {
-        $this->say("https://vetmanager-botman.herokuapp.com/shield/" . $this->auth() . "/" . 'today' . "/");
-        $this->endConversation();
-    }
-
-    private function weekVisitLink()
-    {
-        $this->say("https://vetmanager-botman.herokuapp.com/shield/" . $this->auth() . "/" . 'week' . "/");
+        $this->say("https://vetmanager-botman.herokuapp.com/shield/" . $this->auth() . "/" . 'all' . "/");
         $this->endConversation();
     }
 
@@ -33,15 +27,14 @@ class ServiceConversation extends VetmanagerConversation
     {
         $question = Question::create('Счетчик визитов');
         $question->addButtons([
-            Button::create('Счетчик посещений за сегодня')->value('today'),
-            Button::create('Счетчик посещений за 7 дней')->value('week')
+            Button::create('Счетчик посещений')->value('visit'),
         ]);
         $this->ask($question, function (Answer $answer){
         $value = $answer->getText();
-        if($value == 'today') {
-            return $this->todayVisitLink();
+        if($value == 'visit') {
+            return $this->visitLink();
         } else {
-            return $this->weekVisitLink();
+            throw new \Exception('Неизвестная команда');
         }});
      }
 

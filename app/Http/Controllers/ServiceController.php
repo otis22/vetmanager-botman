@@ -7,6 +7,21 @@ use App\ServiceModel;
 
 class ServiceController extends Controller
 {
+    public function visits($md5)
+    {
+        $service = new ServiceModel();
+        $todayVisits = $service->todayCache($md5);
+        $weekVisits = $service->weekCache($md5);
+
+        return view('visits.all')->with(
+            [
+                'md5' => $md5,
+                'todayVisits' => $todayVisits,
+                'weekVisits' => $weekVisits
+            ]
+        );
+    }
+
     public function todayCount($md5)
     {
         $today = new ServiceModel();
